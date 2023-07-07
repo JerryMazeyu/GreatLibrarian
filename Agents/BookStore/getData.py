@@ -66,88 +66,70 @@ Browse
 Tools
 About
 Support
-African American Review
+Black History Bulletin
 SEARCH THE JOURNAL
 
 This title is part of a longer publication history. The full run of this journal will be searched.
 
 TITLE HISTORY
-1992-2019
+2002-2019
 •
-African American Review
-1976-1991
+Black History Bulletin
+1937-2001
 •
-Black American Literature Forum
-1967-1976
-•
-Negro American Literature Forum
-As the official publication of the Division on Black American Literature and Culture of the Modern Language Association, the quarterly journal African American Review promotes a lively exchange among writers and scholars in the arts, humanities, and social sciences who hold diverse perspectives on African American literature and culture. Between 1967 and 1976, the journal appeared under the title Negro American Literature Forum and for the next fifteen years was titled Black American Literature Forum. In 1992, African American Review changed its name for a third time and expanded its mission to include the study of a broader array of cultural formations. Currently, the journal prints essays on African American literature, theatre, film, the visual arts, and culture generally; interviews; poetry; fiction; and book reviews. AAR has received three American Literary Magazine Awards for Editorial Content in the 1990s.
-
+Negro History Bulletin
+The Black History Bulletin is dedicated to enhancing teaching and learning in the areas of history. Its aim is to publish, generate, and disseminate peer-reviewed information about African Americans in U. S. history, the African Diaspora generally, and the peoples of Africa. Its purpose is to inform the knowledge base for the professional praxis of secondary educators through articles that are grounded in theory, yet supported by practice. The Black History Bulletin welcomes articles on all aspects of Black history, especially those written with a focus on: (1) middle school U.S. history; (2) high school U.S. history; (3) teacher preparation U.S. history methods.
 All Issues
 2010s
-2019 (Vol. 52)
-No. 4 Winter 2019 pp. 323-412
-No. 3 Fall 2019 pp. 217-321
-No. 2 Summer 2019 pp. 121-215
-No. 1 Spring 2019 pp. 1-120
-2018 (Vol. 51)
-No. 4 Winter 2018 pp. 253-350
-No. 3 Fall 2018 pp. 161-251
-No. 2 Summer 2018 pp. 81-159
-No. 1 Spring 2018 pp. 1-79
-2017 (Vol. 50)
-No. 4 Commemorative Issue: 50 Years of AAR Winter 2017 pp. 343-1124
-No. 3 Fall 2017 pp. 251-341
-No. 2 Special Issue: Blackness & Disability Summer 2017 pp. 93-250
-No. 1 Spring 2017 pp. 1-91
-2016 (Vol. 49)
-No. 4 Winter 2016 pp. 297-404
-No. 3 Fall 2016 pp. 179-296
-No. 2 Summer 2016 pp. 75-177
-No. 1 Spring 2016 pp. 1-73
-2015 (Vol. 48)
-No. 4 Winter 2015 pp. 393-487
-No. 3 Special Issue: Delany Lately Fall 2015 pp. 225-392
-No. 1/2 Spring/Summer 2015 pp. 1-224
-2014 (Vol. 47)
-No. 4 Winter 2014 pp. 447-598
-No. 2/3 Summer/Fall 2014 pp. 231-446
-No. 1 Spring 2014 pp. 1-229
-2013 (Vol. 46)
-No. 4 Special Issue: James Baldwin Winter 2013 pp. 559-803
-No. 2/3 Summer/Fall 2013 pp. 201-558
-No. 1 Special issue: Hip Hop and the Literary Spring 2013 pp. 1-200
-2012 (Vol. 45)
-No. 4 Winter 2012 pp. 495-686
-No. 3 Special issue: On Black Performance Fall 2012 pp. 275-494
-No. 1/2 Spring/Summer 2012 pp. 1-274
-2011 (Vol. 44)
-No. 4 Winter 2011 pp. 561-740
-No. 3 Fall 2011 pp. 331-556
-No. 1/2 Spring/Summer 2011 pp. 1-329
+2019 (Vol. 82)
+No. 2 African Americans and the Vote Fall 2019 pp. 4-38
+No. 1 Race, Revolution & Resistance Spring 2019 pp. 4-34
+2018 (Vol. 81)
+No. 2 Black Migrations Fall 2018 pp. 1-33
+No. 1 QUILTED HISTORIES: THE THREADS OF COUNTER NARRATIVES Spring 2018 pp. 1-34
+2017 (Vol. 80)
+No. 2 AFRICAN AMERICANS IN TIMES OF WAR Fall 2017 pp. 1-34
+No. 1 POETRY, PROSE AND MUSIC: THE LYRICAL VOICE OF BLACK ARTS MOVEMENTS Spring 2017 pp. 1-34
+2016 (Vol. 79)
+No. 2 THE CRISIS IN BLACK EDUCATION Fall 2016 pp. 1-34
+No. 1 YOUTH EMPOWERMENT: HOPE, ACTION, AND FREEDOM Spring 2016 pp. 1-34
+2015 (Vol. 78)
+No. 2 HALLOWED GROUNDS: SITES OF AFRICAN AMERICAN MEMORIES Fall 2015 pp. 1-34
+No. 1 SOCIAL JUSTICE: EVOLUTION OR REVOLUTION Spring 2015 pp. 1-31
+2014 (Vol. 77)
+No. 2 A CENTURY OF BLACK LIFE, HISTORY, AND CULTURE Fall 2014 pp. 1-33
+No. 1 THE IMPACT OF MEDIA ON SCHOLAR IDENTITY DEVELOPMENT Spring 2014 pp. 1-33
+2013 (Vol. 76)
+No. 2 Theme: "CIVIL RIGHTS IN AMERICA" SUMMER / FALL 2013 pp. 1-34
+No. 1 Theme: "FRAMING TECHNOLOGY THROUGH THE LENS OF HISTORY" SPRING 2013 pp. 1-34
+2012 (Vol. 75)
+No. 2 Theme: "At the Crossroads of Freedom and Equality: The Emancipation Proclamation and the March on Washington" Fall 2012 pp. 1-34
+No. 1 Theme: "Taking a Look Back to Broaden the Lens of Literacy" Table of Contents Winter / Spring 2012 pp. 1-34
+2011 (Vol. 74)
+No. 2 Theme: "Black Women in American Culture and History" Summer/Fall 2011 pp. 1-35
+No. 1 Theme: "The Influence of African Americans on Popular Culture" Winter/Spring 2011 pp. 1-33
+2010 (Vol. 73)
+No. 2 Theme: "African Americans and the Civil War" Summer/Fall 2010 pp. 1-35
+No. 1 Theme: "Young, Gifted, & Black: Gifted Education in Today's Schools Winter/Spring 2010 pp. 1-35
 2000s
-1990s
 Journal Information
-The Johns Hopkins University Press logo African American Review logo African American Review (St. Louis University) logo
-cover of African American Review
+Association for the Study of African American Life and History logo
+cover of Black History Bulletin
 PUBLISHED BY
-The Johns Hopkins University Press on behalf of African American Review (St. Louis University)
-Submissions
-Journal Home Page
-Subscribe
+Association for the Study of African American Life and History
 COVERAGE
-1992-2019 (Vol. 26, No. 1 - Vol. 52, No. 4)
+2002-2019 (Vol. 65, No. 1/2 - Vol. 82, No. 2)
 MOVING WALL
 Learn more
 3 years
 ISSN
-10624783
+19386656
 EISSN
-19456182
+21534810
 SUBJECTS
-Language & Literature, African American Studies, American Studies, Area Studies, Humanities
+History, African American Studies, History, Area Studies
 COLLECTIONS
-Arts & Sciences I Collection, JSTOR Archival Journal & Primary Source Collection, JSTOR Essential Collection, Language & Literature Collection
+Arts & Sciences XV Collection, JSTOR Archival Journal & Primary Source Collection
 Explore JSTOR
 By Subject
 By Title
@@ -182,8 +164,6 @@ Accessibility
 Cookie Policy
 Cookie Settings
 选择语言
-
-
 
     """
 
