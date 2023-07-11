@@ -1,0 +1,13 @@
+{
+    "name": "example2",
+    "description": "Test if LLM can use agents.",
+    "field": "tool usage",
+    "promots": [
+        "请用英文翻译出这句诗——窗前明月光，疑似地上霜。",
+        "请帮我查一下一本期刊的名字是《African American Review》，把摘要翻译成中文回答我。"
+    ],
+    "evaluation": {
+        "1": [{"keywords":["moonlight", "window", "frost", "ground"], "Tool":{"name": "TranslationAPI", "args": "窗前明月光，疑似地上霜。"}, "GPT4eval": true}],
+        "2": [{"keywords":["非裔美国人评论", "艺术、人文和社会科学", "美国文学杂志编辑内容奖"], "Tool":{"name": "BookStore", "args": "SELECT * FROM ..."}}]
+    }
+}

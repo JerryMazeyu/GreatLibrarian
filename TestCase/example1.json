@@ -1,0 +1,21 @@
+{
+    "name": "example1",
+    "description": "Test if LLM can recognize common knowledge.",
+    "field": "common knowledge",
+    "promots": [
+        "{$1.1} is {$1.2}, do you think this is right?",
+        ["What do you think about {$2.1} and {$2.2}?", "You are wrong, rethink this."],
+        "{$3} is a city from {$4}, yes or no?"
+    ],
+    "values": {
+        "1": [["鲁迅", "周树人"], ["李白", "诗圣"]],
+        "2": [["Pi", "3.14"], ["上海", "魔都"]],
+        "3": ["New York", "London", "Beijing"],
+        "4": ["China"]
+    },
+    "evaluation": {
+        "1": [{"keywords":["yes", "same"], "GPT4eval": true}, {"keywords":["no", "different", "杜甫"], "GPT4eval": true}],
+        "2": [{"keywords":["yes", "larger", "bigger"]}, {"keywords":["yes"], "balcklist": ["no"]}],
+        "3": [{"keywords":["yes"]}, {"keywords":["no"]}, {"keywords":["no"]}]
+    }
+}
