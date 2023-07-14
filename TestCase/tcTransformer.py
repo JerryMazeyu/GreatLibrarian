@@ -128,4 +128,4 @@ if __name__ == '__main__':
     jsobj = json.loads(jsonstr)
     tp = TestProject(jsobj)
     tp.get_prompts()
-    print()
+    print(tp.prompts)

@@ -1,18 +1,17 @@
 from Core import EvalMethods
+from Utils import to_list
 
 class Keyword(EvalMethods):
-    def __init__(self, prompt, llm, evalinfo):
-        super().__init__(prompt, llm, evalinfo)
-    
+    def __init__(self, prompt, ans, evalinfo):
+        super().__init__(prompt, ans, evalinfo)
+        
     
     def eval1(self):
         score = 0.0
         keywords = self.evalinfo['keyword']
-        if isinstance(keywords[0], str):
-            self.keywords = [keywords]
-        for pt in self.prompt:
-            ans = self.llm(pt)
-            if self.if_there_is(ans, self.keywords):
+        keywords = to_list(keywords)
+        for ind, pt in enumerate(self.prompt):
+            if self.if_there_is(self.ans[ind], self.keywords):
                 score += 1 / len(self.prompt)
         return score
     
