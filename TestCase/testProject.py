@@ -3,6 +3,8 @@ import re
 import itertools
 from copy import deepcopy
 from collections import defaultdict
+from Utils import load_from_cfg
+from warnings import warn
 
 
 class TestProject:
@@ -98,34 +100,54 @@ class TestProject:
         for key, pt in self.prompts.items():
             assert(len(self.prompts[key]) == len(self.raw_eval_info[str(key)])), ValueError(f"[{key}] Test promopt length {len(self.prompts[key])} don't match the evaluation info {len(self.raw_eval_info[str(key)])}")
             print(self.raw_eval_info[str(key)])
+    
+    def get_cases(self, baseconf=None):
+        """The main function of the TestProject
+
+        Yields:
+            dict: Return a iterable dict which contains a case.
+        """ 
+        for k,v in self.prompts.items():
+            for ind, pr in enumerate(v):
+                cfg = {'name': self.name, 'description': self.description, 'prompt': pr, 'eval_info': self.raw_eval_info[str(k)][ind]}
+                if baseconf:
+                    cfg['llm'] = baseconf.get('llm', None)
+                    if not cfg['llm']:
+                        warn("There is no LLM in the config.", RuntimeWarning)
+                    cfg['register_agents'] = baseconf.get('register_agents', None)
+                    if not cfg['register_agents']:
+                        warn("There is no registered agents in the config.", RuntimeWarning)
+                yield cfg
+                
 
 
 
-if __name__ == '__main__':
-    jsonstr = """
-    {
-    "name": "example1",
-    "description": "Test if LLM can recognize common knowledge.",
-    "field": "common knowledge",
-    "promots": [
-        "{$1.1} is {$1.2}, do you think this is right?",
-        ["What do you think about {$2.1} and {$2.2}?", "You are wrong, rethink this."],
-        "{$3} is a city from {$4}, yes or no?"
-    ],
-    "values": {
-        "1": [["鲁迅", "周树人"], ["李白", "诗圣"]],
-        "2": [["Pi", "3.14"], ["上海", "魔都"]],
-        "3": ["New York", "London", "Beijing"],
-        "4": ["China"]
-    },
-    "evaluation": {
-        "0": [{"keywords":["yes", "same"], "GPT4eval": true}, {"keywords":["no", "different", "杜甫"], "GPT4eval": true}],
-        "1": [{"keywords":["yes", "larger", "bigger"]}, {"keywords":["yes"], "balcklist": ["no"]}],
-        "2": [{"keywords":["yes"]}, {"keywords":["no"]}, {"keywords":["no"]}]
-    }
+
+jsonstr = """
+{
+"name": "example1",
+"description": "Test if LLM can recognize common knowledge.",
+"field": "common knowledge",
+"promots": [
+    "{$1.1} is {$1.2}, do you think this is right?",
+    ["What do you think about {$2.1} and {$2.2}?", "You are wrong, rethink this."],
+    "{$3} is a city from {$4}, yes or no?"
+],
+"values": {
+    "1": [["鲁迅", "周树人"], ["李白", "诗圣"]],
+    "2": [["Pi", "3.14"], ["上海", "魔都"]],
+    "3": ["New York", "London", "Beijing"],
+    "4": ["China"]
+},
+"evaluation": {
+    "0": [{"keywords":["yes", "same"], "GPT4eval": true}, {"keywords":["no", "different", "杜甫"], "GPT4eval": true}],
+    "1": [{"keywords":["yes", "larger", "bigger"]}, {"keywords":["yes"], "balcklist": ["no"]}],
+    "2": [{"keywords":["yes"]}, {"keywords":["no"]}, {"keywords":["no"]}]
 }
-    """
-    jsobj = json.loads(jsonstr)
-    tp = TestProject(jsobj)
-    tp.get_prompts()
-    print(tp.prompts)
+}
+"""
+jsobj = json.loads(jsonstr)
+tp = TestProject(jsobj)
+tp.get_prompts()
+for i in tp.get_cases():
+    print(i)
