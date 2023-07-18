@@ -4,6 +4,7 @@ import random
 import datetime
 import contextlib
 import functools
+import inspect
 
 def generate_name():
     """Random generate a name.
@@ -13,26 +14,26 @@ def generate_name():
     """
     adjectives = ['admiring', 'adoring', 'affectionate', 'agitated', 'amazing', 'angry', 'awesome', 'blissful', 'bold', 'boring', 'brave', 'busy', 'charming', 'clever', 'cool', 'compassionate', 'competent', 'confident', 'crazy', 'dazzling', 'determined', 'distracted', 'dreamy', 'eager', 'ecstatic', 'elastic', 'elated', 'elegant', 'eloquent', 'epic', 'exciting', 'fervent', 'festive', 'flamboyant', 'focused', 'friendly', 'frosty', 'funny', 'gallant', 'gifted', 'goofy', 'gracious', 'happy', 'hardcore', 'heuristic', 'hopeful', 'hungry', 'infallible', 'inspiring', 'jolly', 'jovial', 'keen', 'kind', 'laughing', 'loving', 'lucid', 'mystifying', 'modest', 'musing', 'naughty', 'nervous', 'nice', 'nifty', 'nostalgic', 'objective', 'optimistic', 'peaceful', 'pedantic', 'pensive', 'practical', 'priceless', 'quirky', 'quizzical', 'relaxed', 'reverent', 'romantic', 'sad', 'serene', 'sharp', 'silly', 'sleepy', 'stoic', 'stupefied', 'suspicious', 'tender', 'thirsty', 'trusting', 'unruffled', 'upbeat', 'vibrant', 'vigilant', 'vigorous', 'wizardly', 'wonderful', 'xenodochial', 'youthful', 'zealous', 'zen']
     scientists = ['albattani', 'allen', 'almeida', 'agnesi', 'archimedes', 'ardinghelli', 'aryabhata', 'austin', 'babbage', 'banach', 'bardeen', 'bartik', 'bassi', 'beaver', 'bell', 'benz', 'bhabha', 'bhaskara', 'blackwell', 'bohr', 'booth', 'borg', 'bose', 'boyd', 'brahmagupta', 'brattain', 'brown', 'carson', 'chandrasekhar', 'chatelet', 'chatterjee', 'chebyshev', 'cohen', 'chaum', 'clarke', 'colden', 'cori', 'cray', 'curran', 'curie', 'darwin', 'davinci', 'dewdney', 'dhawan', 'diffie', 'dijkstra', 'dirac', 'driscoll', 'dubinsky', 'easley', 'edison', 'einstein', 'elbakyan', 'elgamal', 'elion', 'ellis', 'engelbart', 'euclid', 'euler', 'faraday', 'feistel', 'fermat', 'fermi', 'feynman', 'franklin', 'gagarin', 'galileo', 'galois', 'ganguly', 'gates', 'gauss', 'germain', 'golick', 'goodall', 'gould', 'greider', 'grothendieck', 'haibt', 'hamilton', 'hasse', 'hawking', 'hellman', 'heisenberg', 'hermann', 'herschel', 'hertz', 'heyrovsky', 'hodgkin', 'hofstadter', 'hoover', 'hopper', 'hugle', 'hypatia', 'ishizaka', 'jackson', 'jang', 'jennings', 'jepsen', 'johnson', 'joliot', 'jones', 'kalam', 'kapitsa', 'kare', 'keldysh', 'keller', 'kepler', 'khayyam', 'khorana', 'kilby', 'kirch', 'knuth', 'kowalevski', 'lalande', 'lamarr', 'lamport', 'leakey', 'leavitt', 'lewin', 'lichterman', 'liskov', 'lovelace', 'lumiere', 'mahavira', 'margulis', 'matsumoto', 'maxwell', 'mayer', 'mccarthy', 'mcclintock', 'mclean', 'mcnulty', 'mendel', 'mendeleev', 'meitner', 'meninsky', 'merkle', 'mestorf', 'mirzakhani', 'moore', 'morse', 'murdock', 'neumann', 'newton', 'nightingale', 'nobel', 'nocard', 'northcutt', 'noether', 'norton', 'noyce', 'panini', 'pare', 'pascal', 'pasteur', 'payne', 'perlman', 'pike', 'poincare', 'poitras', 'proskuriakova', 'ptolemy', 'raman', 'ramanujan', 'ride', 'montalcini', 'ritchie', 'robinson', 'roentgen', 'rosalind', 'rubin', 'saha', 'sammet', 'sanderson', 'satoshi', 'shamir', 'shannon', 'shaw', 'shirley', 'shockley', 'shtern', 'sinoussi', 'snyder', 'solomon', 'spence', 'stonebraker', 'sutherland', 'swanson', 'swartzlander', 'swirles', 'taussig', 'tereshkova', 'tesla', 'tharp', 'thompson', 'torvalds', 'tu', 'turing', 'varahamihira', 'vaughan', 'visvesvaraya', 'volhard', 'wescoff', 'wiles', 'williams', 'wilson', 'wing', 'wozniak', 'wright', 'yalow', 'yonath', 'zhukovsky']
-    return f"{random.choice(adjectives)}_{random.choice(scientists)}"
+    return f"{random.choice(adjectives)}_{random.choice(scientists)}_{datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')}"
     
-def setup_logger(logger_name, logger_file, level=logging.INFO):
-    """Setup logger.
 
-    Args:
-        logger_name (str): Unique name of the logger.
-        log_file (str): The path of log, like /xxx/xxx/, don't add the name of logger.
-        level (logging.LEVEL, optional): Defaults to logging.INFO.
-    """
+def setup_logger(logger_name, logger_file, level=logging.INFO):
+    """Setup logger only if there is no logger.
+
+#     Args:
+#         logger_name (str): Unique name of the logger.
+#         log_file (str): The path of log, like /xxx/xxx/, don't add the name of logger.
+#         level (logging.LEVEL, optional): Defaults to logging.INFO.
+#     """
     l = logging.getLogger(logger_name)
-    formatter = logging.Formatter('%(levelname)s:%(asctime)s:%(name)s: %(message)s')
-    fileHandler = logging.FileHandler(os.path.join(logger_file, f"{logger_name}.log"), mode='a')
-    
-    streamHandler = logging.StreamHandler()
-    streamHandler.setFormatter(formatter)
-    
-    l.setLevel(level)
-    l.addHandler(fileHandler)
-    l.addHandler(streamHandler)
+    if not l.handlers:  # Only add handlers if there are none yet
+        formatter = logging.Formatter('%(levelname)s:%(asctime)s:%(name)s: %(message)s')
+        fileHandler = logging.FileHandler(os.path.join(logger_file, f"{logger_name}.log"), mode='a')
+        streamHandler = logging.StreamHandler()
+        streamHandler.setFormatter(formatter)
+        l.setLevel(level)
+        l.addHandler(fileHandler)
+        l.addHandler(streamHandler)
 
 def get_logger(logger_name):
     """Get logger instance by name.
@@ -135,6 +136,42 @@ def add_logger(logger_name=None, logger_file=None):
                 return func(*args, **kwargs)
         return wrapper
     return decorate
+
+
+def add_logger_to_class(cls):
+    """
+    A decorator to add logging functionality to all methods of a class.
+
+    This decorator applies the `add_logger` decorator to every method in a class,
+    redirecting the standard output of each method to a log file. All methods of
+    the class will share the same log file, which is named using a random name
+    generated by `generate_name()` function.
+
+    Parameters:
+    cls: The class to be decorated.
+
+    Returns:
+    The decorated class, with logging functionality added to its methods.
+
+    Example:
+
+    @add_logger_to_class
+    class MyClass:
+        def method1(self):
+            print("Hello from method1!")
+        def method2(self):
+            print("Hello from method2!")
+
+    # Now all print statements within the methods of MyClass will be logged into the same log file.
+
+    Note: This decorator assumes the existence of a 'Logs' directory in the current working path.
+    """
+    logger_name = generate_name()
+    for attr_name, attr_value in inspect.getmembers(cls):
+        if inspect.isfunction(attr_value):
+            decorated_func = add_logger(logger_name=logger_name, logger_file='Logs')(attr_value)
+            setattr(cls, attr_name, decorated_func)
+    return cls
 
 
 

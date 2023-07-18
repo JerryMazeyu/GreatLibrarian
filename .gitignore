@@ -2,3 +2,6 @@
 
 __pycache__
 
+Logs/*
+
+!Logs/dazzling_shirley.log

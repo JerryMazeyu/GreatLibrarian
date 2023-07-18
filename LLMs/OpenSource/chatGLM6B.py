@@ -6,6 +6,6 @@ class ChatGLM6B(LLMs):
         pass
     
     def __call__(self, prompt: str) -> str:
-        pass
+        return "你好，我是ChatGLM6B，很高兴认识你。"
 
 chatglm6b = ChatGLM6B()

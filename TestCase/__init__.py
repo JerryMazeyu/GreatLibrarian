@@ -1,1 +1,1 @@
-from .testProject import TestProject, tp
+from .testProject import TestProject

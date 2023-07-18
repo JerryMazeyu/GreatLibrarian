@@ -8,7 +8,7 @@ def load_from_cfg(obj:object, cfg:Union[dict, object]):
         obj (object): Target object.
         cfg (Union[dict, object]): Config.
     """
-    if isinstance(cfg, object):
+    if not isinstance(cfg, dict):
         keys = [x for x in dir(cfg) if not x.startswith("__")]
         for k in keys:
             if hasattr(obj, k):
