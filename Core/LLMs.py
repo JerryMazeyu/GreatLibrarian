@@ -5,7 +5,7 @@ class LLMs(ABC):
     """LLMs abstract class
     """
     @abstractmethod
-    def __call__(self, prompt:str) -> str:
+    def __call__(self, prompt:str) -> dict:
         """Main function of the LLM
 
         Args:
