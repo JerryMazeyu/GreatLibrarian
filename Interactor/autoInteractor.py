@@ -1,6 +1,4 @@
 from typing import Any
-import sys
-sys.path.append('C:\\Users\\Sakura\\Documents\\GitHub\\GreatLibrarian')
 from Utils import add_logger_to_class,load_from_cfg
 from Recoder import Recoder
 from EvalMethods import ToolUse,Keyword,GPT4eval
