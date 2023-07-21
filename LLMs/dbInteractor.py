@@ -45,16 +45,16 @@ def write_data_to_database(db, tablename, data):
             db.close()
 
 
-username = 'root'
-password = '68746223eE#'
-host = '149.248.14.165'
-port = 3306
-database = 'chatglm_1'
-tablename = 'records'
-
-db = get_db_connection(host, port, username, password, database)
-
-if db:
-    print("Connection successful!")
-else:
-    print("Connection failed.")
+# username = 'root'
+# password =
+# host = '149.248.14.165'
+# port = 3306
+# database = 'chatglm_1'
+# tablename = 'records'
+#
+# db = get_db_connection(host, port, username, password, database)
+#
+# if db:
+#     print("Connection successful!")
+# else:
+#     print("Connection failed.")
