@@ -3,7 +3,8 @@ from Interactor import AutoInteractor
 from TestCase import TestProject
 import os
 import json
-
+import concurrent.futures
+from tqdm import tqdm
 
 class AutoRunner():
     def __init__(self, cfg):
@@ -33,8 +34,26 @@ class AutoRunner():
                 self.testprojects.append(TestProject(jsonobj))
     
     def run(self):
-        for testproj in self.testprojects:
-            for testcase in testproj.get_cases(self.cfg):
-                self.interactor = self.interactor_cls(testcase)
-                self.interactor.run()
-        
+        """
+        Multi-threaded to run each test file to speed things up
+        """
+        def run_interactor(testproj, interactor_cls, cfg):
+            for testcase in testproj.get_cases(cfg):
+                interactor = interactor_cls(testcase)
+                interactor.run()
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
+            for testproj in self.testprojects:
+                future = executor.submit(run_interactor, testproj, self.interactor_cls, self.cfg)
+                futures.append(future)
+
+            for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
+                result = future.result()
+    
+    def analyse(self):
+        """
+        The analysis module controls the function,
+        the analysis module is the module that makes summary statistics and visualization of the data after evaluation
+        """
+        pass
