@@ -49,6 +49,7 @@ if __name__ == '__main__':
 
 
 
+
 Skip to Main Content
 Have library access? Log in through your library
 JSTOR Home
@@ -66,70 +67,171 @@ Browse
 Tools
 About
 Support
-Black History Bulletin
-SEARCH THE JOURNAL
+Cover of Administering Freedom: The State of Emancipation after the Freedmen's Bureau
+Administering Freedom: The State of Emancipation after the Freedmen's Bureau
+DALE KRETZ
+Copyright Date: 2022
+Published by: University of North Carolina Press
+Pages: 424
+https://www.jstor.org/stable/10.5149/9781469671048_kretz
+Search for reviews of this book
 
-This title is part of a longer publication history. The full run of this journal will be searched.
+Cite
+Book Info
+This is a preview page.
+Login through your institution for access.
+Table of Contents
 
-TITLE HISTORY
-2002-2019
-•
-Black History Bulletin
-1937-2001
-•
-Negro History Bulletin
-The Black History Bulletin is dedicated to enhancing teaching and learning in the areas of history. Its aim is to publish, generate, and disseminate peer-reviewed information about African Americans in U. S. history, the African Diaspora generally, and the peoples of Africa. Its purpose is to inform the knowledge base for the professional praxis of secondary educators through articles that are grounded in theory, yet supported by practice. The Black History Bulletin welcomes articles on all aspects of Black history, especially those written with a focus on: (1) middle school U.S. history; (2) high school U.S. history; (3) teacher preparation U.S. history methods.
-All Issues
-2010s
-2019 (Vol. 82)
-No. 2 African Americans and the Vote Fall 2019 pp. 4-38
-No. 1 Race, Revolution & Resistance Spring 2019 pp. 4-34
-2018 (Vol. 81)
-No. 2 Black Migrations Fall 2018 pp. 1-33
-No. 1 QUILTED HISTORIES: THE THREADS OF COUNTER NARRATIVES Spring 2018 pp. 1-34
-2017 (Vol. 80)
-No. 2 AFRICAN AMERICANS IN TIMES OF WAR Fall 2017 pp. 1-34
-No. 1 POETRY, PROSE AND MUSIC: THE LYRICAL VOICE OF BLACK ARTS MOVEMENTS Spring 2017 pp. 1-34
-2016 (Vol. 79)
-No. 2 THE CRISIS IN BLACK EDUCATION Fall 2016 pp. 1-34
-No. 1 YOUTH EMPOWERMENT: HOPE, ACTION, AND FREEDOM Spring 2016 pp. 1-34
-2015 (Vol. 78)
-No. 2 HALLOWED GROUNDS: SITES OF AFRICAN AMERICAN MEMORIES Fall 2015 pp. 1-34
-No. 1 SOCIAL JUSTICE: EVOLUTION OR REVOLUTION Spring 2015 pp. 1-31
-2014 (Vol. 77)
-No. 2 A CENTURY OF BLACK LIFE, HISTORY, AND CULTURE Fall 2014 pp. 1-33
-No. 1 THE IMPACT OF MEDIA ON SCHOLAR IDENTITY DEVELOPMENT Spring 2014 pp. 1-33
-2013 (Vol. 76)
-No. 2 Theme: "CIVIL RIGHTS IN AMERICA" SUMMER / FALL 2013 pp. 1-34
-No. 1 Theme: "FRAMING TECHNOLOGY THROUGH THE LENS OF HISTORY" SPRING 2013 pp. 1-34
-2012 (Vol. 75)
-No. 2 Theme: "At the Crossroads of Freedom and Equality: The Emancipation Proclamation and the March on Washington" Fall 2012 pp. 1-34
-No. 1 Theme: "Taking a Look Back to Broaden the Lens of Literacy" Table of Contents Winter / Spring 2012 pp. 1-34
-2011 (Vol. 74)
-No. 2 Theme: "Black Women in American Culture and History" Summer/Fall 2011 pp. 1-35
-No. 1 Theme: "The Influence of African Americans on Popular Culture" Winter/Spring 2011 pp. 1-33
-2010 (Vol. 73)
-No. 2 Theme: "African Americans and the Civil War" Summer/Fall 2010 pp. 1-35
-No. 1 Theme: "Young, Gifted, & Black: Gifted Education in Today's Schools Winter/Spring 2010 pp. 1-35
-2000s
-Journal Information
-Association for the Study of African American Life and History logo
-cover of Black History Bulletin
-PUBLISHED BY
-Association for the Study of African American Life and History
-COVERAGE
-2002-2019 (Vol. 65, No. 1/2 - Vol. 82, No. 2)
-MOVING WALL
-Learn more
-3 years
-ISSN
-19386656
-EISSN
-21534810
-SUBJECTS
-History, African American Studies, History, Area Studies
-COLLECTIONS
-Arts & Sciences XV Collection, JSTOR Archival Journal & Primary Source Collection
+Select all
+
+Cite
+
+Front Matter(pp. i-vi)
+Front Matter(pp. i-vi)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.1
+
+Save
+
+Cite
+
+Table of Contents(pp. vii-viii)
+Table of Contents(pp. vii-viii)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.2
+
+Save
+
+Cite
+
+List of Illustrations(pp. ix-xii)
+List of Illustrations(pp. ix-xii)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.3
+
+Save
+
+Cite
+
+Introduction(pp. 1-13)
+Introduction(pp. 1-13)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.4
+“This is a needle threader. I made it myself,” chuckled the old man of Pine Bluff. “Watch me thread a needle.” Nearly a century old by the late 1930s and feeling “like a poor old leaf left hangin’ to a tree,” William Baltimore still had enough energy to captivate his visitor with stories of ingenuity, hunger, and war. Covered in patchwork clothing stitched together himself, Baltimore spun tales of how he had once made a hacksaw from only a file, and a cotton scraper out of a piece of hardwood and a fragment of steel. He boasted he could build...
+
+
+Save
+
+Cite
+
+CHAPTER ONE What Is Left of the Bureau(pp. 14-57)
+CHAPTER ONE What Is Left of the Bureau(pp. 14-57)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.5
+This story begins with an ending. The year 1872 saw the termination of the Freedmen’s Bureau, a remarkable federal welfare agency, the first of its kind, designed to usher the newly emancipated into the free labor system while devoting special resources and attention to those who fell behind. Its closure came as no surprise. One only had to look at the increasingly halfhearted attempts to defend the temporary agency and the bipartisan assaults upon it to anticipate its eventual collapse. Or one could view the bureau not from the halls of national power but rather from its embattled outposts scattered...
+
+
+CHAPTER TWO The Unfinished Freedmen’s Branch(pp. 58-99)
+CHAPTER TWO The Unfinished Freedmen’s Branch(pp. 58-99)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.6
+The Freedmen’s Branch grew out of failure. Established in June 1872, the new agency assumed the old work of the Freedmen’s Bureau, relegated as it was in its final years to the management of hospitals and schools and the settlement of claims for bounties, back payments, and pensions in the emancipated South. The ostensibly minor task of settling claims consumed the working hours of dozens of agents in the bureau’s final days. Given the potentially radical founding directive of the Freedmen’s Bureau and its multivalent operations, the contracting sphere of bureau activity in the early 1870s has understandably led many to...
+
+
+CHAPTER THREE Reconstructing the Pension Bureau(pp. 100-143)
+CHAPTER THREE Reconstructing the Pension Bureau(pp. 100-143)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.7
+It was a matter of life and death for countless freedpeople. But earning a federal pension would require far more of Black claimants than their previous struggles for bounties, and for far longer. Their pension claims necessarily dragged issues of slavery, the Civil War, and emancipation into the public light well into the twentieth century, defining their primary engagement with the federal government for decades. Though much less than what newly freed men and women had hoped for in 1865, receiving a recurring stipend based on loyalty and service more nearly approximated the sort of compact they had envisioned at...
+
+
+CHAPTER FOUR Of War and Theft(pp. 144-187)
+CHAPTER FOUR Of War and Theft(pp. 144-187)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.8
+If the reconstruction of the Pension Bureau in the South proceeded slowly, as it did so, it exposed at every turn the intensely fraught challenges faced by formerly enslaved men and women as they made their claims in a federal bureaucracy maladjusted to accommodate them. As widows and mothers, freedwomen proved unexpectedly per sis tent in their efforts to secure bounties and pensions, forcing the bureau to make discretionary exceptions when it became clear that enforcing statutory equality was tantamount to excluding the vast majority of formerly enslaved heirs from their entitlements. Their cases provoked issues that had been central...
+
+
+CHAPTER FIVE Some Measure of Justice(pp. 188-232)
+CHAPTER FIVE Some Measure of Justice(pp. 188-232)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.9
+The Civil War’s casualty lists grew after 1865. Hundreds of thousands of soldiers carried wounds, ailments, and other traumas into their postwar lives, making recovery and reconstruction not only national tasks but intimate ones as well, as millions of ordinary Americans encountered and endured disability like never before. The task for many was finding a way to honor republican sacrifice without sacrificing republican honor, and with it the ideals of manly in dependence and productivity. Few veterans could dodge the prevailing Gilded Age antagonism toward disabled persons. Even those onlookers who maintained that “worthy” veterans deserved the nation’s material support...
+
+
+CHAPTER SIX Pensions for All(pp. 233-281)
+CHAPTER SIX Pensions for All(pp. 233-281)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.10
+It was said there was neither North nor South in the Pension Bureau. It knew only loyalty. This axiom was no less true in the 1890s than it had been at the time the Union pension system began. Legions of loyal Southerners from seceded states gave lie to the sectionalist charge commonly leveled against the bureau, none more so than the growing contingency of Black Southerners who lodged their pension claims at extraordinary rates, isolated in many areas as the lone federal beneficiaries.¹ Yet the flurry of pension activity in the South following the Disability Act of June 1890 developed alongside...
+
+
+Conclusion(pp. 282-296)
+Conclusion(pp. 282-296)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.11
+In 1904, only months after the demolition of the ex-slave pension movement, rumors circulated of plans to abolish the U.S. Pension Bureau as well. Such talk swirled around the reelection campaign of President Theodore Roosevelt, whose nomination was secured after the death of his primary challenger, Senator Mark Hanna, less than one year after the latter disavowed support for universal ex-slave pensions. The Black press worried that the reelected president would remove the Pension Bureau from the Department of the Interior and place it fully under the control of the adjutant general in the War Department, the office that once...
+
+
+Epilogue(pp. 297-302)
+Epilogue(pp. 297-302)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.12
+“A misery got me in the chest, right here, and it been with me all through life,” remarked the former slave Boston Blackwell to an interviewer in the late 1930s. Blackwell had in fact “filed for a pension on this ailment.” During the Civil War, Blackwell fled his captors to join the U.S. Army near Pine Bluff, Arkansas. “It was cold, frosty weather,” he recalled, and the journey took two days and nights filled with the sounds of “hounds a-howling,” their haunting echoes trailing Blackwell and his freedom-seeking comrades. At last they reached “the Yankee camp,” believing “all our troubles...
+
+
+Acknowledgments(pp. 303-306)
+Acknowledgments(pp. 303-306)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.13
+
+Notes(pp. 307-362)
+Notes(pp. 307-362)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.14
+
+Bibliography(pp. 363-400)
+Bibliography(pp. 363-400)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.15
+
+Index(pp. 401-412)
+Index(pp. 401-412)
+https://www.jstor.org/stable/10.5149/9781469671048_kretz.16
+University of North Carolina Press logo
+Front Matter
+Download
+XML
+Table of Contents
+Download
+XML
+List of Illustrations
+Download
+XML
+Introduction
+Download
+XML
+What Is Left of the Bureau
+Download
+XML
+The Unfinished Freedmen’s Branch
+Download
+XML
+Reconstructing the Pension Bureau
+Download
+XML
+Of War and Theft
+Download
+XML
+Some Measure of Justice
+Download
+XML
+Pensions for All
+Download
+XML
+Conclusion
+Download
+XML
+Epilogue
+Download
+XML
+Acknowledgments
+Download
+XML
+Notes
+Download
+XML
+Bibliography
+Download
+XML
+Index
+Download
+XML
 Explore JSTOR
 By Subject
 By Title
@@ -164,6 +266,7 @@ Accessibility
 Cookie Policy
 Cookie Settings
 选择语言
+
 
     """
 
