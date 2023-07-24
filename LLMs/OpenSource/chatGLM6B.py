@@ -2,7 +2,7 @@ from Core import LLMs
 import requests
 import json
 import configparser
-from ..dbInteractor import get_db_connection, write_data_to_database
+from LLMs.dbInteractor import get_db_connection, write_data_to_database
 
 
 class ChatGLM6B(LLMs):
@@ -14,8 +14,8 @@ class ChatGLM6B(LLMs):
         config = configparser.ConfigParser()
         config.read('../LLMs.ini')
 
-        api_address = config.get('chatGLM6B_Local', 'local_api_request_address')
-        port = config.get('chatGLM6B_Local', 'port')
+        api_address = config.get('chatGLM6B_1_Local', 'local_api_request_address')
+        port = config.get('chatGLM6B_1_Local', 'service_port')
 
         payload = {
             "prompt": prompt,
@@ -24,17 +24,17 @@ class ChatGLM6B(LLMs):
         headers = {
             'Content-Type': 'application/json'
         }
-        response = requests.post(api_address + ':' + port, headers=headers, data=payload)
+        response = requests.post(api_address + ':' + port, headers=headers, data=json.dumps(payload))
 
         if response.status_code == 200:
-            # return response.json()['response']
             data = {**payload, **response.json()}
             data['llm_name'] = self.model
-            db = get_db_connection(hostname=config.get('DataBase_Settings', 'host'),
-                                   username=config.get('DataBase_Settings', 'username'),
-                                   password=config.get('DataBase_Settings', 'password'),
-                                   dbname=config.get('DataBase_Settings', 'tablename1'))
-            write_data_to_database(db=db, tablename=config.get('DataBase_Settings', 'tablename1'), data=data)
+            db = get_db_connection(hostname=config.get('chatGLM6B_1_Local', 'host'),
+                                   port=int(config.get('chatGLM6B_1_Local', 'db_port')),
+                                   username=config.get('chatGLM6B_1_Local', 'username'),
+                                   password=config.get('chatGLM6B_1_Local', 'password'),
+                                   dbname=config.get('chatGLM6B_1_Local', 'database'))
+            write_data_to_database(db=db, tablename=config.get('chatGLM6B_1_Local', 'tablename'), data=data)
             return {**payload, **response.json()}
         else:
             print(f"Request failed with status code {response.status_code}: {response.text}")
@@ -43,4 +43,4 @@ class ChatGLM6B(LLMs):
 
 chatglm6b = ChatGLM6B()
 # unit test
-# response = chatglm6b.__call__("你好！")
+response = chatglm6b.__call__("你是谁？")

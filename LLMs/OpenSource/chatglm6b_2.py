@@ -15,7 +15,7 @@ class ChatGLM6B_2(LLMs):
         config.read('../LLMs.ini')
 
         api_address = config.get('chatGLM6B_2_Local', 'local_api_request_address')
-        port = config.get('chatGLM6B_2_Local', 'port')
+        port = config.get('chatGLM6B_2_Local', 'service_port')
         req = {
             "prompt": prompt,
             "history": []
@@ -29,11 +29,12 @@ class ChatGLM6B_2(LLMs):
         if response.status_code == 200:
             data = {**req, **response.json()}
             data['llm_name'] = self.model
-            db = get_db_connection(hostname=config.get('DataBase_Settings', 'host'),
-                                   username=config.get('DataBase_Settings', 'username'),
-                                   password=config.get('DataBase_Settings', 'password'),
-                                   dbname=config.get('DataBase_Settings', 'tablename1'))
-            write_data_to_database(db=db, tablename=config.get('DataBase_Settings', 'tablename1'), data=data)
+            db = get_db_connection(hostname=config.get('chatGLM6B_2_Local', 'host'),
+                                   port=int(config.get('chatGLM6B_2_Local', 'db_port')),
+                                   username=config.get('chatGLM6B_2_Local', 'username'),
+                                   password=config.get('chatGLM6B_2_Local', 'password'),
+                                   dbname=config.get('chatGLM6B_2_Local', 'database'))
+            write_data_to_database(db=db, tablename=config.get('chatGLM6B_2_Local', 'tablename'), data=data)
             return {**req, **response.json()}
         else:
             # Handle request errors
@@ -43,4 +44,4 @@ class ChatGLM6B_2(LLMs):
 
 chatglm6b_2 = ChatGLM6B_2()
 # unit test
-response = chatglm6b_2.__call__("你好！请描述一下你自己。")
+response = chatglm6b_2.__call__("我是你爹！！！")
