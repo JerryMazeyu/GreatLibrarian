@@ -15,7 +15,7 @@
     },
     "evaluation": {
         "0": [{"keywords":["yes", "same"], "GPT4eval": true}, {"keywords":["no", "different", "杜甫"], "GPT4eval": true}],
-        "1": [{"keywords":[["yes", "larger", "bigger"],["yes", "larger", "bigger"]]}, {"keywords":["yes"], "balcklist": ["no"]}],
+        "1": [{"keywords":[["yes", "larger", "bigger"],["yes", "larger", "bigger"]]}, {"keywords":["yes"], "blacklist": ["no"]}],
         "2": [{"keywords":["yes"]}, {"keywords":["no"]}, {"keywords":["no"]}]
     }
 }

@@ -19,7 +19,7 @@ class AutoInteractor():
         eval_dict={"keywords":Keyword,"tools":ToolUse,"GPT4eval":GPT4eval}
         eval_stack={}
         for key in eval_dict.keys():
-            if (key in self.raw_eval_info.key()):
+            if (key in self.raw_eval_info.keys()):
                 eval_cls=eval_dict[key]
                 eval_method=eval_cls(self.prompt,'',self.raw_eval_info)
                 eval_stack[key]=eval_method
@@ -104,5 +104,12 @@ class AutoInteractor():
             eval_obj.set_ans(keywords_ans)
             keywords_eval_info=eval_obj.score(1)#to do: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
             print(keywords_eval_info)
+            if self.eval_info.get('GPT4eval', None):
+                GPT4_ans=' '
+                eval_obj=eval_stack['GPT4eval']
+                eval_obj.set_ans(GPT4_ans)
+                GPT4_eval_info=eval_obj.score(1)#to do: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
+                print(GPT4_eval_info)
+
 
 

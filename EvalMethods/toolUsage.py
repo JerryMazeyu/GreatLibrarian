@@ -8,6 +8,7 @@ class ToolUse(EvalMethods):
         if not self.evalinfo.get("tool", None):
             warnings.warn("There is no tool usage.", RuntimeWarning)
         self.tools = to_list(self.evalinfo.get("tool"))
+        self.methodnum=2
     
     def set_ans(self,ans):
         self.ans=ans
@@ -56,7 +57,7 @@ class ToolUse(EvalMethods):
         eval_dict={1:self.eval1,2:self.eval2}
         eval_method=eval_dict[method_num]
         score=eval_method()
-        score_info=f'The model gets ***{score}*** points in this testcase by toolUsage method.'
+        score_info=f'The model gets {score} points in this testcase by toolUsage method.'
         return(score_info)
     
     
