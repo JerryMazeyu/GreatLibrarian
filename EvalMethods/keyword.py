@@ -53,7 +53,7 @@ class Keyword(EvalMethods):
         eval_dict={1:self.eval1,2:self.eval2}
         eval_method=eval_dict[method_num]
         score=eval_method()
-        score_info=f'The model gets ***{score}*** points in this testcase by keywords method.'
+        score_info=f'The model gets {score} points in this testcase by keywords method.'
         return(score_info)
 
     def if_there_is(self, ans, keywords):

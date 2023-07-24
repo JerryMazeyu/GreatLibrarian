@@ -43,4 +43,5 @@ class ChatGLM6B(LLMs):
 
 chatglm6b = ChatGLM6B()
 # unit test
-response = chatglm6b.__call__("你是谁？")
+# response = chatglm6b.__call__("你好！")
+

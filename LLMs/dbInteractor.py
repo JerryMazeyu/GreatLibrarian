@@ -58,3 +58,4 @@ def write_data_to_database(db, tablename, data):
 #     print("Connection successful!")
 # else:
 #     print("Connection failed.")
+
