@@ -1,7 +1,7 @@
 from typing import Any
 from Utils import add_logger_to_class,load_from_cfg
 from Recoder import Recoder
-from EvalMethods import ToolUse,Keyword,GPT4eval
+from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 
 @add_logger_to_class
 class AutoInteractor():
@@ -16,7 +16,7 @@ class AutoInteractor():
         The dictionary "eval_stack" is the final evaluation stack, the value of every key is the corresponding evaluation object.
 
         """
-        eval_dict={"keywords":Keyword,"tools":ToolUse,"GPT4eval":GPT4eval}
+        eval_dict={"keywords":Keyword,"tools":ToolUse,"GPT4eval":GPT4eval,"blacklist":Blacklist}
         eval_stack={}
         for key in eval_dict.keys():
             if (key in self.raw_eval_info.keys()):
@@ -96,20 +96,26 @@ class AutoInteractor():
             toolusage_ans=self.tool_interact(self.prompt, self.eval_info['tool'])
             eval_obj=eval_stack['tools']
             eval_obj.set_ans(toolusage_ans)
-            tool_eval_info=eval_obj.score(1)#to do: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
+            tool_eval_info=eval_obj.score(1) #TODO: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
             print(tool_eval_info)
         else:
             keywords_ans=self.base_interact(self.prompt)
             eval_obj=eval_stack['keywords']
             eval_obj.set_ans(keywords_ans)
-            keywords_eval_info=eval_obj.score(1)#to do: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
+            keywords_eval_info=eval_obj.score(1) #TODO: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
             print(keywords_eval_info)
-            if self.eval_info.get('GPT4eval', None):
-                GPT4_ans=' '
-                eval_obj=eval_stack['GPT4eval']
-                eval_obj.set_ans(GPT4_ans)
-                GPT4_eval_info=eval_obj.score(1)#to do: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
+            if  self.eval_info.get('blacklist', None):
+                eval_obj=eval_stack['blacklist']
+                eval_obj.set_ans(keywords_ans)
+                blacklist_eval_info=eval_obj.score(1) #TODO: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
+                print(blacklist_eval_info)
                 print(GPT4_eval_info)
+            if  self.eval_info.get('GPT4eval', None):
+                eval_obj=eval_stack['GPT4eval']
+                eval_obj.set_ans(keywords_ans)
+                GPT4_eval_info=eval_obj.score(1) #TODO: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
+                print(GPT4_eval_info)
+
 
 
 
