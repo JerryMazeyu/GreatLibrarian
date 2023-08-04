@@ -2,7 +2,7 @@
     "name": "example1",
     "description": "Test if LLM can recognize common knowledge.",
     "field": "common knowledge",
-    "promots": [
+    "prompts": [
         "{$1.1} is {$1.2}, do you think this is right?",
         ["What do you think about {$2.1} and {$2.2}?", "You are wrong, rethink this."],
         "{$3} is a city from {$4}, yes or no?"
