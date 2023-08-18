@@ -27,6 +27,7 @@ class Getinfo():
             eval_method, score = self.extract_info(line)
             if eval_method and score:
                 score_dict[eval_method].append(score)
+
         print(score_dict)
         return (score_dict)
 

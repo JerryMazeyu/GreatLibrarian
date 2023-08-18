@@ -18,17 +18,21 @@ class Analyse():
         
         """
         score=self.score_dict
-        keywords_score=score['keywords']
-        toolUsage_socre=score['toolUsage']
-        gpt4Eval_score=score['gpt4Eval']
-        blacklist_score=score['blacklist']
-        keywords_score_mean=sum(keywords_score)/len(keywords_score)
-        toolUsage_socre_mean=sum(toolUsage_socre)/len(toolUsage_socre)
-        gpt4Eval_score_mean=sum(gpt4Eval_score)/len(gpt4Eval_score)
-        blacklist_score_mean=sum(blacklist_score)/len(blacklist_score)
-        mean_score_info=f'By \'keywords\' evaluation, the LLM gets {keywords_score_mean} scores in average.\nBy \'toolUsage\' evaluation, the LLM gets {toolUsage_socre_mean} scores in average.\nBy \'gpt4Eval\' evaluation, the LLM gets {gpt4Eval_score_mean} scores in average.\nBy \'blacklist\' evaluation, the LLM gets {blacklist_score_mean} scores in average.\n'
+        score_list=[]
+        score_mean=[]
+        score_list.append(score['keywords'])
+        score_list.append(score['toolUsage'])
+        score_list.append(score['gpt4Eval'])
+        score_list.append(score['blacklist'])
+        for score in score_list:
+            if score==[]:
+                score_mean.append('Not evaluated by this method')
+            else:
+                score_mean.append(sum(score)/len(score))
+
+        mean_score_info=f'By \'keywords\' evaluation, the LLM gets {score_mean[0]} scores in average.\nBy \'toolUsage\' evaluation, the LLM gets {score_mean[1]} scores in average.\nBy \'gpt4Eval\' evaluation, the LLM gets {score_mean[2]} scores in average.\nBy \'blacklist\' evaluation, the LLM gets {score_mean[3]} scores in average.\n'
         print(mean_score_info)
-        mean_score_list=[keywords_score_mean,toolUsage_socre_mean,gpt4Eval_score_mean,blacklist_score_mean]
+        mean_score_list=[score_mean[0],score_mean[1],score_mean[2],score_mean[3]]
         for score in mean_score_list:
             if score>=0.6:
                 score='does well in'
