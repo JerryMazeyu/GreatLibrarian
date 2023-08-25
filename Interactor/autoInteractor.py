@@ -8,6 +8,7 @@ class AutoInteractor():
     def __init__(self, testcase) -> None:
         load_from_cfg(self, testcase)
         # self.recoders = []
+
     
     def eval(self):
         """
@@ -16,7 +17,7 @@ class AutoInteractor():
         The dictionary "eval_stack" is the final evaluation stack, the value of every key is the corresponding evaluation object.
 
         """
-        eval_dict={"keywords":Keyword,"tools":ToolUse,"GPT4eval":GPT4eval,"blacklist":Blacklist}
+        eval_dict={"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
         eval_stack={}
         for key in eval_dict.keys():
             if (key in self.raw_eval_info.keys()):
@@ -82,6 +83,33 @@ class AutoInteractor():
         # self.recoders.append(recoder)
         return(ans_list)
     
+
+    def selectmethod(self):#TODO:这个方法暂时不确定后续应该放在哪里，因为并行可能导致该函数重复运行不必要的次数，先临时写在这个地方
+        """
+        A function to record a list, which represents the method that user chooses in each evaluation method.
+        The evaluation method that doesn't appear in this testcase will be recorded as 0.
+        For example, if the evalstack is like: {"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist},and the return of the method is [1,2,1,0].
+        That means the user chooses method1 in toolUse method, method2 in keyword method and method1 in blacklist method.
+
+        """
+        eval_dict={"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
+        methodnum=[]
+        for key in eval_dict:
+            if (key in self.raw_eval_info.keys()):
+                eval_cls=eval_dict[key]
+                eval_method=eval_cls(self.prompt,'',self.raw_eval_info)
+                print(f'Please choose one of the methods in the {key} evaluation!\nThe methods are shown as below:')
+                eval_method.showmethod()
+                num=int(input('Please enter the number of your chosen method:'))
+                while num>eval_method.getmethodtotal():
+                    print("Please input the correct number!")
+                    num=int(input('Please enter the number of your chosen method:'))
+                methodnum.append(num)
+            else:
+                methodnum.append(0)
+        return(methodnum)
+
+    
     def run(self):
 
         """
@@ -91,31 +119,33 @@ class AutoInteractor():
         The function use a list to record the answers from the LLM, and use this answer list to evaluate the LLM in this testcase. It will evaluate the LLM with every method chosen by the user.
         
         """
+        methodnum=self.selectmethod()#TODO:也是临时放在这里
         eval_stack=self.eval()
         if self.eval_info.get('tool', None):
             toolusage_ans=self.tool_interact(self.prompt, self.eval_info['tool'])
             eval_obj=eval_stack['tools']
             eval_obj.set_ans(toolusage_ans)
-            tool_eval_info=eval_obj.score(1) #TODO: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
-            print(tool_eval_info)
+            _,tool_eval_info=eval_obj.score(methodnum[0]) 
         else:
             keywords_ans=self.base_interact(self.prompt)
             eval_obj=eval_stack['keywords']
             eval_obj.set_ans(keywords_ans)
-            keywords_eval_info=eval_obj.score(1) #TODO: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
+            _,keywords_eval_info=eval_obj.score(methodnum[1]) 
             print(keywords_eval_info)
             if  self.eval_info.get('blacklist', None):
                 eval_obj=eval_stack['blacklist']
                 eval_obj.set_ans(keywords_ans)
-                blacklist_eval_info=eval_obj.score(1) #TODO: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
+                _,blacklist_eval_info=eval_obj.score(methodnum[2]) 
                 print(blacklist_eval_info)
                 print(GPT4_eval_info)
             if  self.eval_info.get('GPT4eval', None):
                 eval_obj=eval_stack['GPT4eval']
                 eval_obj.set_ans(keywords_ans)
-                GPT4_eval_info=eval_obj.score(1) #TODO: Get the method_num that user choose instead of a certain number to choose one of the methods in this kind of evluation.
+                _,GPT4_eval_info=eval_obj.score(methodnum[3]) 
                 print(GPT4_eval_info)
 
 
-
+case=[{ 'eval_info': {"keywords":["yes", "same"],"blacklist":['no']}}]
+test=AutoInteractor(case)
+test.run()
 

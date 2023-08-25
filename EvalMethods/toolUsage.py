@@ -1,6 +1,7 @@
 from Core import EvalMethods
 from Utils import to_list
 import warnings
+import re
 
 class ToolUse(EvalMethods):
     def __init__(self, prompt, ans, evalinfo):
@@ -8,7 +9,10 @@ class ToolUse(EvalMethods):
         if not self.evalinfo.get("tool", None):
             warnings.warn("There is no tool usage.", RuntimeWarning)
         self.tools = to_list(self.evalinfo.get("tool"))
-        self.methodnum=2
+        self.methodtotal=2
+    
+    def getmethodtotal(self):
+        return int((self.methodtotal))
     
     def set_ans(self,ans):
         self.ans=ans
@@ -58,6 +62,20 @@ class ToolUse(EvalMethods):
         eval_method=eval_dict[method_num]
         score=eval_method()
         score_info=f'The model gets {score} points in this testcase by toolUsage method.'
-        return(score_info)
+        return(score,score_info)
     
+
+    def showmethod(self):
+        """
+        A method to show the methods in this evaluation method for the users to choose the method they want.
+
+        """
+        method_pattern = re.compile(r'^eval\d+$')
+        methods = [getattr(ToolUse, method_name) for method_name in dir(ToolUse) if callable(getattr(ToolUse, method_name)) and method_pattern.match(method_name)] 
+        methods.sort(key=lambda x: x.__name__)
+ 
+        for method in methods:
+            docstring = method.__doc__
+            if docstring:
+                print(f"{method.__name__}:\n{docstring}\n")
     

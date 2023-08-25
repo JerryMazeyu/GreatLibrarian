@@ -1,13 +1,16 @@
 from Core import EvalMethods
 from Utils import to_list
+import re
 
 class Keyword(EvalMethods):
     def __init__(self, prompt, ans, evalinfo):
         super().__init__(prompt, ans, evalinfo)
         self.name = ['keyword', 'Keyword', 'Keywords','keywords']
         self.keywords=to_list(self.evalinfo.get("keywwords"))
-        self.methodnum=2
+        self.methodtotal=2
         
+    def getmethodtotal(self):
+        return int((self.methodtotal))
     
     def set_ans(self,ans):
         self.ans=ans
@@ -55,7 +58,22 @@ class Keyword(EvalMethods):
         eval_method=eval_dict[method_num]
         score=eval_method()
         score_info=f'The model gets {score} points in this testcase by keywords method.'
-        return(score_info)
+        return(score,score_info)
+    
+    def showmethod(self):
+        """
+        A method to show the methods in this evaluation method for the users to choose the method they want.
+
+        """
+        method_pattern = re.compile(r'^eval\d+$')
+        methods = [getattr(Keyword, method_name) for method_name in dir(Keyword) if callable(getattr(Keyword, method_name)) and method_pattern.match(method_name)] 
+        methods.sort(key=lambda x: x.__name__)
+ 
+        for method in methods:
+            docstring = method.__doc__
+            if docstring:
+                print(f"{method.__name__}:\n{docstring}\n")
+        
 
     def if_there_is(self, ans, keywords):
         for kw in keywords:
