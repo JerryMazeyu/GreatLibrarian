@@ -42,7 +42,7 @@ class ChatGLM6B_2(LLMs):
             return None
 
 
-chatglm6b_2 = ChatGLM6B_2()
+#chatglm6b_2 = ChatGLM6B_2()
 # unit test
-response = chatglm6b_2.__call__("我是你爹！！！")
+#response = chatglm6b_2.__call__("我是你爹！！！")
 

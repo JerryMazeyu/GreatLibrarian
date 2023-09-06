@@ -7,4 +7,23 @@ class GPT4eval(EvalMethods):
         super().__init__(prompt, ans, evalinfo)
         if not self.evalinfo.get("GPT4eval", None):
             warnings.warn("There is no GPT4eval.", RuntimeWarning)
-        self.methodnum=0
+        self.methodtotal=0
+    
+
+    def eval1(self):
+        """
+
+
+        """
+        pass
+
+    def showmethod(self):
+        """
+        A method to show the methods in this evaluation method for the users to choose the method they want.
+
+        """
+        pass
+        
+
+    def getmethodtotal(self):
+        return int((self.methodtotal))

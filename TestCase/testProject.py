@@ -12,7 +12,7 @@ class TestProject:
         self.name = json_obj.get('name', "No Test Case Name")
         self.description = json_obj.get('description', "")
         self.fields = []
-        self.prompts_ = json_obj['promots']
+        self.prompts_ = json_obj['prompts']
         self.values = json_obj.get('values', {})
         self.raw_eval_info = json_obj.get('evaluation', None)
         self.valid_fields = ['common knowledge', 'tool usage']
