@@ -1,5 +1,5 @@
 from Core import Agents
-import getContextExamples as ex
+from Agents.PromptMarket import getContextExamples as ex
 from LLMs.OpenSource import chatglm6b_2
 
 class PromptMarket(Agents):
@@ -13,7 +13,7 @@ class PromptMarket(Agents):
         # return temp
         print("PromptMarket User Guide：该工具箱包含了数学、统计的许多语境示例，当你遇到这方面的问题时，它会返回给你一些典型的语境示例，能够帮助你更好的进行上下文学习，但是你需要明确具体的领域，例如：概率论、数理统计等。")
         print("1. Input domain, concept and question, the question is optional.")
-        print("2. Input "exit" to quit.")
+        print("2. Input 'exit' to quit.")
         print("3. ....")
     
     def __call__(self) -> str:

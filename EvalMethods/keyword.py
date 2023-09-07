@@ -6,7 +6,7 @@ class Keyword(EvalMethods):
     def __init__(self, prompt, ans, evalinfo):
         super().__init__(prompt, ans, evalinfo)
         self.name = ['keyword', 'Keyword', 'Keywords','keywords']
-        self.keywords=to_list(self.evalinfo.get("keywwords"))
+        self.keywords=self.evalinfo['keywords']
         self.methodtotal=2
         
     def getmethodtotal(self):
@@ -25,6 +25,8 @@ class Keyword(EvalMethods):
         score = 0.0
         keywords = self.evalinfo['keywords']
         keywords = to_list(keywords)
+        print(self.prompt)
+        print(self.keywords)
         for ind, pt in enumerate(self.prompt):
             if self.if_there_is(self.ans[ind], self.keywords[ind]):
                 score += 1 / len(self.prompt)

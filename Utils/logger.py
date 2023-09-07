@@ -91,7 +91,9 @@ class LoggerWriter:
             self.logger.info(formatted_message)
                 
     def flush(self):
-        self.logger.flush()
+       try:  self.logger.flush()
+       except:
+           pass
 
 
 def add_logger(logger_name=None, logger_file=None):

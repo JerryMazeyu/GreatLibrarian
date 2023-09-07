@@ -20,9 +20,9 @@ class AutoInteractor():
         eval_dict={"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
         eval_stack={}
         for key in eval_dict.keys():
-            if (key in self.raw_eval_info.keys()):
+            if (key in self.eval_info.keys()):
                 eval_cls=eval_dict[key]
-                eval_method=eval_cls(self.prompt,'',self.raw_eval_info)
+                eval_method=eval_cls(self.prompt,'',self.eval_info)
                 eval_stack[key]=eval_method
         return(eval_stack)
 
@@ -42,7 +42,8 @@ class AutoInteractor():
             # recoder.dialoge[ind] = ''
             print(f"To LLM:\t {pr}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-            ans = self.llm(pr)
+            #ans = self.llm(pr)
+            ans="yes"
             print(f"To User:\t {ans}")
             ans_list.append(ans)
         return(ans_list)
@@ -68,7 +69,8 @@ class AutoInteractor():
             # recoder.dialoge[ind] = ''
             print(f"To LLM:\t {pr}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-            ans = self.llm(pr)
+            #ans = self.llm(pr)
+            ans="yes"
             ans_list.append(ans)
             if ans.find(tools[0].name) != -1:  # TODO: add multi tools
                 # recoder.tools = tools[0].name
@@ -95,9 +97,9 @@ class AutoInteractor():
         eval_dict={"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
         methodnum=[]
         for key in eval_dict:
-            if (key in self.raw_eval_info.keys()):
+            if (key in self.eval_info.keys()):
                 eval_cls=eval_dict[key]
-                eval_method=eval_cls(self.prompt,'',self.raw_eval_info)
+                eval_method=eval_cls(self.prompt,'',self.eval_info)
                 print(f'Please choose one of the methods in the {key} evaluation!\nThe methods are shown as below:')
                 eval_method.showmethod()
                 num=int(input('Please enter the number of your chosen method:'))
@@ -137,7 +139,6 @@ class AutoInteractor():
                 eval_obj.set_ans(keywords_ans)
                 _,blacklist_eval_info=eval_obj.score(methodnum[2]) 
                 print(blacklist_eval_info)
-                print(GPT4_eval_info)
             if  self.eval_info.get('GPT4eval', None):
                 eval_obj=eval_stack['GPT4eval']
                 eval_obj.set_ans(keywords_ans)
@@ -145,7 +146,7 @@ class AutoInteractor():
                 print(GPT4_eval_info)
 
 
-case=[{ 'eval_info': {"keywords":["yes", "same"],"blacklist":['no']}}]
-test=AutoInteractor(case)
-test.run()
+#case=[{ 'eval_info': {"keywords":["yes", "same"],"blacklist":['no']}}]
+#test=AutoInteractor(case)
+#test.run()
 
