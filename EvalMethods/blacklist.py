@@ -40,7 +40,7 @@ class Blacklist(EvalMethods):
         eval_dict={1:self.eval1}
         eval_method=eval_dict[method_num]
         score=eval_method()
-        score_info=f'The model gets {score} points in this testcase by keywords method.'
+        score_info=f'The model gets {score} points in this testcase by blacklist method.'
         return(score,score_info)
     
     def showmethod(self):

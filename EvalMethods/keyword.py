@@ -25,8 +25,8 @@ class Keyword(EvalMethods):
         score = 0.0
         keywords = self.evalinfo['keywords']
         keywords = to_list(keywords)
-        print(self.prompt)
-        print(self.keywords)
+        #print(self.prompt)
+        #print(self.keywords)
         for ind, pt in enumerate(self.prompt):
             if self.if_there_is(self.ans[ind], self.keywords[ind]):
                 score += 1 / len(self.prompt)
