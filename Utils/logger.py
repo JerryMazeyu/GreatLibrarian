@@ -140,6 +140,7 @@ def add_logger(logger_name=None, logger_file=None):
     return decorate
 
 
+
 def add_logger_to_class(cls):
     """
     A decorator to add logging functionality to all methods of a class.
@@ -169,6 +170,7 @@ def add_logger_to_class(cls):
     Note: This decorator assumes the existence of a 'Logs' directory in the current working path.
     """
     logger_name = generate_name()
+    setattr(cls,'logger_name',logger_name)
     for attr_name, attr_value in inspect.getmembers(cls):
         if inspect.isfunction(attr_value):
             decorated_func = add_logger(logger_name=logger_name, logger_file='Logs')(attr_value)

@@ -28,18 +28,22 @@ class Analyse():
             if score==[]:
                 score_mean.append('Not evaluated by this method')
             else:
-                score_mean.append(sum(score)/len(score))
+                score_mean.append(round((sum(score)/len(score)),3))
 
-        mean_score_info=f'By \'keywords\' evaluation, the LLM gets {score_mean[0]} scores in average.\nBy \'toolUsage\' evaluation, the LLM gets {score_mean[1]} scores in average.\nBy \'gpt4Eval\' evaluation, the LLM gets {score_mean[2]} scores in average.\nBy \'blacklist\' evaluation, the LLM gets {score_mean[3]} scores in average.\n'
+        mean_score_info=f'By \'keywords\' evaluation, the LLM gets "{score_mean[0]}" scores in average.\nBy \'toolUsage\' evaluation, the LLM gets "{score_mean[1]}" scores in average.\nBy \'gpt4Eval\' evaluation, the LLM gets "{score_mean[2]}" scores in average.\nBy \'blacklist\' evaluation, the LLM gets "{score_mean[3]}" scores in average.\n'
         print(mean_score_info)
-        mean_score_list=[score_mean[0],score_mean[1],score_mean[2],score_mean[3]]
-        for score in mean_score_list:
-            if score>=0.6:
-                score='does well in'
+        mean_score_list=[]
+        for score in score_mean:
+            if score!='Not evaluated by this method':
+                if score>=0.6:
+                    mean_score_list.append('does well in')
+                else:
+                    mean_score_list.append('is not good at')
             else:
-                score='is not good at'
+                mean_score_list.append('is not evaluated')
         sum_info=f'To conclude: The model {mean_score_list[0]} in \'keywords\' evaluation.\nThe model {mean_score_list[1]} in \'toolUsage\' evaluation.\nThe model {mean_score_list[2]} in \'gpt4Eval\' evaluation.\nThe model {mean_score_list[3]} in \'blacklist\' evaluation.\n'
         print(sum_info)
+        return(mean_score_info,sum_info)
 
 
 

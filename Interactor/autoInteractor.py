@@ -2,6 +2,8 @@ from typing import Any
 from Utils import add_logger_to_class,load_from_cfg
 from Recoder import Recoder
 from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
+from Analyser import Analyse,Getinfo
+import os
 
 @add_logger_to_class
 class AutoInteractor():
@@ -17,7 +19,7 @@ class AutoInteractor():
         The dictionary "eval_stack" is the final evaluation stack, the value of every key is the corresponding evaluation object.
 
         """
-        eval_dict={"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
+        eval_dict={"tool":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
         eval_stack={}
         for key in eval_dict.keys():
             if (key in self.eval_info.keys()):
@@ -72,7 +74,7 @@ class AutoInteractor():
             #ans = self.llm(pr)
             ans="yes"
             ans_list.append(ans)
-            if ans.find(tools[0].name) != -1:  # TODO: add multi tools
+            if ans.find(tools[0]['name']) != -1:  # TODO: add multi tools
                 # recoder.tools = tools[0].name
                 print(f"To Tool:\t {ans}")
                 # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
@@ -94,7 +96,7 @@ class AutoInteractor():
         That means the user chooses method1 in toolUse method, method2 in keyword method and method1 in blacklist method.
 
         """
-        eval_dict={"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
+        eval_dict={"tool":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
         methodnum=[]
         for key in eval_dict:
             if (key in self.eval_info.keys()):
@@ -123,11 +125,12 @@ class AutoInteractor():
         """
         methodnum=self.selectmethod()#TODO:也是临时放在这里
         eval_stack=self.eval()
-        if self.eval_info.get('tool', None):
+        if self.eval_info.get('tool', None):#TODO:如果这里按照这个逻辑执行，对于同一个prompt，有了tool评价方法就不能再使用其他方法，并且所有prompt的答案设置都必须含有keyword评价方法。
             toolusage_ans=self.tool_interact(self.prompt, self.eval_info['tool'])
-            eval_obj=eval_stack['tools']
+            eval_obj=eval_stack['tool']
             eval_obj.set_ans(toolusage_ans)
             _,tool_eval_info=eval_obj.score(methodnum[0]) 
+            print(tool_eval_info)
         else:
             keywords_ans=self.base_interact(self.prompt)
             eval_obj=eval_stack['keywords']
@@ -144,6 +147,9 @@ class AutoInteractor():
                 eval_obj.set_ans(keywords_ans)
                 _,GPT4_eval_info=eval_obj.score(methodnum[3]) 
                 print(GPT4_eval_info)
+        log_path=os.path.join('Logs',f"{self.logger_name}.log")
+        score_dict=Getinfo(log_path).get_eval_result()
+        mean_score_info,sum_info=Analyse(score_dict).analyse()
 
 
 #case=[{ 'eval_info': {"keywords":["yes", "same"],"blacklist":['no']}}]

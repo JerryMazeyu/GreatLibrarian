@@ -25,10 +25,9 @@ class Getinfo():
 
         for line in lines:
             eval_method, score = self.extract_info(line)
-            if eval_method and score:
+            if eval_method :
                 score_dict[eval_method].append(score)
 
-        print(score_dict)
         return (score_dict)
 
     def extract_info(self,line):
