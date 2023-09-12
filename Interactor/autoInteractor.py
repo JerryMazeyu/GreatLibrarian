@@ -7,9 +7,10 @@ import os
 
 @add_logger_to_class
 class AutoInteractor():
-    def __init__(self, testcase) -> None:
+    def __init__(self, testcase,methodnum) -> None:
         load_from_cfg(self, testcase)
         # self.recoders = []
+        self.methodnum=methodnum
 
     
     def eval(self):
@@ -123,29 +124,29 @@ class AutoInteractor():
         The function use a list to record the answers from the LLM, and use this answer list to evaluate the LLM in this testcase. It will evaluate the LLM with every method chosen by the user.
         
         """
-        methodnum=self.selectmethod()#TODO:也是临时放在这里
+        #methodnum=self.selectmethod()#TODO:也是临时放在这里
         eval_stack=self.eval()
         if self.eval_info.get('tool', None):#TODO:如果这里按照这个逻辑执行，对于同一个prompt，有了tool评价方法就不能再使用其他方法，并且所有prompt的答案设置都必须含有keyword评价方法。
             toolusage_ans=self.tool_interact(self.prompt, self.eval_info['tool'])
             eval_obj=eval_stack['tool']
             eval_obj.set_ans(toolusage_ans)
-            _,tool_eval_info=eval_obj.score(methodnum[0]) 
+            _,tool_eval_info=eval_obj.score(self.methodnum[0]) 
             print(tool_eval_info)
         else:
             keywords_ans=self.base_interact(self.prompt)
             eval_obj=eval_stack['keywords']
             eval_obj.set_ans(keywords_ans)
-            _,keywords_eval_info=eval_obj.score(methodnum[1]) 
+            _,keywords_eval_info=eval_obj.score(self.methodnum[1]) 
             print(keywords_eval_info)
             if  self.eval_info.get('blacklist', None):
                 eval_obj=eval_stack['blacklist']
                 eval_obj.set_ans(keywords_ans)
-                _,blacklist_eval_info=eval_obj.score(methodnum[2]) 
+                _,blacklist_eval_info=eval_obj.score(self.methodnum[2]) 
                 print(blacklist_eval_info)
             if  self.eval_info.get('GPT4eval', None):
                 eval_obj=eval_stack['GPT4eval']
                 eval_obj.set_ans(keywords_ans)
-                _,GPT4_eval_info=eval_obj.score(methodnum[3]) 
+                _,GPT4_eval_info=eval_obj.score(self.methodnum[3]) 
                 print(GPT4_eval_info)
         log_path=os.path.join('Logs',f"{self.logger_name}.log")
         score_dict=Getinfo(log_path).get_eval_result()

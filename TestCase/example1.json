@@ -16,6 +16,6 @@
     "evaluation": {
         "0": [{"keywords":["yes", "same"]}, {"keywords":["no", "different", "杜甫"]}],
         "1": [{"keywords":[["yes", "larger", "bigger"],["yes", "larger", "bigger"]]}, {"keywords":[["yes"],["yes"]], "blacklist": [["no"],["no"]]}],
-        "2": [{"keywords":["yes"]}, {"keywords":["no"]}, {"keywords":["no"]}]
+        "2": [{"keywords":["no"]}, {"keywords":["no"]}, {"keywords":["yes"]}]
     }
 }

@@ -5,6 +5,7 @@ import os
 import json
 import concurrent.futures
 from tqdm import tqdm
+from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 
 class AutoRunner():
     def __init__(self, cfg):
@@ -37,15 +38,16 @@ class AutoRunner():
         """
         Multi-threaded to run each test file to speed things up
         """
-        def run_interactor(testproj, interactor_cls, cfg):
+        def run_interactor(testproj, interactor_cls, cfg,methodnum):
             for testcase in testproj.get_cases(cfg):
-                interactor = interactor_cls(testcase)
+                interactor = interactor_cls(testcase,methodnum)
                 interactor.run()
 
+        methodnum=self.selectmethod()
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
             for testproj in self.testprojects:
-                future = executor.submit(run_interactor, testproj, self.interactor_cls, self.cfg)
+                future = executor.submit(run_interactor, testproj, self.interactor_cls, self.cfg,methodnum)
                 futures.append(future)
 
             for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
@@ -57,3 +59,25 @@ class AutoRunner():
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation
         """
         pass
+
+    def selectmethod(self):#TODO:这个方法暂时不确定后续应该放在哪里，因为并行可能导致该函数重复运行不必要的次数，先临时写在这个地方
+        """
+        A function to record a list, which represents the method that user chooses in each evaluation method.
+        The evaluation method that doesn't appear in this testcase will be recorded as 0.
+        For example, if the evalstack is like: {"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist},and the return of the method is [1,2,1,0].
+        That means the user chooses method1 in toolUse method, method2 in keyword method and method1 in blacklist method.
+
+        """
+        eval_dict={"tool":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
+        methodnum=[]
+        for key in eval_dict:
+                eval_cls=eval_dict[key]
+                eval_method=eval_cls('','',{"keywords":["moonlight", "window", "frost", "ground"], "tool":[{"name": "TranslationAPI", "args": "窗前明月光，疑似地上霜。"}]})
+                print(f'Please choose one of the methods in the {key} evaluation!\nThe methods are shown as below:')
+                eval_method.showmethod()
+                num=int(input('Please enter the number of your chosen method:'))
+                while num>eval_method.getmethodtotal():
+                    print("Please input the correct number!")
+                    num=int(input('Please enter the number of your chosen method:'))
+                methodnum.append(num)
+        return(methodnum)
