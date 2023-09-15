@@ -5,11 +5,12 @@ class EvalMethods(ABC):
     """Evaluation methods abstract class
     """
     
-    def __init__(self, prompt, ans, evalinfo):
+    def __init__(self, prompt, ans, evalinfo, field):
         self.prompt = prompt
         self.ans = ans
         self.evalinfo = evalinfo
         self.methods = []
+        self.field = field
         self.check()
         
     def check(self):

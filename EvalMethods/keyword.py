@@ -3,10 +3,11 @@ from Utils import to_list
 import re
 
 class Keyword(EvalMethods):
-    def __init__(self, prompt, ans, evalinfo):
-        super().__init__(prompt, ans, evalinfo)
+    def __init__(self, prompt, ans, evalinfo,field):
+        super().__init__(prompt, ans, evalinfo,field)
         self.name = ['keyword', 'Keyword', 'Keywords','keywords']
         self.keywords=self.evalinfo['keywords']
+        self.field=field
         self.methodtotal=2
         
     def getmethodtotal(self):
@@ -14,7 +15,10 @@ class Keyword(EvalMethods):
     
     def set_ans(self,ans):
         self.ans=ans
-        
+
+    def set_field(self,field):
+        self.field=field
+
     def eval1(self):
         """
         A method for scoring models based on keywords.
@@ -59,7 +63,7 @@ class Keyword(EvalMethods):
         eval_dict={1:self.eval1,2:self.eval2}
         eval_method=eval_dict[method_num]
         score=eval_method()
-        score_info=f'The model gets {score} points in this testcase by keywords method.'
+        score_info=f'The model gets {score} points in this testcase by keywords method, in {self.field} field.'
         return(score,score_info)
     
     def showmethod(self):

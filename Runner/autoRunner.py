@@ -60,7 +60,7 @@ class AutoRunner():
         """
         pass
 
-    def selectmethod(self):#TODO:这个方法暂时不确定后续应该放在哪里，因为并行可能导致该函数重复运行不必要的次数，先临时写在这个地方
+    def selectmethod(self):
         """
         A function to record a list, which represents the method that user chooses in each evaluation method.
         The evaluation method that doesn't appear in this testcase will be recorded as 0.
@@ -72,7 +72,7 @@ class AutoRunner():
         methodnum=[]
         for key in eval_dict:
                 eval_cls=eval_dict[key]
-                eval_method=eval_cls('','',{"keywords":["moonlight", "window", "frost", "ground"], "tool":[{"name": "TranslationAPI", "args": "窗前明月光，疑似地上霜。"}]})
+                eval_method=eval_cls('','',{"keywords":["moonlight", "window", "frost", "ground"], "tool":[{"name": "TranslationAPI", "args": "窗前明月光，疑似地上霜。"}]},'')
                 print(f'Please choose one of the methods in the {key} evaluation!\nThe methods are shown as below:')
                 eval_method.showmethod()
                 num=int(input('Please enter the number of your chosen method:'))

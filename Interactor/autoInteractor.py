@@ -25,7 +25,7 @@ class AutoInteractor():
         for key in eval_dict.keys():
             if (key in self.eval_info.keys()):
                 eval_cls=eval_dict[key]
-                eval_method=eval_cls(self.prompt,'',self.eval_info)
+                eval_method=eval_cls(self.prompt,'',self.eval_info,[])
                 eval_stack[key]=eval_method
         return(eval_stack)
 
@@ -130,22 +130,26 @@ class AutoInteractor():
             toolusage_ans=self.tool_interact(self.prompt, self.eval_info['tool'])
             eval_obj=eval_stack['tool']
             eval_obj.set_ans(toolusage_ans)
+            eval_obj.set_field(self.field)
             _,tool_eval_info=eval_obj.score(self.methodnum[0]) 
             print(tool_eval_info)
         else:
             keywords_ans=self.base_interact(self.prompt)
             eval_obj=eval_stack['keywords']
             eval_obj.set_ans(keywords_ans)
+            eval_obj.set_field(self.field)
             _,keywords_eval_info=eval_obj.score(self.methodnum[1]) 
             print(keywords_eval_info)
             if  self.eval_info.get('blacklist', None):
                 eval_obj=eval_stack['blacklist']
                 eval_obj.set_ans(keywords_ans)
+                eval_obj.set_field(self.field)
                 _,blacklist_eval_info=eval_obj.score(self.methodnum[2]) 
                 print(blacklist_eval_info)
             if  self.eval_info.get('GPT4eval', None):
                 eval_obj=eval_stack['GPT4eval']
                 eval_obj.set_ans(keywords_ans)
+                eval_obj.set_field(self.field)
                 _,GPT4_eval_info=eval_obj.score(self.methodnum[3]) 
                 print(GPT4_eval_info)
         log_path=os.path.join('Logs',f"{self.logger_name}.log")

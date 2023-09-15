@@ -4,12 +4,13 @@ import warnings
 import re
 
 class ToolUse(EvalMethods):
-    def __init__(self, prompt, ans, evalinfo):
-        super().__init__(prompt, ans, evalinfo)
+    def __init__(self, prompt, ans, evalinfo,field):
+        super().__init__(prompt, ans, evalinfo,field)
         if not self.evalinfo.get("tool", None):
             warnings.warn("There is no tool usage.", RuntimeWarning)
         self.tools = to_list(self.evalinfo.get("tool"))
         self.methodtotal=2
+        self.field=field
     
     def getmethodtotal(self):
         return int((self.methodtotal))

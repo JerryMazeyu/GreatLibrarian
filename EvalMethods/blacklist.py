@@ -3,9 +3,10 @@ from Utils import to_list
 import re
 
 class Blacklist(EvalMethods):
-    def __init__(self, prompt, ans, evalinfo):
-        super().__init__(prompt, ans, evalinfo)
+    def __init__(self, prompt, ans, evalinfo,field):
+        super().__init__(prompt, ans, evalinfo,field)
         self.blacklist=to_list(self.evalinfo.get("blacklist"))
+        self.field=field
         self.methodtotal=1
         
     def getmethodtotal(self):
@@ -13,6 +14,9 @@ class Blacklist(EvalMethods):
 
     def set_ans(self,ans):
         self.ans=ans
+
+    def set_field(self,field):
+        self.field=field
 
     def eval1(self):
         """
@@ -40,7 +44,7 @@ class Blacklist(EvalMethods):
         eval_dict={1:self.eval1}
         eval_method=eval_dict[method_num]
         score=eval_method()
-        score_info=f'The model gets {score} points in this testcase by blacklist method.'
+        score_info=f'The model gets {score} points in this testcase by blacklist method, in {self.field} field.'
         return(score,score_info)
     
     def showmethod(self):
