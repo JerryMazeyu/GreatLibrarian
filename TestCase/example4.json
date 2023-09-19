@@ -10,7 +10,7 @@
     "values": {
         "1": [["叮当猫", "多啦A梦"], ["柯南", "工藤新一"]],
         "2": [["牛顿第一定律", "惯性"], ["北京", "帝都"]],
-        "3": ["STHLM", "California", "Shanghai"],
+        "3": ["STHLM", "California", "Yangzhou"],
         "4": ["China"]
     },
     "evaluation": {
