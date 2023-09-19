@@ -11,24 +11,24 @@ class TestProject:
     def __init__(self, json_obj):
         self.name = json_obj.get('name', "No Test Case Name")
         self.description = json_obj.get('description', "")
-        self.fields = []
+        self.fields = json_obj.get('field')
         self.prompts_ = json_obj['prompts']
         self.values = json_obj.get('values', {})
         self.raw_eval_info = json_obj.get('evaluation', None)
         self.valid_fields = ['common knowledge', 'tool usage']
         self.prompts = defaultdict(list)
 
-        if isinstance(json_obj['field'], list):
-            for x in json_obj['field']:
-                if x not in self.valid_fields:
-                    print(f"Warning: Field '{x}' is not in {self.valid_fields}")
-                else:
-                    self.fields.append(x)
-        else:
-            if json_obj['field'] not in self.valid_fields:
-                print(f"Warning: Field '{json_obj['field']}' is not in {self.valid_fields}")
-            else:    
-                self.fields.append(json_obj['field'])
+        # if isinstance(json_obj['field'], list):
+        #     for x in json_obj['field']:
+        #         if x not in self.valid_fields:
+        #             print(f"Warning: Field '{x}' is not in {self.valid_fields}")
+        #         else:
+        #             self.fields.append(x)
+        # else:
+        #     if json_obj['field'] not in self.valid_fields:
+        #         print(f"Warning: Field '{json_obj['field']}' is not in {self.valid_fields}")
+        #     else:    
+        #         self.fields.append(json_obj['field'])
         
         self.get_prompts()
         self.get_eval_info()
@@ -109,7 +109,7 @@ class TestProject:
         """ 
         for k,v in self.prompts.items():
             for ind, pr in enumerate(v):
-                cfg = {'name': self.name, 'description': self.description, 'field':to_list(self.fields), \
+                cfg = {'name': self.name, 'description': self.description, 'field':self.fields, \
                         'prompt': to_list(pr), 'eval_info': self.raw_eval_info[str(k)][ind]}
                 if baseconf:
                     cfg['llm'] = getattr(baseconf, 'llm', None)

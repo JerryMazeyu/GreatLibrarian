@@ -1,7 +1,7 @@
 {
     "name": "example2",
     "description": "Test if LLM can use agents.",
-    "field": "tool usage",
+    "field": "tool_usage",
     "prompts": [
         "请用英文翻译出这句诗——窗前明月光，疑似地上霜。",
         "请帮我查一下一本期刊的名字是《African American Review》，把摘要翻译成中文回答我。"
