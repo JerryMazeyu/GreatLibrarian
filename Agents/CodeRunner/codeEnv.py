@@ -1,109 +1,60 @@
+import os 
 import subprocess
-import shutil
-import time
-import os
-
-# def runcmd(command):
-#     ret = subprocess.run(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,encoding="utf-8",timeout=1)
-#     if ret.returncode == 0:
-#         print("success:",ret)
-#     else:
-#         print("error:",ret)
-
-# ["dir","/b"])#序列参数
-# runcmd("exit 1")#字符串参数
-
-
-
-
+import json
 
 class CodeRunner():
- def __init__(self) :
-    self.virtual_env_path='VirEnv'
-
+ def __init__(self, env_name) :
+    self.env_name=env_name
+    #self.env_name.path="  "
 
  def create_virtual_env(self):
     try:
-        #create virtual env
-        subprocess.run(['python','-m','venv','VirEnv'],stdout=subprocess,stderr=subprocess.PIPE,timeout=None)
-
-
-
-    except Exception as e:
-        return{
-            'error':f"Failed to create a virtual environment :{str(e)}"
-
-        }
+       command_create=['python', '-m','venv',self.env_name]
+       subprocess.run(command_create,check=True)
+       print(f'Virtual Environment {self.env_name} created successfully!')
+    except subprocess.CalledProcessError:
+       print(f'Unable to careate virtual Environment {self.env_name}.')
+       
     
  def run_code(self,user_code):
     try:
-       #create virtual environment
-       self.create_virtual_env()
+       #activate virtual environment
+       activate_script=os.path.join(self.env_name,'bin','activate')
+       activate_cmd=f'source {activate_script}'
+       
+       
+       #run user code
+       command_activate=[activate_cmd,'&&','python','-c',user_code]
+       result=subprocess.run(command_activate,stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True,text=True)
+       
+       #print output
+       print("Output: ",result.stdout)
+       print("Errors: ",result.stderr)
+       
 
-       #run code from user in virtual environment
-       result=subprocess.run([f'{self.virtual_env_path}/bin/python','-c',user_code],stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
+    except subprocess.CalledProcessError:
+       print(f'Unable to run code in your virtual environment')
 
-       #get result
-       output=result.stdout.decode('utf-8')
-       error=result.stderr.decode('utf-8')
 
-       return {
-          'output':output,
-          'error':error
-       }
+ def run_json(self,json_file):
+    try:
+       with open(json_file,'r') as file:
+          data=json.load(file)
+          if 'code' in data:
+             code_to_run=data['code']
+             self.run_code_in_virenv(code_to_run)
+          else:
+             print('JSON file does not cotain a "code" field')
 
-    except Exception as e:
-        return{
-           'error':str(e)
 
-        }
-    
-    finally:
-       #clear virtual environment
-       shutil.rmtree(self.virtual_env_path,ignore_errors=True)
-    
+    except FileNotFoundError:
+       print("f'File {json_file} does not found!")
+    except json.JSONDecodeError:
+       print("f'Unable to decode JSON file {json_file}.")
+
+
+
+
+
 code_runner=CodeRunner()
 
-# #
-# user_code="""
-# print("hello world!)
-# """
-
-# result=code_runner.run_code(user_code)
-
-# print("Output:")
-# print(result['output'])
-
-# print("Error:")
-# print(result['error'])
-
-
-# def run_code(user_code):
-#     try:
-#         #create virtual env
-#         virtual_env=subprocess.Popen(['python','-m','venv','VirEnv'],stdout=subprocess,stderr=subprocess.PIPE)
-#         virtual_env.communicate()
-        
-#         #activate virtual_env
-#         activate_env=subprocess.Popen(['source','VirEnv/bin/activate'],shell=True,stdout=subprocess,stderr=subprocess.PIPE)
-#         activate_env.communicate()
-
-#         #run code from users in virtual_env
-#         result=subprocess.run(['python','-c',user_code],stdout=subprocess.PIPE,stderr=subprocess.PIPE,shell=True)
-
-
-#         #get results
-#         output=result.stdout.decode('utf-8')
-#         error=result.stderr.decode('utf-8')
-
-#         return{
-#             'output': output,
-#             'error': error
-#         }
-#     except Exception as e:
-#         return{
-#             'error': str(e)
-#         }
-    
-
-#code input 
