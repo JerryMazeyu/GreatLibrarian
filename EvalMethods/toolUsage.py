@@ -17,6 +17,9 @@ class ToolUse(EvalMethods):
     
     def set_ans(self,ans):
         self.ans=ans
+    
+    def set_field(self,field):
+        self.field=field
 
     def eval1(self):
         """

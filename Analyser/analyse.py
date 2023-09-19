@@ -2,7 +2,7 @@ from Utils import add_logger_to_class
 @add_logger_to_class
 class Analyse():
     def __init__(self,score_dict) -> None:
-        self.score_dict=score_dict
+        self.score_dict = score_dict
     
     def analyse(self):
         """
@@ -17,33 +17,44 @@ class Analyse():
          To conclude, the LLM …"
         
         """
-        score=self.score_dict
-        score_list=[]
-        score_mean=[]
-        score_list.append(score['keywords'])
-        score_list.append(score['toolUsage'])
-        score_list.append(score['gpt4Eval'])
-        score_list.append(score['blacklist'])
-        for score in score_list:
-            if score==[]:
-                score_mean.append('Not evaluated by this method')
-            else:
-                score_mean.append(round((sum(score)/len(score)),3))
+        score = self.score_dict
+        score_list = []
+        score_mean = [0]*10
+        score_get = [0]*10
+        field_list = ['knowledge_understanding', 'coding', 'common_knowledge', 'reasoning', 'multi-language', 'specialized_knowledge', 'traceability', 'outputformatting', 'internal_security', 'external_security']
+        total_score = [0]*10
 
-        mean_score_info=f'By \'keywords\' evaluation, the LLM gets "{score_mean[0]}" scores in average.\nBy \'toolUsage\' evaluation, the LLM gets "{score_mean[1]}" scores in average.\nBy \'gpt4Eval\' evaluation, the LLM gets "{score_mean[2]}" scores in average.\nBy \'blacklist\' evaluation, the LLM gets "{score_mean[3]}" scores in average.\n'
-        print(mean_score_info)
+        for i in range(10):
+            score_list.append(score[field_list[i]])
+
+        for i in range(10):
+            if score_list[i] == []:
+                score_mean[i] = 'Not evaluated in this field'
+            else:
+                score_mean[i] = float('%.3f'%(sum(score_list[i])/len(score_list[i])))
+                total_score[i] = (len(score_list[i]))
+                score_get[i] = float('%.3f'%(sum(score_list[i])))
+        get_score_info=''
+
+        for i in range (10):
+            get_score_info += f'In {field_list[i]} field, the LLM gets "{score_get[i]}/{total_score[i]}" scores.\n'
+
         mean_score_list=[]
         for score in score_mean:
-            if score!='Not evaluated by this method':
+            if score!='Not evaluated in this field':
                 if score>=0.6:
                     mean_score_list.append('does well in')
                 else:
                     mean_score_list.append('is not good at')
             else:
                 mean_score_list.append('is not evaluated')
-        sum_info=f'To conclude: The model {mean_score_list[0]} in \'keywords\' evaluation.\nThe model {mean_score_list[1]} in \'toolUsage\' evaluation.\nThe model {mean_score_list[2]} in \'gpt4Eval\' evaluation.\nThe model {mean_score_list[3]} in \'blacklist\' evaluation.\n'
-        print(sum_info)
-        return(mean_score_info,sum_info)
+        conclude_info = 'To conclude:'
+        for i in range (10):
+            conclude_info += f'The model {mean_score_list[i]} in {field_list[i]} field.\n'
+        print(score_mean)
+        print(get_score_info)
+        print(conclude_info)
+        return(get_score_info,conclude_info)
 
 
 
