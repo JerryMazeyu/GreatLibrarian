@@ -9,24 +9,24 @@ class Getinfo():
 
         """
         A function to get the socre information from the log file.
-        The function can find the score record by finding text in a particular format that defined by the EvalMethods(keyword/toolUsage...)
+        The function can find the score record by finding text in a particular format that defined by the field(language understanding/coding...)
         Parameters:
         line:One of the lines in the log file.
         Returns:A dict that contains the model's score under each metric in the current testcase
-        The dict is formatted like this:{'keyword':[0.7,0.5,0.8],'toolUsage':[0.3,0.9],'gpt4Eval':[0.1,0.3]}
+        The dict is formatted like this:{'knowledge understanding':[1,0,1],'coding':[1,0]......}
 
         """
         file_path = self.log_path
         lines = []
-        score_dict = {'keywords': [], 'toolUsage': [], 'gpt4Eval': [],'blacklist':[]}
+        score_dict = {'knowledge_understanding': [], 'coding': [], 'common_knowledge': [], 'reasoning':[], 'multi-language' : [], 'specialized_knowledge' : [], 'traceability' : [], 'outputformatting' : [], 'internal_security' : [], 'external_security' : []}
 
         with open(file_path, 'r', encoding='utf-8') as file:
             lines = file.readlines()
 
         for line in lines:
-            eval_method, score = self.extract_info(line)
+            eval_method, score, field = self.extract_info(line)
             if eval_method :
-                score_dict[eval_method].append(score)
+                score_dict[field].append(score)
 
         return (score_dict)
 
@@ -41,11 +41,12 @@ class Getinfo():
 
         """
 
-        pattern = r'The model gets (\d+\.\d+) points in this testcase by (\w+) method.'
+        pattern = r'The model gets (\d+\.\d+) points in this testcase by (\w+) method, in (\w+) field.'
         match = re.search(pattern, line)
         if match:
             score = match.group(1)
             eval_method = match.group(2)
-            return eval_method, float(score)
+            field = match.group(3)
+            return eval_method, float(score), field
         else:
-            return None, None
+            return None, None, None

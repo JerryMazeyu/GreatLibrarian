@@ -11,6 +11,10 @@ class GPT4eval(EvalMethods):
         self.field=field
     
 
+    def set_field(self,field):
+        self.field=field
+
+        
     def eval1(self):
         """
 
