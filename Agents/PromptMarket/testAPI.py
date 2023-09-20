@@ -1,9 +1,8 @@
 import openai
 
 # 使用你的API密钥初始化OpenAI API客户端
-openai.api_key = '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'
 
-# 使用Timeout属性为API调用设置超时（示例）
+
 try:
     response = openai.Completion.create(
         engine="davinci",
@@ -11,7 +10,7 @@ try:
         max_tokens=50,
         timeout=5  # 将超时设置为5秒
     )
-except openai.error.TimeoutError as e:
-    print("API调用超时:", e)
+except openai.error.OpenAIError as e:
+    print("API调用错误:", e)
 except Exception as e:
     print("发生错误:", e)
