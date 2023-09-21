@@ -9,6 +9,7 @@ class VirtualEnvRunner:
         try:
             subprocess.run(['python', '-m', 'venv', self.env_name], check=True)
             print(f'Virtual environment {self.env_name} created successfully.')
+            print(f'Virtual encironment path: {os.path.abspath(self.env_name)}')
         except subprocess.CalledProcessError:
             print('Error creating virtual environment.')
 
@@ -30,8 +31,9 @@ class VirtualEnvRunner:
             print(result.stdout)
             print("Errors:")
             print(result.stderr)
-            print(f'Virtual encironment path: {os.path.abspath(self.env_name)}')
+            
         except subprocess.CalledProcessError:
+            print(f'Unable to run code in your virtual environment')
             #print('Error running code in virtual environment.')
 
 
