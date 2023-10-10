@@ -1,4 +1,6 @@
-from Utils import add_logger_to_class
+from Utils import add_logger_name
+
+add_logger_to_class = add_logger_name('analyse')
 @add_logger_to_class
 class Analyse():
     def __init__(self,score_dict) -> None:
