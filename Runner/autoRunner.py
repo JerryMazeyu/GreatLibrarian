@@ -49,15 +49,17 @@ class AutoRunner():
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
             for testproj in self.testprojects:
-                future = executor.submit(run_interactor, testproj, self.interactor_cls, self.cfg,methodnum)
-                # log_path=os.path.join('Logs',f"{self.logger_name}.log")
-                # score_dict=Getinfo(log_path).get_eval_result()
-                # mean_score_info,sum_info=Analyse(score_dict).analyse()
+                for testcase in testproj.get_cases(self.cfg):
+                    interactor = self.interactor_cls(testcase,methodnum)
+                    future = executor.submit(interactor.run())
+                    # log_path=os.path.join('Logs',f"{self.logger_name}.log")
+                    # score_dict=Getinfo(log_path).get_eval_result()
+                    # mean_score_info,sum_info=Analyse(score_dict).analyse()
 
                 futures.append(future)
 
-            for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
-                result = future.result()
+            # for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
+            #     result = future.result()
     
 
 

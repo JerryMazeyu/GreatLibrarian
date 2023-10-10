@@ -1,10 +1,11 @@
 from typing import Any
-from Utils import add_logger_to_class,load_from_cfg
+from Utils import add_logger_name,load_from_cfg
 from Recoder import Recoder
 from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 from Analyser import Analyse,Getinfo
 import os
 
+add_logger_to_class = add_logger_name('dialog')
 @add_logger_to_class
 class AutoInteractor():
     def __init__(self, testcase,methodnum) -> None:

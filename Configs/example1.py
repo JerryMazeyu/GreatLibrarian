@@ -16,5 +16,12 @@ class ExampleConfig():
         self.json_paths = ['example1.json','example3.json','example4.json']
         # self.register_agents = [BookStore, PromptMarket]
         # self.interactor = AutoInteractor
+
+# class ExampleConfig():
+#     def __init__(self):
+#         self.llm = chatglm6b
+#         self.json_paths = ['example1.json']
+#         # self.register_agents = [BookStore, PromptMarket]
+#         # self.interactor = AutoInteractor
         
 exconf = ExampleConfig()
