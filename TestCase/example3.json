@@ -1,5 +1,5 @@
 {
-    "name": "example2",
+    "name": "example3",
     "description": "Test if LLM can use agents.",
     "field": "knowledge_understanding",
     "prompts": [

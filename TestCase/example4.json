@@ -1,5 +1,5 @@
 {
-    "name": "example1",
+    "name": "example4",
     "description": "Test if LLM can recognize common knowledge.",
     "field": "specialized_knowledge",
     "prompts": [
