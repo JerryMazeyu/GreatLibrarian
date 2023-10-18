@@ -1,6 +1,7 @@
-from Utils import add_logger_name
+from Utils import add_logger_name_cls
 
-add_logger_to_class = add_logger_name('analyse')
+
+add_logger_to_class = add_logger_name_cls('analyse')
 @add_logger_to_class
 class Analyse():
     def __init__(self,score_dict) -> None:
@@ -53,7 +54,6 @@ class Analyse():
         conclude_info = 'To conclude:'
         for i in range (10):
             conclude_info += f'The model {mean_score_list[i]} in {field_list[i]} field.\n'
-        print(score_mean)
         print(get_score_info)
         print(conclude_info)
         return(get_score_info,conclude_info)

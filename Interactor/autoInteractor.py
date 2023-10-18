@@ -1,17 +1,18 @@
 from typing import Any
-from Utils import add_logger_name,load_from_cfg
+from Utils import add_logger_name_cls,load_from_cfg
 from Recoder import Recoder
 from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 from Analyser import Analyse,Getinfo
 import os
 
-add_logger_to_class = add_logger_name('dialog')
+add_logger_to_class = add_logger_name_cls('dialog_init')
 @add_logger_to_class
 class AutoInteractor():
-    def __init__(self, testcase,methodnum) -> None:
+    def __init__(self, testcase,methodnum,threadnum) -> None:
         load_from_cfg(self, testcase)
         # self.recoders = []
         self.methodnum=methodnum
+        self.threadnum=threadnum
 
     
     def eval(self):
@@ -40,15 +41,15 @@ class AutoInteractor():
         """
         # recoder = Recoder()
         # recoder.ind = ind
-        print(f"---------- New Epoch ----------")
+        print(f"---------- New Epoch ---------- from thread {self.threadnum}")
         ans_list=[]
         for ind, pr in enumerate(prompt):
             # recoder.dialoge[ind] = ''
-            print(f"To LLM:\t {pr}")
+            print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
             #ans = self.llm(pr)
             ans="yes"
-            print(f"To User:\t {ans}")
+            print(f"To User:\t {ans} from thread {self.threadnum}")
             ans_list.append(ans)
         return(ans_list)
 
@@ -67,24 +68,24 @@ class AutoInteractor():
         # recoder = Recoder()
         # recoder.ind = ind
         # recoder.prompt = prompt
-        print(f"---------- New Epoch ----------")
+        print(f"---------- New Epoch ---------- from thread {self.threadnum}")
         ans_list=[]
         for ind, pr in enumerate(prompt):
             # recoder.dialoge[ind] = ''
-            print(f"To LLM:\t {pr}")
+            print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
             #ans = self.llm(pr)
             ans="yes"
             ans_list.append(ans)
             if ans.find(tools[0]['name']) != -1:  # TODO: add multi tools
                 # recoder.tools = tools[0].name
-                print(f"To Tool:\t {ans}")
+                print(f"To Tool:\t {ans} from thread {self.threadnum}")
                 # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
                 tool_response = self.tools[0](ans)
-                print(f"To LLM:\t {tool_response}")
+                print(f"To LLM:\t {tool_response} from thread {self.threadnum}")
                 # recoder.dialoge[ind] += f"To LLM:\t {tool_response}\n"
                 ans = self.llm(tool_response)
-            print(f"To User:\t {ans}")
+            print(f"To User:\t {ans} from thread {self.threadnum}")
         #     recoder.dialoge[ind] += f"To LLM:\t {tool_response}\n"
         # self.recoders.append(recoder)
         return(ans_list)
@@ -133,29 +134,27 @@ class AutoInteractor():
             eval_obj.set_ans(toolusage_ans)
             eval_obj.set_field(self.field)
             _,tool_eval_info=eval_obj.score(self.methodnum[0]) 
-            print(tool_eval_info)
+            print(tool_eval_info+f'from thread {self.threadnum}')
         else:
             keywords_ans=self.base_interact(self.prompt)
             eval_obj=eval_stack['keywords']
             eval_obj.set_ans(keywords_ans)
             eval_obj.set_field(self.field)
             _,keywords_eval_info=eval_obj.score(self.methodnum[1]) 
-            print(keywords_eval_info)
+            print(keywords_eval_info+f'from thread {self.threadnum}')
             if  self.eval_info.get('blacklist', None):
                 eval_obj=eval_stack['blacklist']
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
                 _,blacklist_eval_info=eval_obj.score(self.methodnum[2]) 
-                print(blacklist_eval_info)
+                print(blacklist_eval_info+f'from thread {self.threadnum}')
             if  self.eval_info.get('GPT4eval', None):
                 eval_obj=eval_stack['GPT4eval']
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
                 _,GPT4_eval_info=eval_obj.score(self.methodnum[3]) 
-                print(GPT4_eval_info)
-        log_path=os.path.join('Logs',f"{self.logger_name}.log")
-        score_dict=Getinfo(log_path).get_eval_result()
-        mean_score_info,sum_info=Analyse(score_dict).analyse()
+                print(GPT4_eval_info+f'from thread {self.threadnum}')
+
 
 
 #case=[{ 'eval_info': {"keywords":["yes", "same"],"blacklist":['no']}}]

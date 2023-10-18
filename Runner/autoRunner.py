@@ -6,6 +6,9 @@ import json
 import concurrent.futures
 from tqdm import tqdm
 from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
+import threading
+from Utils import clean_log_dialog
+from Analyser import Analyse,Getinfo
 
 class AutoRunner():
     def __init__(self, cfg):
@@ -38,29 +41,33 @@ class AutoRunner():
         """
         Multi-threaded to run each test file to speed things up
         """
-        def run_interactor(testproj, interactor_cls, cfg,methodnum):
-            for testcase in testproj.get_cases(cfg):
-                interactor = interactor_cls(testcase,methodnum)
-                # print(interactor.logger_name)
-                interactor.run()
-                
+        lock = threading.Lock()
 
-        methodnum=self.selectmethod()
+        def run_interactor(testproj, interactor_cls, cfg, methodnum, threadnum):
+            for testcase in testproj.get_cases(cfg):
+                with lock:
+                    interactor = interactor_cls(testcase, methodnum, threadnum)
+                    if interactor is not None:
+                        interactor.run()
+
+            
+        method_num=self.selectmethod()
+        threadnum = 1
+
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
             for testproj in self.testprojects:
-                for testcase in testproj.get_cases(self.cfg):
-                    interactor = self.interactor_cls(testcase,methodnum)
-                    future = executor.submit(interactor.run())
-                    # log_path=os.path.join('Logs',f"{self.logger_name}.log")
-                    # score_dict=Getinfo(log_path).get_eval_result()
-                    # mean_score_info,sum_info=Analyse(score_dict).analyse()
+                future = executor.submit(run_interactor, testproj, self.interactor_cls, self.cfg,method_num,threadnum)
+                threadnum+=1
 
                 futures.append(future)
 
-            # for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
-            #     result = future.result()
-    
+            for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
+                result = future.result()
+
+        self.mk_clean_log()
+        self.analyse()
+
 
 
     def analyse(self):
@@ -68,6 +75,11 @@ class AutoRunner():
         The analysis module controls the function,
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation
         """
+
+        log_path=os.path.join('Logs',"dialog.log")
+        score_dict=Getinfo(log_path).get_eval_result()
+        analyse=Analyse(score_dict)
+        mean_score_info,sum_info=analyse.analyse()
         pass
 
     def selectmethod(self):
@@ -91,3 +103,11 @@ class AutoRunner():
                     num=int(input('Please enter the number of your chosen method:'))
                 methodnum.append(num)
         return(methodnum)
+    
+    def mk_clean_log(self):
+        log_path_dialog=os.path.join('Logs','dialog_init.log')
+        clean_log_dialog(log_path_dialog)
+
+
+    
+        
