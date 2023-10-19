@@ -4,6 +4,21 @@ from Recoder import Recoder
 from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 from Analyser import Analyse,Getinfo
 import os
+import zhipuai
+
+zhipuai.api_key = "450fe9e4faec64c0a48234a5d92115ef.aWoqpjlhWO2Kpbvw"
+ 
+def invoke_example(prompt):
+    response = zhipuai.model_api.invoke(
+        model="chatglm_pro",
+        prompt=[{"role": "user", "content": prompt}],
+        top_p=0.7,
+        temperature=0.9,
+    )
+    if response['code']==200:
+        return(response['data']['choices'][0]['content'])
+    else:
+        return('API Problem')
 
 add_logger_to_class = add_logger_name_cls('dialog_init')
 @add_logger_to_class
@@ -47,8 +62,8 @@ class AutoInteractor():
             # recoder.dialoge[ind] = ''
             print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-            #ans = self.llm(pr)
-            ans="yes"
+            ans = invoke_example(pr)
+            # ans="yes"
             print(f"To User:\t {ans} from thread {self.threadnum}")
             ans_list.append(ans)
         return(ans_list)
