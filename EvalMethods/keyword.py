@@ -49,7 +49,7 @@ class Keyword(EvalMethods):
         for ind, pt in enumerate(self.prompt):
           for k in keywords[ind]:
               if self.ans[ind].find(k)!=-1:
-                  score += 1 / len(self.keywords[ind])
+                  score += 1 / len(self.keywords[ind])*len(self.promopt)
         return(score)
     
 
@@ -84,6 +84,7 @@ class Keyword(EvalMethods):
     def if_there_is(self, ans, keywords):
         for kw in keywords:
             if ans.find(kw) != -1:
+                print(f'keyword:{kw}')
                 return True
         return False
 

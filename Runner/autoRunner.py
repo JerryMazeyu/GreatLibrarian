@@ -57,7 +57,7 @@ class AutoRunner():
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
             for testproj in self.testprojects:
-                future = executor.submit(run_interactor, testproj, self.interactor_cls, self.cfg,method_num,threadnum)
+                future = executor.submit(run_interactor, testproj, AutoInteractor, self.cfg,method_num,threadnum)
                 threadnum+=1
 
                 futures.append(future)

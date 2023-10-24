@@ -18,7 +18,7 @@ class Getinfo():
         """
         file_path = self.log_path
         lines = []
-        score_dict = {'knowledge_understanding': [], 'coding': [], 'common_knowledge': [], 'reasoning':[], 'multi-language' : [], 'specialized_knowledge' : [], 'traceability' : [], 'outputformatting' : [], 'internal_security' : [], 'external_security' : []}
+        score_dict = {'knowledge_understanding': [], 'coding': [], 'common_knowledge': [], 'reasoning':[], 'multi_language' : [], 'specialized_knowledge' : [], 'traceability' : [], 'outputformatting' : [], 'internal_security' : [], 'external_security' : []}
 
         with open(file_path, 'r', encoding='utf-8') as file:
             lines = file.readlines()
