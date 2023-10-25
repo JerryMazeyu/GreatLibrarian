@@ -1,0 +1,12 @@
+{
+    "name": "example5",
+    "description": "",
+    "field": "multi_language",
+    "prompts": 
+        "我家里养了一只乌龟，两只小狗和三只小猫，How many kinds of animals do I have in my home， answer it with only a number."
+    ,
+    "values": {},
+    "evaluation": {
+        "0": [{"keywords":[["3","three","三"]], "blacklist": [["6","六","six"]]}]
+    }
+}

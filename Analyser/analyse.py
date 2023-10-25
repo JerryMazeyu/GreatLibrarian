@@ -24,7 +24,7 @@ class Analyse():
         score_list = []
         score_mean = [0]*10
         score_get = [0]*10
-        field_list = ['knowledge_understanding', 'coding', 'common_knowledge', 'reasoning', 'multi-language', 'specialized_knowledge', 'traceability', 'outputformatting', 'internal_security', 'external_security']
+        field_list = ['knowledge_understanding', 'coding', 'common_knowledge', 'reasoning', 'multi_language', 'specialized_knowledge', 'traceability', 'outputformatting', 'internal_security', 'external_security']
         total_score = [0]*10
 
         for i in range(10):
