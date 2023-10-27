@@ -14,8 +14,8 @@
         "4": ["China"]
     },
     "evaluation": {
-        "0": [{"keywords":[["yes", "same", "Yes"]]}, {"keywords":[["no", "different", "杜甫","No"]]}],
-        "1": [{"keywords":[["yes", "larger", "bigger", "Yes"],["yes", "Yes", "larger", "bigger"]]}, {"keywords":[["yes", "Yes"],["yes", "Yes"]], "blacklist": [["no","No"],["no","No"]]}],
-        "2": [{"keywords":[["no","No"]]}, {"keywords":[["no","No"]]}, {"keywords":[["yes", "Yes"]]}]
+        "0": [{"keywords":[["yes", "same"]]}, {"keywords":[["No", "different", "杜甫"]]}],
+        "1": [{"keywords":[["yes", "larger", "bigger"],["yes", "larger", "bigger"]]}, {"keywords":[["yes"],["yes"]], "blacklist": [["no"],["no"]]}],
+        "2": [{"keywords":[["no"]]}, {"keywords":[["no"]]}, {"keywords":[["yes"]]}]
     }
 }
