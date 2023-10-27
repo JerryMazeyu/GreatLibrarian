@@ -79,7 +79,8 @@ class AutoRunner():
         log_path=os.path.join('Logs',"dialog.log")
         score_dict=Getinfo(log_path).get_eval_result()
         analyse=Analyse(score_dict)
-        mean_score_info,sum_info=analyse.analyse()
+        mean_score_info,sum_info,plotinfo=analyse.analyse()
+        analyse.report(plotinfo)
         pass
 
     def selectmethod(self):

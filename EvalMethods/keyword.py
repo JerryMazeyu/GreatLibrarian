@@ -83,7 +83,7 @@ class Keyword(EvalMethods):
 
     def if_there_is(self, ans, keywords):
         for kw in keywords:
-            if ans.find(kw) != -1:
+            if ans.find(kw.lower()) != -1:
                 print(f'keyword:{kw}')
                 return True
         return False

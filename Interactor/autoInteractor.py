@@ -6,19 +6,7 @@ from Analyser import Analyse,Getinfo
 import os
 import zhipuai
 
-zhipuai.api_key = "450fe9e4faec64c0a48234a5d92115ef.aWoqpjlhWO2Kpbvw"
- 
-def invoke_example(prompt):
-    response = zhipuai.model_api.invoke(
-        model="chatglm_pro",
-        prompt=[{"role": "user", "content": prompt}],
-        top_p=0.7,
-        temperature=0.9,
-    )
-    if response['code']==200:
-        return(response['data']['choices'][0]['content'])
-    else:
-        return('API Problem')
+
 
 add_logger_to_class = add_logger_name_cls('dialog_init')
 @add_logger_to_class
@@ -28,6 +16,7 @@ class AutoInteractor():
         # self.recoders = []
         self.methodnum=methodnum
         self.threadnum=threadnum
+        self.llm=self.llm()
 
     
     def eval(self):
@@ -62,10 +51,10 @@ class AutoInteractor():
             # recoder.dialoge[ind] = ''
             print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-            ans = invoke_example(pr)
+            ans = self.llm(pr)
             # ans="yes"
             print(f"To User:\t {ans} from thread {self.threadnum}")
-            ans_list.append(ans)
+            ans_list.append(ans.lower())
         return(ans_list)
 
 
@@ -90,8 +79,8 @@ class AutoInteractor():
             print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
             #ans = self.llm(pr)
-            ans="yes"
-            ans_list.append(ans)
+            ans = self.llm(pr)
+            ans_list.append(ans.lower())
             if ans.find(tools[0]['name']) != -1:  # TODO: add multi tools
                 # recoder.tools = tools[0].name
                 print(f"To Tool:\t {ans} from thread {self.threadnum}")
