@@ -123,7 +123,7 @@ class Analyse():
         pdf_pages.savefig()
         pdf_pages.close()
 
-        print("Report Generated")
+        print("Report Generated !")
 
 
 
