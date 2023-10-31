@@ -43,7 +43,7 @@ class Analyse():
         get_score_info=''
 
         for i in range (10):
-            get_score_info += f'In {field_list[i]} field, the LLM gets "{score_get[i]}/{total_score[i]}" scores.\n'
+            get_score_info += f'\nIn {field_list[i]} field, the LLM gets "{score_get[i]}/{total_score[i]}" scores.\n'
 
         plotinfo = [field_list,score_get,total_score]
 
@@ -58,7 +58,7 @@ class Analyse():
                 mean_score_list.append('is not evaluated')
         conclude_info = 'To conclude:\n'
         for i in range (10):
-            conclude_info += f'The model {mean_score_list[i]} in {field_list[i]} field.\n'
+            conclude_info += f'\nThe model {mean_score_list[i]} in {field_list[i]} field.\n'
         print(get_score_info)
         print(conclude_info)
         return(get_score_info,conclude_info,plotinfo)
