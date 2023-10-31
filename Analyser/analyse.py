@@ -43,7 +43,7 @@ class Analyse():
         get_score_info=''
 
         for i in range (10):
-            get_score_info += f'In {field_list[i]} field, the LLM gets "{score_get[i]}/{total_score[i]}" scores.\n'
+            get_score_info += f'\nIn {field_list[i]} field, the LLM gets "{score_get[i]}/{total_score[i]}" scores.\n'
 
         plotinfo = [field_list,score_get,total_score]
 
@@ -56,9 +56,9 @@ class Analyse():
                     mean_score_list.append('is not good at')
             else:
                 mean_score_list.append('is not evaluated')
-        conclude_info = 'To conclude:'
+        conclude_info = 'To conclude:\n'
         for i in range (10):
-            conclude_info += f'The model {mean_score_list[i]} in {field_list[i]} field.\n'
+            conclude_info += f'\nThe model {mean_score_list[i]} in {field_list[i]} field.\n'
         print(get_score_info)
         print(conclude_info)
         return(get_score_info,conclude_info,plotinfo)
@@ -75,7 +75,6 @@ class Analyse():
         pdf_pages = PdfPages(pdf_file)
         # colors = ['blue', 'green', 'red', 'purple', 'orange', 'brown', 'pink', 'gray', 'cyan', 'magenta']
 
-        # 绘制饼状图
         filtered_fields = [fields for fields, total_scores in zip(field,total_score) if total_scores > 0]
         filtered_totalscore = [totalscores for totalscores in total_score if totalscores > 0]
         percentages = [num / totalnum for num in filtered_totalscore]
@@ -107,7 +106,6 @@ class Analyse():
             accuracies.append(accuracy)
             labels.append(label)
 
-        # 绘制柱状图
         plt.figure(figsize=(20, 20))
         bars = plt.bar(field, accuracies)
         plt.xlabel('Field',fontsize = 25)
@@ -118,14 +116,14 @@ class Analyse():
         for i, (bar, label) in enumerate(zip(bars, labels)):
             if label == "Not Tested":
                 plt.text(i, bar.get_height(), label, ha="center", va="bottom")
-            elif accuracies[i] > 0:
+            elif accuracies[i] >= 0:
                 plt.text(i, bar.get_height(), label, ha="center", va="bottom")
 
         plt.tight_layout()
         pdf_pages.savefig()
         pdf_pages.close()
 
-        print("PDF文件已生成：", pdf_file)
+        print("Report Generated !")
 
 
 

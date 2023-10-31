@@ -24,8 +24,8 @@ class Getinfo():
             lines = file.readlines()
 
         for line in lines:
-            eval_method, score, field = self.extract_info(line)
-            if eval_method :
+            score, field = self.extract_info(line)
+            if field :
                 score_dict[field].append(score)
 
         return (score_dict)
@@ -41,12 +41,11 @@ class Getinfo():
 
         """
 
-        pattern = r'The model gets (\d+\.\d+) points in this testcase by (\w+) method, in (\w+) field.'
+        pattern = r'The final score of this testcase is (\d+\.\d+), in (\w+) field.'
         match = re.search(pattern, line)
         if match:
             score = match.group(1)
-            eval_method = match.group(2)
-            field = match.group(3)
-            return eval_method, float(score), field
+            field = match.group(2)
+            return float(score), field
         else:
-            return None, None, None
+            return None, None

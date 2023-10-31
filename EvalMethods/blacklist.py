@@ -30,7 +30,7 @@ class Blacklist(EvalMethods):
         blacklist = to_list(blacklist)
         for ind, pt in enumerate(self.prompt):
             if self.if_there_is(self.ans[ind], self.blacklist[ind]):
-                score=0
+                score=0.0
                 return score
         return score
 
