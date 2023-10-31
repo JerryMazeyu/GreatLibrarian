@@ -114,6 +114,7 @@ class TestProject:
                 if baseconf:
                     cfg['llm'] = getattr(baseconf, 'llm', None)
                     cfg['register_agents'] = getattr(baseconf, 'register_agents', None)
+                    cfg['finalscore'] = getattr(baseconf, 'finalscore', None)
                     if not cfg['register_agents']:
                         warn("There is no registered agents in the config.", RuntimeWarning)
                 yield cfg

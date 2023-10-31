@@ -94,32 +94,6 @@ class AutoInteractor():
         # self.recoders.append(recoder)
         return(ans_list)
     
-
-    def selectmethod(self):#TODO:这个方法暂时不确定后续应该放在哪里，因为并行可能导致该函数重复运行不必要的次数，先临时写在这个地方
-        """
-        A function to record a list, which represents the method that user chooses in each evaluation method.
-        The evaluation method that doesn't appear in this testcase will be recorded as 0.
-        For example, if the evalstack is like: {"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist},and the return of the method is [1,2,1,0].
-        That means the user chooses method1 in toolUse method, method2 in keyword method and method1 in blacklist method.
-
-        """
-        eval_dict={"tool":ToolUse,"keywords":Keyword,"blacklist":Blacklist,"GPT4eval":GPT4eval}
-        methodnum=[]
-        for key in eval_dict:
-            if (key in self.eval_info.keys()):
-                eval_cls=eval_dict[key]
-                eval_method=eval_cls(self.prompt,'',self.eval_info)
-                print(f'Please choose one of the methods in the {key} evaluation!\nThe methods are shown as below:')
-                eval_method.showmethod()
-                num=int(input('Please enter the number of your chosen method:'))
-                while num>eval_method.getmethodtotal():
-                    print("Please input the correct number!")
-                    num=int(input('Please enter the number of your chosen method:'))
-                methodnum.append(num)
-            else:
-                methodnum.append(0)
-        return(methodnum)
-
     
     def run(self):
 
@@ -130,34 +104,48 @@ class AutoInteractor():
         The function use a list to record the answers from the LLM, and use this answer list to evaluate the LLM in this testcase. It will evaluate the LLM with every method chosen by the user.
         
         """
-        #methodnum=self.selectmethod()#TODO:也是临时放在这里
         eval_stack=self.eval()
+        blacklist_score = 1
+        score_dict = {}
         if self.eval_info.get('tool', None):#TODO:如果这里按照这个逻辑执行，对于同一个prompt，有了tool评价方法就不能再使用其他方法，并且所有prompt的答案设置都必须含有keyword评价方法。
             toolusage_ans=self.tool_interact(self.prompt, self.eval_info['tool'])
             eval_obj=eval_stack['tool']
             eval_obj.set_ans(toolusage_ans)
             eval_obj.set_field(self.field)
-            _,tool_eval_info=eval_obj.score(self.methodnum[0]) 
+            toolusage_score,tool_eval_info=eval_obj.score(self.methodnum[0]) 
             print(tool_eval_info+f'from thread {self.threadnum}')
+            score_dict['toolusage'] = toolusage_score
         else:
             keywords_ans=self.base_interact(self.prompt)
-            eval_obj=eval_stack['keywords']
-            eval_obj.set_ans(keywords_ans)
-            eval_obj.set_field(self.field)
-            _,keywords_eval_info=eval_obj.score(self.methodnum[1]) 
-            print(keywords_eval_info+f'from thread {self.threadnum}')
             if  self.eval_info.get('blacklist', None):
                 eval_obj=eval_stack['blacklist']
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
-                _,blacklist_eval_info=eval_obj.score(self.methodnum[2]) 
+                blacklist_score,blacklist_eval_info=eval_obj.score(self.methodnum[2]) 
                 print(blacklist_eval_info+f'from thread {self.threadnum}')
-            if  self.eval_info.get('GPT4eval', None):
+                score_dict['blacklist'] = blacklist_score
+
+            if  blacklist_score!=0 and self.eval_info.get('keywords', None):
+                eval_obj=eval_stack['keywords']
+                eval_obj.set_ans(keywords_ans)
+                eval_obj.set_field(self.field)
+                keywords_score,keywords_eval_info=eval_obj.score(self.methodnum[1]) 
+                print(keywords_eval_info+f'from thread {self.threadnum}')
+                score_dict['keywords'] = keywords_score
+
+            if  blacklist_score!=0 and self.eval_info.get('GPT4eval', None):
                 eval_obj=eval_stack['GPT4eval']
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
-                _,GPT4_eval_info=eval_obj.score(self.methodnum[3]) 
+                GPT4_eval_score,GPT4_eval_info=eval_obj.score(self.methodnum[3]) 
                 print(GPT4_eval_info+f'from thread {self.threadnum}')
+                score_dict['GPT4_eval'] = GPT4_eval_score
+        final_score_obj = self.finalscore(score_dict,self.field)
+        final_score_info = final_score_obj.final_score_info()
+        print(final_score_info)
+
+
+        
 
 
 

@@ -17,6 +17,7 @@ class AutoRunner():
         self._check()
         self.load_json()
         
+        
     def _check(self):
         if not hasattr(self, 'llm'):
             raise ValueError("There is no llm in the configure file.")
@@ -27,7 +28,7 @@ class AutoRunner():
             self.interactor_cls = AutoInteractor
         if not hasattr(self, 'register_agents'):
             print("Find no registered agents, default is empty list.")
-            self.interactor = []
+            self.register_agents = []
     
     def load_json(self):
         self.testprojects = []
@@ -57,7 +58,8 @@ class AutoRunner():
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
             for testproj in self.testprojects:
-                future = executor.submit(run_interactor, testproj, AutoInteractor, self.cfg,method_num,threadnum)
+                future = executor.submit(run_interactor, testproj, self.interactor, self.cfg,method_num,threadnum)
+                # future = executor.submit(run_interactor, testproj, AutoInteractor, self.cfg,method_num,threadnum)
                 threadnum+=1
 
                 futures.append(future)
@@ -78,6 +80,7 @@ class AutoRunner():
 
         log_path=os.path.join('Logs',"dialog.log")
         score_dict=Getinfo(log_path).get_eval_result()
+        print(score_dict)
         analyse=Analyse(score_dict)
         mean_score_info,sum_info,plotinfo=analyse.analyse()
         analyse.report(plotinfo)
