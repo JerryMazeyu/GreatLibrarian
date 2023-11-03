@@ -9,6 +9,7 @@ from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 import threading
 from Utils import clean_log_dialog
 from Analyser import Analyse,Getinfo
+from FinalScore import FinalScore1
 
 class AutoRunner():
     def __init__(self, cfg):
@@ -29,6 +30,9 @@ class AutoRunner():
         if not hasattr(self, 'register_agents'):
             print("Find no registered agents, default is empty list.")
             self.register_agents = []
+        if not hasattr(self, 'finalscore'):
+            print("Find no finalscore, default is FinalScore1.")
+            self.finalscore = FinalScore1
     
     def load_json(self):
         self.testprojects = []
@@ -40,7 +44,7 @@ class AutoRunner():
     
     def run(self):
         """
-        Multi-threaded to run each test file to speed things up
+        Multi-threaded to run each test file to speed up
         """
         lock = threading.Lock()
 
