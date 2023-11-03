@@ -1,5 +1,6 @@
+from Core import FinalScore
 
-class FinalScore1 ():
+class FinalScore1 (FinalScore):
      def __init__(self, score_dict,field) -> None:
         self.score = score_dict
         self.field = field
