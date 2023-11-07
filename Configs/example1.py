@@ -7,7 +7,7 @@ from FinalScore import *
 class ExampleConfig():
     def __init__(self):
         self.llm = chatglm_pro
-        self.json_paths = ['example1.json']
+        self.json_paths = ['example.json']
         self.interactor = AutoInteractor
         self.finalscore = FinalScore1
         # self.register_agents = [BookStore]

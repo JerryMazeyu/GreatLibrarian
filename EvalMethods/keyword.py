@@ -49,7 +49,7 @@ class Keyword(EvalMethods):
         for ind, pt in enumerate(self.prompt):
           for k in keywords[ind]:
               if self.ans[ind].find(k)!=-1:
-                  score += 1 / len(self.keywords[ind])*len(self.promopt)
+                  score += 1 / (len(self.keywords[ind])*len(self.prompt))
         return(score)
     
 

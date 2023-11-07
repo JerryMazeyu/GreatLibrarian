@@ -1,5 +1,5 @@
 from typing import Any
-from Utils import add_logger_name_cls,load_from_cfg
+from Utils import add_logger_name_cls,load_from_cfg,generate_name_new,generate_logger_subfile
 from Recoder import Recoder
 from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 from Analyser import Analyse,Getinfo
@@ -7,17 +7,21 @@ import os
 import zhipuai
 
 
-
-add_logger_to_class = add_logger_name_cls('dialog_init')
+# log_name = generate_name_new('dialog_init')
+log_name = 'dialog_init'
+logger_name = 'dialog_init.log'
+logger_subfile = generate_logger_subfile()
+add_logger_to_class = add_logger_name_cls(log_name,os.path.join('Logs',logger_subfile))
+logger_path = os.path.join(os.path.join('Logs',logger_subfile),logger_name)
 @add_logger_to_class
 class AutoInteractor():
     def __init__(self, testcase,methodnum,threadnum) -> None:
         load_from_cfg(self, testcase)
         # self.recoders = []
-        self.methodnum=methodnum
-        self.threadnum=threadnum
-        self.llm=self.llm()
-
+        self.methodnum = methodnum
+        self.threadnum = threadnum
+        self.llm = self.llm()
+        self.logger_path = logger_path
     
     def eval(self):
         """
@@ -34,6 +38,10 @@ class AutoInteractor():
                 eval_method=eval_cls(self.prompt,'',self.eval_info,[])
                 eval_stack[key]=eval_method
         return(eval_stack)
+    
+    def get_logger_path(self):
+        return(self.logger_path)
+
 
     def base_interact(self, prompt):
 
@@ -141,8 +149,17 @@ class AutoInteractor():
                 print(GPT4_eval_info+f'from thread {self.threadnum}')
                 score_dict['GPT4_eval'] = GPT4_eval_score
         final_score_obj = self.finalscore(score_dict,self.field)
-        final_score_info = final_score_obj.final_score_info()
-        print(final_score_info)
+        human_judge,final_score_info = final_score_obj.final_score_info()
+        if human_judge != 'Human Evaluation':
+            print(final_score_info)
+        else:
+            pass
+
+
+
+
+
+
 
 
         
