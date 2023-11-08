@@ -1,14 +1,21 @@
-from Utils import add_logger_name_cls
+from Utils import add_logger_name_cls,generate_logger_subfile,generate_name_new
 import matplotlib.pyplot as plt
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Image as RLImage
 from matplotlib.backends.backend_pdf import PdfPages
+import os 
 
-add_logger_to_class = add_logger_name_cls('analyse')
+# log_name = generate_name_new('analyse')
+log_name = 'analyse'
+logger_name = 'analyse.log'
+logger_subfile = generate_logger_subfile()
+add_logger_to_class = add_logger_name_cls(log_name,os.path.join('Logs',logger_subfile))
+logger_path = os.path.join(os.path.join('Logs',logger_subfile))
 @add_logger_to_class
 class Analyse():
     def __init__(self,score_dict) -> None:
         self.score_dict = score_dict
+        self.logger_path = logger_path
     
     def analyse(self):
         """
@@ -71,8 +78,10 @@ class Analyse():
 
         plt.rcParams['font.size'] = 18
 
-        pdf_file = "report.pdf"
-        pdf_pages = PdfPages(pdf_file)
+        pdf_name = "report.pdf"
+        pdf_file_path = os.path.join(logger_path,pdf_name)
+
+        pdf_pages = PdfPages(pdf_file_path)
         # colors = ['blue', 'green', 'red', 'purple', 'orange', 'brown', 'pink', 'gray', 'cyan', 'magenta']
 
         filtered_fields = [fields for fields, total_scores in zip(field,total_score) if total_scores > 0]

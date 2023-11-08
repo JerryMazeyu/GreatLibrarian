@@ -16,13 +16,33 @@ def generate_name():
     scientists = ['albattani', 'allen', 'almeida', 'agnesi', 'archimedes', 'ardinghelli', 'aryabhata', 'austin', 'babbage', 'banach', 'bardeen', 'bartik', 'bassi', 'beaver', 'bell', 'benz', 'bhabha', 'bhaskara', 'blackwell', 'bohr', 'booth', 'borg', 'bose', 'boyd', 'brahmagupta', 'brattain', 'brown', 'carson', 'chandrasekhar', 'chatelet', 'chatterjee', 'chebyshev', 'cohen', 'chaum', 'clarke', 'colden', 'cori', 'cray', 'curran', 'curie', 'darwin', 'davinci', 'dewdney', 'dhawan', 'diffie', 'dijkstra', 'dirac', 'driscoll', 'dubinsky', 'easley', 'edison', 'einstein', 'elbakyan', 'elgamal', 'elion', 'ellis', 'engelbart', 'euclid', 'euler', 'faraday', 'feistel', 'fermat', 'fermi', 'feynman', 'franklin', 'gagarin', 'galileo', 'galois', 'ganguly', 'gates', 'gauss', 'germain', 'golick', 'goodall', 'gould', 'greider', 'grothendieck', 'haibt', 'hamilton', 'hasse', 'hawking', 'hellman', 'heisenberg', 'hermann', 'herschel', 'hertz', 'heyrovsky', 'hodgkin', 'hofstadter', 'hoover', 'hopper', 'hugle', 'hypatia', 'ishizaka', 'jackson', 'jang', 'jennings', 'jepsen', 'johnson', 'joliot', 'jones', 'kalam', 'kapitsa', 'kare', 'keldysh', 'keller', 'kepler', 'khayyam', 'khorana', 'kilby', 'kirch', 'knuth', 'kowalevski', 'lalande', 'lamarr', 'lamport', 'leakey', 'leavitt', 'lewin', 'lichterman', 'liskov', 'lovelace', 'lumiere', 'mahavira', 'margulis', 'matsumoto', 'maxwell', 'mayer', 'mccarthy', 'mcclintock', 'mclean', 'mcnulty', 'mendel', 'mendeleev', 'meitner', 'meninsky', 'merkle', 'mestorf', 'mirzakhani', 'moore', 'morse', 'murdock', 'neumann', 'newton', 'nightingale', 'nobel', 'nocard', 'northcutt', 'noether', 'norton', 'noyce', 'panini', 'pare', 'pascal', 'pasteur', 'payne', 'perlman', 'pike', 'poincare', 'poitras', 'proskuriakova', 'ptolemy', 'raman', 'ramanujan', 'ride', 'montalcini', 'ritchie', 'robinson', 'roentgen', 'rosalind', 'rubin', 'saha', 'sammet', 'sanderson', 'satoshi', 'shamir', 'shannon', 'shaw', 'shirley', 'shockley', 'shtern', 'sinoussi', 'snyder', 'solomon', 'spence', 'stonebraker', 'sutherland', 'swanson', 'swartzlander', 'swirles', 'taussig', 'tereshkova', 'tesla', 'tharp', 'thompson', 'torvalds', 'tu', 'turing', 'varahamihira', 'vaughan', 'visvesvaraya', 'volhard', 'wescoff', 'wiles', 'williams', 'wilson', 'wing', 'wozniak', 'wright', 'yalow', 'yonath', 'zhukovsky']
     return f"{random.choice(adjectives)}_{random.choice(scientists)}_{datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')}"
 
-# def generate_name_new(type):
-#     current_time = datetime.datetime.now()
-#     current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
-#     return f"{type}_{current_time_str}"
+def generate_name_new(type):
+    current_time = datetime.datetime.now()
+    current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
+    return f"{type}_{current_time_str}"
+
+def generate_logger_subfile():
+    subfilenum = '1'
+    subfilename = 'Test'+subfilenum
+    logger_file = os.path.join('Logs',subfilename)
 
 
-def setup_logger(logger_name, logger_file, level=logging.INFO):
+    analyse_exist = os.path.exists(os.path.join(logger_file,'analyse.log'))
+    dialog_exist = os.path.exists(os.path.join(logger_file,'dialog.log'))
+    dialog_init_exist = os.path.exists(os.path.join(logger_file,'dialog_init.log'))
+
+    while os.path.exists(logger_file) and analyse_exist and dialog_exist and dialog_init_exist:
+        subfilenum = str(int(subfilenum) + 1)
+        subfilename = 'Test'+subfilenum
+        logger_file = os.path.join('Logs',subfilename)
+
+        analyse_exist = os.path.exists(os.path.join(logger_file,'analyse.log'))
+        dialog_exist = os.path.exists(os.path.join(logger_file,'dialog.log'))
+        dialog_init_exist = os.path.exists(os.path.join(logger_file,'dialog_init.log'))
+
+    return subfilename
+
+def setup_logger(logger_name, logger_file,level=logging.INFO):
     """Setup logger only if there is no logger.
 
 #     Args:
@@ -101,7 +121,7 @@ class LoggerWriter:
        except:
            pass
 
-def add_logger(logger_name=None, logger_file=None):
+def add_logger(logger_name, logger_file):
     """
     A decorator function that adds a logger to the function it decorates. 
 
@@ -131,8 +151,11 @@ def add_logger(logger_name=None, logger_file=None):
     if not logger_name:
         logger_name = generate_name()
     if not logger_file:
-        logger_file = f'{logger_name}.log'
-    
+        logger_file = 'Logs'
+
+    if not os.path.exists(logger_file):
+        os.makedirs(logger_file)
+
     def decorate(func):
         setup_logger(logger_name, logger_file)
         logger = logging.getLogger(logger_name)
@@ -146,7 +169,7 @@ def add_logger(logger_name=None, logger_file=None):
 
 
 
-def add_logger_name_cls(logger_name):
+def add_logger_name_cls(logger_name,logger_file):
     def add_logger_to_class(cls):
         """
         A decorator to add logging functionality to all methods of a class.
@@ -179,7 +202,7 @@ def add_logger_name_cls(logger_name):
         setattr(cls,'logger_name',logger_name)
         for attr_name, attr_value in inspect.getmembers(cls):
             if inspect.isfunction(attr_value):
-                decorated_func = add_logger(logger_name=logger_name, logger_file='Logs')(attr_value)
+                decorated_func = add_logger(logger_name=logger_name, logger_file=logger_file)(attr_value)
                 setattr(cls, attr_name, decorated_func)
         return cls
     return(add_logger_to_class)

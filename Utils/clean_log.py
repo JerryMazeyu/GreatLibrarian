@@ -1,9 +1,12 @@
 import re
-from Utils import add_logger
+from Utils import add_logger,generate_logger_subfile,generate_name_new
 import os
 
-# add_logger_to_func_dialog=add_logger_name_func('dialog')
-@add_logger(logger_name='dialog',logger_file='Logs')
+# log_name = generate_name_new('dialog')
+log_name = 'dialog'
+logger_subfile = generate_logger_subfile()
+
+@add_logger(log_name,os.path.join('Logs',logger_subfile))
 def clean_log_dialog(log_file):
     thread_messages = info_extract(log_file)
 
@@ -12,6 +15,7 @@ def clean_log_dialog(log_file):
         for message in messages:
             print(message)
         print()
+
 
 def info_extract(log):
     pattern = r"from thread (\d+)"

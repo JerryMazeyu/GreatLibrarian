@@ -7,7 +7,7 @@ import concurrent.futures
 from tqdm import tqdm
 from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 import threading
-from Utils import clean_log_dialog
+from Utils import clean_log_dialog,to_int
 from Analyser import Analyse,Getinfo
 from FinalScore import FinalScore1
 
@@ -54,6 +54,8 @@ class AutoRunner():
                     interactor = interactor_cls(testcase, methodnum, threadnum)
                     if interactor is not None:
                         interactor.run()
+            global logger_path
+            logger_path = interactor.get_logger_path()
 
             
         method_num=self.selectmethod()
@@ -71,24 +73,22 @@ class AutoRunner():
             for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
                 result = future.result()
 
-        self.mk_clean_log()
-        self.analyse()
+        self.mk_clean_log(logger_path)
+        self.analyse(logger_path)
 
 
 
-    def analyse(self):
+    def analyse(self,logger_path):
         """
         The analysis module controls the function,
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation
         """
 
-        log_path=os.path.join('Logs',"dialog.log")
-        score_dict=Getinfo(log_path).get_eval_result()
+        score_dict=Getinfo(logger_path).get_eval_result()
         print(score_dict)
         analyse=Analyse(score_dict)
         mean_score_info,sum_info,plotinfo=analyse.analyse()
         analyse.report(plotinfo)
-        pass
 
     def selectmethod(self):
         """
@@ -105,16 +105,18 @@ class AutoRunner():
                 eval_method=eval_cls('','',{"keywords":["moonlight", "window", "frost", "ground"], "tool":[{"name": "TranslationAPI", "args": "窗前明月光，疑似地上霜。"}]},'')
                 print(f'Please choose one of the methods in the {key} evaluation!\nThe methods are shown as below:')
                 eval_method.showmethod()
-                num=int(input('Please enter the number of your chosen method:'))
-                while num>eval_method.getmethodtotal():
-                    print("Please input the correct number!")
-                    num=int(input('Please enter the number of your chosen method:'))
-                methodnum.append(num)
+                usr_input=input('Please enter the number of your chosen method:')
+                trans_result = to_int(usr_input)
+                while trans_result == None or trans_result > eval_method.getmethodtotal():
+                    print(f'Please input a number from 1 to {eval_method.getmethodtotal()}')
+                    usr_input = input('Please enter the number of your chosen method:')
+                    trans_result = to_int(usr_input)
+
+                methodnum.append(trans_result)
         return(methodnum)
     
-    def mk_clean_log(self):
-        log_path_dialog=os.path.join('Logs','dialog_init.log')
-        clean_log_dialog(log_path_dialog)
+    def mk_clean_log(self,logger_path):
+        clean_log_dialog(logger_path)
 
 
     
