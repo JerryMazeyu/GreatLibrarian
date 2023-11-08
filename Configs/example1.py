@@ -14,12 +14,13 @@ class ExampleConfig():
         # self.register_agents = [BookStore]
 
 
-# class ExampleConfig():
-#     def __init__(self):
-#         self.llm = chatglm6b
-#         self.json_paths = ['example5.json']
-#         self.register_agents = [BookStore, PromptMarket]
-#         self.interactor = AutoInteractor
+class ExampleConfig():
+    def __init__(self):
+        self.llm = qwen_turbo
+        self.json_paths = ['example.json']
+        self.register_agents = [BookStore, PromptMarket]
+        self.interactor = AutoInteractor
+        self.finalscore = FinalScore1
 
 # class ExampleConfig():
 #     def __init__(self):

@@ -97,7 +97,7 @@ class Analyse():
 
         field_info = ''
         for fields in filtered_fields:
-            field_info += f'"{str(fields)}",'
+            field_info += f'"{str(fields)}"'
 
         testcasenum_info = ''
         for i in range (len(filtered_fields)):
@@ -107,9 +107,9 @@ class Analyse():
         for i in range (len(filtered_score_get)):
             score_info += f'In "{filtered_fields[i]}" ,The score of the LLm is : {filtered_score_get[i]}/{filtered_totalscore[i]}\n'
 
-        conclude_info = f'This test contains {totalnum} testcases,involving' + field_info + '\b.' + f'{len(field)} fields in total.\nAmong all testcases:' + testcasenum_info + score_info
+        conclude_info = f'This test contains {totalnum} testcases,involving' + field_info + f'{len(field)} fields in total.\nAmong all testcases:' + testcasenum_info + score_info
         
-        plt.text(5, 5, conclude_info, fontsize=18, ha='center', va='center')
+        fig.text(0.5, 0.5, conclude_info, fontsize=18, ha='center', va='center')
 
         plt.axis('off')
 
