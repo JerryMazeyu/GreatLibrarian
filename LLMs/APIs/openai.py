@@ -1,5 +1,9 @@
 from Core import LLMs
 import zhipuai
+
+from http import HTTPStatus
+import dashscope
+
 class ChatGPT(LLMs):
     def __init__(self):
         self.apikey = ""
@@ -26,5 +30,21 @@ class chatglm_pro(LLMs):
         else:
             return('API Problem')
 
+class qwen_turbo(LLMs):
+    def __init__(self):
+        self.apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8"
+        self.name = "qwen_turbo"
+    
+    def __call__(self, prompt: str) -> str:
+        dashscope.api_key = self.apikey
+        response = dashscope.Generation.call(
+        model=dashscope.Generation.Models.qwen_turbo,
+        prompt=prompt
+        )
+
+        if response['status_code'].value==200:
+            return(response['output']['text'])
+        else:
+            return('API Problem')
 
 chatgpt = ChatGPT()
