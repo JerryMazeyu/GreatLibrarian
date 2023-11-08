@@ -1,5 +1,5 @@
 from typing import Any
-from Utils import add_logger_name_cls,load_from_cfg,generate_name_new,generate_logger_subfile
+from Utils import add_logger_name_cls,load_from_cfg,generate_name_new,generate_logger_subfile,human_evaluation
 from Recoder import Recoder
 from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 from Analyser import Analyse,Getinfo
@@ -35,7 +35,7 @@ class AutoInteractor():
         for key in eval_dict.keys():
             if (key in self.eval_info.keys()):
                 eval_cls=eval_dict[key]
-                eval_method=eval_cls(self.prompt,'',self.eval_info,[])
+                eval_method=eval_cls(self.prompt,'',self.eval_info,'',0)
                 eval_stack[key]=eval_method
         return(eval_stack)
     
@@ -120,6 +120,7 @@ class AutoInteractor():
             eval_obj=eval_stack['tool']
             eval_obj.set_ans(toolusage_ans)
             eval_obj.set_field(self.field)
+            eval_obj.set_threadnum(self.threadnum)
             toolusage_score,tool_eval_info=eval_obj.score(self.methodnum[0]) 
             print(tool_eval_info+f'from thread {self.threadnum}')
             score_dict['toolusage'] = toolusage_score
@@ -129,6 +130,7 @@ class AutoInteractor():
                 eval_obj=eval_stack['blacklist']
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
+                eval_obj.set_threadnum(self.threadnum)
                 blacklist_score,blacklist_eval_info=eval_obj.score(self.methodnum[2]) 
                 print(blacklist_eval_info+f'from thread {self.threadnum}')
                 score_dict['blacklist'] = blacklist_score
@@ -137,6 +139,7 @@ class AutoInteractor():
                 eval_obj=eval_stack['keywords']
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
+                eval_obj.set_threadnum(self.threadnum)
                 keywords_score,keywords_eval_info=eval_obj.score(self.methodnum[1]) 
                 print(keywords_eval_info+f'from thread {self.threadnum}')
                 score_dict['keywords'] = keywords_score
@@ -145,28 +148,20 @@ class AutoInteractor():
                 eval_obj=eval_stack['GPT4eval']
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
+                eval_obj.set_prompt(self.prompt)
+                eval_obj.set_threadnum(self.threadnum)
                 GPT4_eval_score,GPT4_eval_info=eval_obj.score(self.methodnum[3]) 
                 print(GPT4_eval_info+f'from thread {self.threadnum}')
                 score_dict['GPT4_eval'] = GPT4_eval_score
-        final_score_obj = self.finalscore(score_dict,self.field)
+        final_score_obj = self.finalscore(score_dict,self.field,self.threadnum)
         human_judge,final_score_info = final_score_obj.final_score_info()
+
         if human_judge != 'Human Evaluation':
             print(final_score_info)
         else:
-            pass
+            print('Human Evaluation!'+f'from thread {self.threadnum}')
+            human_eval = {'prompt':self.prompt,'ans':keywords_ans,'field':self.field,'threadnum':self.threadnum}
+            human_evaluation(human_eval)
 
 
-
-
-
-
-
-
-        
-
-
-
-#case=[{ 'eval_info': {"keywords":["yes", "same"],"blacklist":['no']}}]
-#test=AutoInteractor(case)
-#test.run()
 

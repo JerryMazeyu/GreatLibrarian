@@ -98,8 +98,9 @@ class TestProject:
     
     def get_eval_info(self):
         for key, pt in self.prompts.items():
+            print(self.raw_eval_info[str(key)])
             assert(len(self.prompts[key]) == len(self.raw_eval_info[str(key)])), ValueError(f"[{key}] Test promopt length {len(self.prompts[key])} don't match the evaluation info {len(self.raw_eval_info[str(key)])}")
-            # print(self.raw_eval_info[str(key)])
+            print(self.raw_eval_info[str(key)])
     
     def get_cases(self, baseconf=None):
         """The main function of the TestProject

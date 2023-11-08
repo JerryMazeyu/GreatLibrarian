@@ -8,6 +8,10 @@ logger_subfile = generate_logger_subfile()
 
 @add_logger(log_name,os.path.join('Logs',logger_subfile))
 def clean_log_dialog(log_file):
+    """
+    Organize disordered logs in the order of line numbers to create properly ordered logs.
+
+    """
     thread_messages = info_extract(log_file)
 
     for i in range (1,len(thread_messages)+1):

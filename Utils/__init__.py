@@ -3,3 +3,4 @@ from .logger import *
 from .typetrans import *
 from .register import *
 from .clean_log import *
+from .human_evaluation import *

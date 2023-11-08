@@ -102,7 +102,7 @@ class AutoRunner():
         methodnum=[]
         for key in eval_dict:
                 eval_cls=eval_dict[key]
-                eval_method=eval_cls('','',{"keywords":["moonlight", "window", "frost", "ground"], "tool":[{"name": "TranslationAPI", "args": "窗前明月光，疑似地上霜。"}]},'')
+                eval_method=eval_cls('','',{"keywords":["moonlight", "window", "frost", "ground"], "tool":[{"name": "TranslationAPI", "args": "窗前明月光，疑似地上霜。"}]},'','')
                 print(f'Please choose one of the methods in the {key} evaluation!\nThe methods are shown as below:')
                 eval_method.showmethod()
                 usr_input=input('Please enter the number of your chosen method:')
