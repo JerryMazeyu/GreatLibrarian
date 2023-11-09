@@ -3,12 +3,13 @@ from Utils import to_list
 import re
 
 class Keyword(EvalMethods):
-    def __init__(self, prompt, ans, evalinfo,field):
-        super().__init__(prompt, ans, evalinfo,field)
+    def __init__(self, prompt, ans, evalinfo,field,threadnum):
+        super().__init__(prompt, ans, evalinfo,field,threadnum)
         self.name = ['keyword', 'Keyword', 'Keywords','keywords']
         self.keywords=self.evalinfo['keywords']
         self.field=field
         self.methodtotal=2
+        self.threadnum = threadnum
         
     def getmethodtotal(self):
         return int((self.methodtotal))
@@ -18,6 +19,9 @@ class Keyword(EvalMethods):
 
     def set_field(self,field):
         self.field=field
+
+    def set_threadnum(self,threadnum):
+        self.threadnum = threadnum
 
     def eval1(self):
         """
@@ -50,6 +54,7 @@ class Keyword(EvalMethods):
           for k in keywords[ind]:
               if self.ans[ind].find(k)!=-1:
                   score += 1 / (len(self.keywords[ind])*len(self.prompt))
+                  print(f'keywords:{k}'+f'from thread {self.threadnum}')
         return(score)
     
 
@@ -84,7 +89,7 @@ class Keyword(EvalMethods):
     def if_there_is(self, ans, keywords):
         for kw in keywords:
             if ans.find(kw.lower()) != -1:
-                print(f'keyword:{kw}')
+                print(f'keyword:{kw}'+f'from thread {self.threadnum}')
                 return True
         return False
 

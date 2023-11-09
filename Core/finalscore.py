@@ -6,9 +6,10 @@ class FinalScore (ABC):
     FinalScore abstract class
     """
     
-    def __init__(self, score_dict,field) -> None:
+    def __init__(self, score_dict,field,threadnum) -> None:
         self.score = score_dict
         self.field = field
+        self.threadnum = threadnum
 
     @abstractmethod
     def get_final_score(self) -> int :

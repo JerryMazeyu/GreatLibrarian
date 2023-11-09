@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Image as RLImage
 from matplotlib.backends.backend_pdf import PdfPages
+from reportlab.pdfgen import canvas
 import os 
 
 # log_name = generate_name_new('analyse')
@@ -84,8 +85,36 @@ class Analyse():
         pdf_pages = PdfPages(pdf_file_path)
         # colors = ['blue', 'green', 'red', 'purple', 'orange', 'brown', 'pink', 'gray', 'cyan', 'magenta']
 
+        fig = plt.figure(figsize=(20, 20))
+
+
+        title = "Test Statistics"
+        plt.title(title, fontsize=16, ha='center')
+
         filtered_fields = [fields for fields, total_scores in zip(field,total_score) if total_scores > 0]
         filtered_totalscore = [totalscores for totalscores in total_score if totalscores > 0]
+        filtered_score_get = [score for score,total_scores in zip(score_get,total_score) if total_scores > 0]
+
+        field_info = ''
+        for fields in filtered_fields:
+            field_info += f'"{str(fields)}"'
+
+        testcasenum_info = ''
+        for i in range (len(filtered_fields)):
+            testcasenum_info += f'There are {filtered_totalscore[i]} testcases in "{filtered_fields[i]}"\n'
+
+        score_info = ''
+        for i in range (len(filtered_score_get)):
+            score_info += f'In "{filtered_fields[i]}" ,The score of the LLm is : {filtered_score_get[i]}/{filtered_totalscore[i]}\n'
+
+        conclude_info = f'This test contains {totalnum} testcases,involving' + field_info + f'{len(field)} fields in total.\nAmong all testcases:' + testcasenum_info + score_info
+        
+        fig.text(0.5, 0.5, conclude_info, fontsize=18, ha='center', va='center')
+
+        plt.axis('off')
+
+        pdf_pages.savefig(fig)
+
         percentages = [num / totalnum for num in filtered_totalscore]
         plt.figure(figsize=(20, 20))
         patches, texts, autotexts = plt.pie(percentages, labels=filtered_fields, autopct='%1.1f%%', startangle=140)

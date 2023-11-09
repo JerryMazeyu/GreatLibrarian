@@ -3,8 +3,8 @@ from Utils import to_list
 import re
 
 class Blacklist(EvalMethods):
-    def __init__(self, prompt, ans, evalinfo,field):
-        super().__init__(prompt, ans, evalinfo,field)
+    def __init__(self, prompt, ans, evalinfo,field,threadnum):
+        super().__init__(prompt, ans, evalinfo,field,threadnum)
         self.blacklist=to_list(self.evalinfo.get("blacklist"))
         self.field=field
         self.methodtotal=1
@@ -17,6 +17,9 @@ class Blacklist(EvalMethods):
 
     def set_field(self,field):
         self.field=field
+    
+    def set_threadnum(self,threadnum):
+        self.threadnum = threadnum
 
     def eval1(self):
         """

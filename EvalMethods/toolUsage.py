@@ -4,8 +4,8 @@ import warnings
 import re
 
 class ToolUse(EvalMethods):
-    def __init__(self, prompt, ans, evalinfo,field):
-        super().__init__(prompt, ans, evalinfo,field)
+    def __init__(self, prompt, ans, evalinfo,field,threadnum):
+        super().__init__(prompt, ans, evalinfo,field,threadnum)
         if not self.evalinfo.get("tool", None):
             warnings.warn("There is no tool usage.", RuntimeWarning)
         self.tools = to_list(self.evalinfo.get("tool"))
@@ -20,6 +20,9 @@ class ToolUse(EvalMethods):
     
     def set_field(self,field):
         self.field=field
+
+    def set_threadnum(self,threadnum):
+        self.threadnum = threadnum
 
     def eval1(self):
         """
