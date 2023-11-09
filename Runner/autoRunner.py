@@ -75,6 +75,7 @@ class AutoRunner():
 
         self.mk_clean_log(logger_path)
         self.analyse(logger_path)
+        
 
 
 
@@ -88,7 +89,7 @@ class AutoRunner():
         print(score_dict)
         analyse=Analyse(score_dict)
         mean_score_info,sum_info,plotinfo=analyse.analyse()
-        analyse.report(plotinfo)
+        analyse.report(plotinfo,logger_path)
 
     def selectmethod(self):
         """

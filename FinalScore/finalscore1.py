@@ -26,5 +26,5 @@ class FinalScore1 (FinalScore):
             return(self.score['GPT4_eval'])
 
      def final_score_info(self) -> str:
-        return (self.get_final_score(),f'The final score of this testcase is {self.get_final_score()}, in {self.field} field.'+f'from thread {self.threadnum}')
+        return (self.get_final_score(),f'The final score of this testcase is {self.get_final_score()}, in {self.field} field.'+f'from thread {self.threadnum}',self.get_final_score())
 
