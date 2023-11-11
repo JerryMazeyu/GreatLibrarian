@@ -60,7 +60,7 @@ class AutoInteractor():
             print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
             ans = self.llm(pr)
-            # ans="yes"
+            # ans="Yes"
             print(f"To User:\t {ans} from thread {self.threadnum}")
             ans_list.append(ans.lower())
         return(ans_list)
@@ -154,7 +154,7 @@ class AutoInteractor():
                 print(GPT4_eval_info+f'from thread {self.threadnum}')
                 score_dict['GPT4_eval'] = GPT4_eval_score
         final_score_obj = self.finalscore(score_dict,self.field,self.threadnum)
-        human_judge,final_score_info = final_score_obj.final_score_info()
+        human_judge,final_score_info,final_score = final_score_obj.final_score_info()
 
         if human_judge != 'Human Evaluation':
             print(final_score_info)
@@ -162,6 +162,9 @@ class AutoInteractor():
             print('Human Evaluation!'+f'from thread {self.threadnum}')
             human_eval = {'prompt':self.prompt,'ans':keywords_ans,'field':self.field,'threadnum':self.threadnum}
             human_evaluation(human_eval)
+        if final_score == 0:
+            print(f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}')
+           
 
 
 

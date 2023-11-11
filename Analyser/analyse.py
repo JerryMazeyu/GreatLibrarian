@@ -5,6 +5,9 @@ from reportlab.platypus import SimpleDocTemplate, Image as RLImage
 from matplotlib.backends.backend_pdf import PdfPages
 from reportlab.pdfgen import canvas
 import os 
+from Utils import extract_mistaken_info
+import matplotlib
+import textwrap
 
 # log_name = generate_name_new('analyse')
 log_name = 'analyse'
@@ -71,7 +74,12 @@ class Analyse():
         print(conclude_info)
         return(get_score_info,conclude_info,plotinfo)
 
-    def report(self,plotinfo):#TODO:用图像展示以下测评结果：各领域题目回答准确率，各领域题目占比，测试题目总数，测试用时等
+    def report(self,plotinfo,log_path):#TODO:用图像展示以下测评结果：各领域题目回答准确率，各领域题目占比，测试题目总数，测试用时等
+        """
+        log_path:The path of the dialog_init.log
+        logger_path:A gloabal variable, the path to the analyse.log
+
+        """
         field = plotinfo[0]
         score_get = plotinfo[1]
         total_score = plotinfo[2]
@@ -85,36 +93,69 @@ class Analyse():
         pdf_pages = PdfPages(pdf_file_path)
         # colors = ['blue', 'green', 'red', 'purple', 'orange', 'brown', 'pink', 'gray', 'cyan', 'magenta']
 
-        fig = plt.figure(figsize=(20, 20))
+        fig = plt.figure(figsize=(20,20))
 
 
         title = "Test Statistics"
-        plt.title(title, fontsize=16, ha='center')
+        plt.title(title, fontsize=32, ha='center',y=1.1)
 
         filtered_fields = [fields for fields, total_scores in zip(field,total_score) if total_scores > 0]
         filtered_totalscore = [totalscores for totalscores in total_score if totalscores > 0]
         filtered_score_get = [score for score,total_scores in zip(score_get,total_score) if total_scores > 0]
 
         field_info = ''
-        for fields in filtered_fields:
-            field_info += f'"{str(fields)}"'
+        if len(filtered_fields)<=3:
+            for fields in filtered_fields:
+                field_info += f'"{str(fields)}"'
+        else:
+            for i in range (3):
+                field_info += f'"{str(filtered_fields[i])}"'
+            field_info += ' and so on.'
 
         testcasenum_info = ''
         for i in range (len(filtered_fields)):
-            testcasenum_info += f'There are {filtered_totalscore[i]} testcases in "{filtered_fields[i]}"\n'
+            testcasenum_info += f'\nThere are {filtered_totalscore[i]} testcases in "{filtered_fields[i]}"\n'
 
         score_info = ''
         for i in range (len(filtered_score_get)):
-            score_info += f'In "{filtered_fields[i]}" ,The score of the LLm is : {filtered_score_get[i]}/{filtered_totalscore[i]}\n'
+            score_info += f'\nIn "{filtered_fields[i]}" ,The score of the LLm is : {filtered_score_get[i]}/{filtered_totalscore[i]}\n'
 
-        conclude_info = f'This test contains {totalnum} testcases,involving' + field_info + f'{len(field)} fields in total.\nAmong all testcases:' + testcasenum_info + score_info
+        conclude_info = f'This test contains {totalnum} testcases.\n\nThe testcases involves ' + field_info + f'\n\nAmong all testcases:\n' + testcasenum_info + score_info
         
-        fig.text(0.5, 0.5, conclude_info, fontsize=18, ha='center', va='center')
+        fig.text(0.1,0.55, conclude_info, fontsize=21, ha='left', va='center')
 
         plt.axis('off')
 
         pdf_pages.savefig(fig)
 
+
+        fig = plt.figure(figsize=(30, 30))
+
+        title = "Mistaken Cases"
+        plt.title(title, fontsize=32, ha='center',y=1.1)
+
+        mistaken_list = extract_mistaken_info(log_path)
+        mistaken_txt = ''
+
+        for i in range (len(mistaken_list)):
+            mistaken_list[i][0] = textwrap.fill(mistaken_list[i][0], width=80)
+            mistaken_list[i][1] = textwrap.fill(mistaken_list[i][1], width=80)
+
+        if len(mistaken_list) <= 5:
+            for mistakens in mistaken_list:
+                mistaken = f'\n\nFor this testcase in {mistakens[2]} field, the LLM made a mistake.\n\nTo LLM:“{mistakens[0]}”\n\nTo user:“{mistakens[1]}”'
+                mistaken_txt += mistaken
+        else:
+            for i in range (5):
+                mistaken = f'\n\nFor this testcase in {mistaken_list[i][2]} field, the LLM made a mistake.\n\nTo LLM:“{mistaken_list[i][0]}”\n\nTo user:“{mistaken_list[i][1]}”'
+                mistaken_txt += mistaken
+        
+        fig.text(0.1,0.5, mistaken_txt, fontsize=22, fontfamily='SimSun',ha='left', va='center')
+        plt.axis('off')
+
+        pdf_pages.savefig(fig)
+        
+        
         percentages = [num / totalnum for num in filtered_totalscore]
         plt.figure(figsize=(20, 20))
         patches, texts, autotexts = plt.pie(percentages, labels=filtered_fields, autopct='%1.1f%%', startangle=140)

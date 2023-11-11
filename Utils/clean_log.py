@@ -36,7 +36,7 @@ def info_extract(log):
             current_thread = match.group(1)
             if current_thread not in thread_messages:
                 thread_messages[current_thread] = []
-        if current_thread:
+        if current_thread and match:
             clean_message = re.sub(pattern, '', message).strip()
             thread_messages[current_thread].append(clean_message)
     return(thread_messages)
