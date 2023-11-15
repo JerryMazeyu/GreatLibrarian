@@ -4,6 +4,8 @@ import zhipuai
 from http import HTTPStatus
 import dashscope
 
+import qianfan
+
 class ChatGPT(LLMs):
     def __init__(self):
         self.apikey = ""
@@ -42,9 +44,32 @@ class qwen_turbo(LLMs):
         prompt=prompt
         )
 
-        if response['status_code'].value==200:
-            return(response['output']['text'])
-        else:
-            return('API Problem')
+        if response:
+            if response['output']:
+                if response['output']['text']:
+                    return(response['output']['text'])
+        return('API Problem')
 
+class wenxin(LLMs):
+    def __init__(self):
+        self.ak="B00yKgZuin8IolPHYsHggVyU"
+        self.sk="B19OtdVn0jwwaByK9RgovfukUQWv2rT6"
+        self.name = "ernie-bot"
+    
+    def __call__(self, prompt: str) -> str:
+        # 替换下列示例中参数，应用API Key替换your_ak，Secret Key替换your_sk
+        chat_comp = qianfan.ChatCompletion(ak=self.ak, sk = self.sk)
+
+        # 指定特定模型
+        resp = chat_comp.do(model="ERNIE-Bot", messages=[{
+            "role": "user",
+            "content": prompt
+        }])
+
+        if resp:
+            if resp['body']:
+                if resp['body']['result']:
+                    return(resp['body']['result'])
+        return('API Problem')
+        
 chatgpt = ChatGPT()

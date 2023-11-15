@@ -17,6 +17,7 @@ class AutoRunner():
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
+        self.llm_name = self.llm.__name__
         
         
     def _check(self):
@@ -89,7 +90,7 @@ class AutoRunner():
         print(score_dict)
         analyse=Analyse(score_dict)
         mean_score_info,sum_info,plotinfo=analyse.analyse()
-        analyse.report(plotinfo,logger_path)
+        analyse.report(plotinfo,logger_path,self.llm_name)
 
     def selectmethod(self):
         """
