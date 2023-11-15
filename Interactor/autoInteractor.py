@@ -61,7 +61,6 @@ class AutoInteractor():
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
             ans = self.llm(pr)
             # ans="Yes"
-            print(f"To User:\t {ans} from thread {self.threadnum}")
             ans_list.append(ans.lower())
         return(ans_list)
 
@@ -86,7 +85,6 @@ class AutoInteractor():
             # recoder.dialoge[ind] = ''
             print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-            #ans = self.llm(pr)
             ans = self.llm(pr)
             ans_list.append(ans.lower())
             if ans.find(tools[0]['name']) != -1:  # TODO: add multi tools
@@ -163,8 +161,14 @@ class AutoInteractor():
             human_eval = {'prompt':self.prompt,'ans':keywords_ans,'field':self.field,'threadnum':self.threadnum}
             human_evaluation(human_eval)
         if final_score == 0:
-            print(f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}')
-           
+            if 'blacklist' in self.eval_info:
+                print(f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]},blacklist:{self.eval_info["blacklist"][0]}')
+            else:
+                print(f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]}')
+
+        if final_score != 0:
+            print(f'Example case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}')
+            
 
 
 
