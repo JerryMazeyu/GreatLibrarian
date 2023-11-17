@@ -28,6 +28,6 @@ class FinalScore (ABC):
             The finalscore information of the testcase.
         """
 
-        return (f'The final score of this testcase is {self.get_final_score()}, in {self.field} field.') 
+        return (self.get_final_score(),f'The final score of this testcase is {self.get_final_score()}, in {self.field} field.'+f'from thread {self.threadnum}',self.get_final_score()) 
                
 

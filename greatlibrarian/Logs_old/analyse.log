@@ -1,0 +1,488 @@
+2023-10-31 13:26:34 - INFO - In knowledge_understanding field, the LLM gets "1.0/2" scores.
+In coding field, the LLM gets "4.0/7" scores.
+In common_knowledge field, the LLM gets "5.0/7" scores.
+In reasoning field, the LLM gets "1.0/2" scores.
+In multi_language field, the LLM gets "0.0/1" scores.
+In specialized_knowledge field, the LLM gets "4.0/7" scores.
+In traceability field, the LLM gets "4.0/7" scores.
+In outputformatting field, the LLM gets "4.0/7" scores.
+In internal_security field, the LLM gets "4.0/7" scores.
+In external_security field, the LLM gets "4.0/7" scores.
+
+2023-10-31 13:26:34 - INFO - To conclude:
+The model is not good at in knowledge_understanding field.
+The model is not good at in coding field.
+The model does well in in common_knowledge field.
+The model is not good at in reasoning field.
+The model is not good at in multi_language field.
+The model is not good at in specialized_knowledge field.
+The model is not good at in traceability field.
+The model is not good at in outputformatting field.
+The model is not good at in internal_security field.
+The model is not good at in external_security field.
+
+2023-10-31 13:26:35 - INFO - Report Generated
+2023-10-31 15:07:14 - INFO - In knowledge_understanding field, the LLM gets "3.0/6" scores.
+In coding field, the LLM gets "12.0/21" scores.
+In common_knowledge field, the LLM gets "15.0/21" scores.
+In reasoning field, the LLM gets "4.0/7" scores.
+In multi_language field, the LLM gets "0.0/3" scores.
+In specialized_knowledge field, the LLM gets "12.0/21" scores.
+In traceability field, the LLM gets "12.0/21" scores.
+In outputformatting field, the LLM gets "12.0/21" scores.
+In internal_security field, the LLM gets "12.0/21" scores.
+In external_security field, the LLM gets "12.0/21" scores.
+
+2023-10-31 15:07:14 - INFO - To conclude:
+The model is not good at in knowledge_understanding field.
+The model is not good at in coding field.
+The model does well in in common_knowledge field.
+The model is not good at in reasoning field.
+The model is not good at in multi_language field.
+The model is not good at in specialized_knowledge field.
+The model is not good at in traceability field.
+The model is not good at in outputformatting field.
+The model is not good at in internal_security field.
+The model is not good at in external_security field.
+
+2023-10-31 15:07:15 - INFO - Report Generated !
+2023-11-02 14:21:38 - INFO - 
+In knowledge_understanding field, the LLM gets "6.0/12" scores.
+
+In coding field, the LLM gets "24.0/42" scores.
+
+In common_knowledge field, the LLM gets "30.0/42" scores.
+
+In reasoning field, the LLM gets "8.0/14" scores.
+
+In multi_language field, the LLM gets "0.0/5" scores.
+
+In specialized_knowledge field, the LLM gets "24.0/42" scores.
+
+In traceability field, the LLM gets "24.0/42" scores.
+
+In outputformatting field, the LLM gets "24.0/42" scores.
+
+In internal_security field, the LLM gets "24.0/42" scores.
+
+In external_security field, the LLM gets "24.0/42" scores.
+
+2023-11-02 14:21:38 - INFO - To conclude:
+
+The model is not good at in knowledge_understanding field.
+
+The model is not good at in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not good at in reasoning field.
+
+The model is not good at in multi_language field.
+
+The model is not good at in specialized_knowledge field.
+
+The model is not good at in traceability field.
+
+The model is not good at in outputformatting field.
+
+The model is not good at in internal_security field.
+
+The model is not good at in external_security field.
+
+2023-11-02 14:21:38 - INFO - Report Generated !
+2023-11-02 15:19:35 - INFO - 
+In knowledge_understanding field, the LLM gets "0/0" scores.
+
+In coding field, the LLM gets "0/0" scores.
+
+In common_knowledge field, the LLM gets "1.0/1" scores.
+
+In reasoning field, the LLM gets "0/0" scores.
+
+In multi_language field, the LLM gets "0/0" scores.
+
+In specialized_knowledge field, the LLM gets "1.0/1" scores.
+
+In traceability field, the LLM gets "0/0" scores.
+
+In outputformatting field, the LLM gets "0/0" scores.
+
+In internal_security field, the LLM gets "0/0" scores.
+
+In external_security field, the LLM gets "0/0" scores.
+
+2023-11-02 15:19:35 - INFO - To conclude:
+
+The model is not evaluated in knowledge_understanding field.
+
+The model is not evaluated in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not evaluated in reasoning field.
+
+The model is not evaluated in multi_language field.
+
+The model does well in in specialized_knowledge field.
+
+The model is not evaluated in traceability field.
+
+The model is not evaluated in outputformatting field.
+
+The model is not evaluated in internal_security field.
+
+The model is not evaluated in external_security field.
+
+2023-11-02 15:19:35 - INFO - Report Generated !
+2023-11-02 15:22:58 - INFO - 
+In knowledge_understanding field, the LLM gets "0/0" scores.
+
+In coding field, the LLM gets "0/0" scores.
+
+In common_knowledge field, the LLM gets "1.0/1" scores.
+
+In reasoning field, the LLM gets "0/0" scores.
+
+In multi_language field, the LLM gets "0/0" scores.
+
+In specialized_knowledge field, the LLM gets "1.0/2" scores.
+
+In traceability field, the LLM gets "0/0" scores.
+
+In outputformatting field, the LLM gets "0/0" scores.
+
+In internal_security field, the LLM gets "0/0" scores.
+
+In external_security field, the LLM gets "0/0" scores.
+
+2023-11-02 15:22:58 - INFO - To conclude:
+
+The model is not evaluated in knowledge_understanding field.
+
+The model is not evaluated in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not evaluated in reasoning field.
+
+The model is not evaluated in multi_language field.
+
+The model is not good at in specialized_knowledge field.
+
+The model is not evaluated in traceability field.
+
+The model is not evaluated in outputformatting field.
+
+The model is not evaluated in internal_security field.
+
+The model is not evaluated in external_security field.
+
+2023-11-02 15:22:59 - INFO - Report Generated !
+2023-11-02 15:23:37 - INFO - 
+In knowledge_understanding field, the LLM gets "0/0" scores.
+
+In coding field, the LLM gets "0/0" scores.
+
+In common_knowledge field, the LLM gets "3.0/3" scores.
+
+In reasoning field, the LLM gets "0/0" scores.
+
+In multi_language field, the LLM gets "0/0" scores.
+
+In specialized_knowledge field, the LLM gets "3.0/6" scores.
+
+In traceability field, the LLM gets "0/0" scores.
+
+In outputformatting field, the LLM gets "0/0" scores.
+
+In internal_security field, the LLM gets "0/0" scores.
+
+In external_security field, the LLM gets "0/0" scores.
+
+2023-11-02 15:23:37 - INFO - To conclude:
+
+The model is not evaluated in knowledge_understanding field.
+
+The model is not evaluated in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not evaluated in reasoning field.
+
+The model is not evaluated in multi_language field.
+
+The model is not good at in specialized_knowledge field.
+
+The model is not evaluated in traceability field.
+
+The model is not evaluated in outputformatting field.
+
+The model is not evaluated in internal_security field.
+
+The model is not evaluated in external_security field.
+
+2023-11-02 15:23:37 - INFO - Report Generated !
+2023-11-02 15:24:08 - INFO - 
+In knowledge_understanding field, the LLM gets "0/0" scores.
+
+In coding field, the LLM gets "0/0" scores.
+
+In common_knowledge field, the LLM gets "1.0/1" scores.
+
+In reasoning field, the LLM gets "0/0" scores.
+
+In multi_language field, the LLM gets "0/0" scores.
+
+In specialized_knowledge field, the LLM gets "1.0/2" scores.
+
+In traceability field, the LLM gets "0/0" scores.
+
+In outputformatting field, the LLM gets "0/0" scores.
+
+In internal_security field, the LLM gets "0/0" scores.
+
+In external_security field, the LLM gets "0/0" scores.
+
+2023-11-02 15:24:08 - INFO - To conclude:
+
+The model is not evaluated in knowledge_understanding field.
+
+The model is not evaluated in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not evaluated in reasoning field.
+
+The model is not evaluated in multi_language field.
+
+The model is not good at in specialized_knowledge field.
+
+The model is not evaluated in traceability field.
+
+The model is not evaluated in outputformatting field.
+
+The model is not evaluated in internal_security field.
+
+The model is not evaluated in external_security field.
+
+2023-11-02 15:24:08 - INFO - Report Generated !
+2023-11-02 15:25:58 - INFO - 
+In knowledge_understanding field, the LLM gets "0/0" scores.
+
+In coding field, the LLM gets "0/0" scores.
+
+In common_knowledge field, the LLM gets "1.0/1" scores.
+
+In reasoning field, the LLM gets "0/0" scores.
+
+In multi_language field, the LLM gets "0/0" scores.
+
+In specialized_knowledge field, the LLM gets "1.0/2" scores.
+
+In traceability field, the LLM gets "0/0" scores.
+
+In outputformatting field, the LLM gets "0/0" scores.
+
+In internal_security field, the LLM gets "0/0" scores.
+
+In external_security field, the LLM gets "0/0" scores.
+
+2023-11-02 15:25:58 - INFO - To conclude:
+
+The model is not evaluated in knowledge_understanding field.
+
+The model is not evaluated in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not evaluated in reasoning field.
+
+The model is not evaluated in multi_language field.
+
+The model is not good at in specialized_knowledge field.
+
+The model is not evaluated in traceability field.
+
+The model is not evaluated in outputformatting field.
+
+The model is not evaluated in internal_security field.
+
+The model is not evaluated in external_security field.
+
+2023-11-02 15:25:58 - INFO - Report Generated !
+2023-11-02 15:30:57 - INFO - 
+In knowledge_understanding field, the LLM gets "0/0" scores.
+
+In coding field, the LLM gets "0/0" scores.
+
+In common_knowledge field, the LLM gets "1.0/1" scores.
+
+In reasoning field, the LLM gets "0/0" scores.
+
+In multi_language field, the LLM gets "0/0" scores.
+
+In specialized_knowledge field, the LLM gets "0/0" scores.
+
+In traceability field, the LLM gets "0/0" scores.
+
+In outputformatting field, the LLM gets "0/0" scores.
+
+In internal_security field, the LLM gets "0/0" scores.
+
+In external_security field, the LLM gets "0/0" scores.
+
+2023-11-02 15:30:57 - INFO - To conclude:
+
+The model is not evaluated in knowledge_understanding field.
+
+The model is not evaluated in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not evaluated in reasoning field.
+
+The model is not evaluated in multi_language field.
+
+The model is not evaluated in specialized_knowledge field.
+
+The model is not evaluated in traceability field.
+
+The model is not evaluated in outputformatting field.
+
+The model is not evaluated in internal_security field.
+
+The model is not evaluated in external_security field.
+
+2023-11-02 15:30:57 - INFO - Report Generated !
+2023-11-02 15:31:39 - INFO - 
+In knowledge_understanding field, the LLM gets "0/0" scores.
+
+In coding field, the LLM gets "0/0" scores.
+
+In common_knowledge field, the LLM gets "1.0/1" scores.
+
+In reasoning field, the LLM gets "0/0" scores.
+
+In multi_language field, the LLM gets "0/0" scores.
+
+In specialized_knowledge field, the LLM gets "1.0/1" scores.
+
+In traceability field, the LLM gets "0/0" scores.
+
+In outputformatting field, the LLM gets "0/0" scores.
+
+In internal_security field, the LLM gets "0/0" scores.
+
+In external_security field, the LLM gets "0/0" scores.
+
+2023-11-02 15:31:39 - INFO - To conclude:
+
+The model is not evaluated in knowledge_understanding field.
+
+The model is not evaluated in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not evaluated in reasoning field.
+
+The model is not evaluated in multi_language field.
+
+The model does well in in specialized_knowledge field.
+
+The model is not evaluated in traceability field.
+
+The model is not evaluated in outputformatting field.
+
+The model is not evaluated in internal_security field.
+
+The model is not evaluated in external_security field.
+
+2023-11-02 15:31:40 - INFO - Report Generated !
+2023-11-02 16:01:11 - INFO - 
+In knowledge_understanding field, the LLM gets "0/0" scores.
+
+In coding field, the LLM gets "0/0" scores.
+
+In common_knowledge field, the LLM gets "155.0/200" scores.
+
+In reasoning field, the LLM gets "0/0" scores.
+
+In multi_language field, the LLM gets "0/0" scores.
+
+In specialized_knowledge field, the LLM gets "0/0" scores.
+
+In traceability field, the LLM gets "0/0" scores.
+
+In outputformatting field, the LLM gets "0/0" scores.
+
+In internal_security field, the LLM gets "0/0" scores.
+
+In external_security field, the LLM gets "0/0" scores.
+
+2023-11-02 16:01:11 - INFO - To conclude:
+
+The model is not evaluated in knowledge_understanding field.
+
+The model is not evaluated in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not evaluated in reasoning field.
+
+The model is not evaluated in multi_language field.
+
+The model is not evaluated in specialized_knowledge field.
+
+The model is not evaluated in traceability field.
+
+The model is not evaluated in outputformatting field.
+
+The model is not evaluated in internal_security field.
+
+The model is not evaluated in external_security field.
+
+2023-11-02 16:01:11 - INFO - Report Generated !
+2023-11-02 17:17:20 - INFO - 
+In knowledge_understanding field, the LLM gets "0/0" scores.
+
+In coding field, the LLM gets "0/0" scores.
+
+In common_knowledge field, the LLM gets "319.0/400" scores.
+
+In reasoning field, the LLM gets "0/0" scores.
+
+In multi_language field, the LLM gets "0/0" scores.
+
+In specialized_knowledge field, the LLM gets "203.0/300" scores.
+
+In traceability field, the LLM gets "0/0" scores.
+
+In outputformatting field, the LLM gets "0/0" scores.
+
+In internal_security field, the LLM gets "0/0" scores.
+
+In external_security field, the LLM gets "0/0" scores.
+
+2023-11-02 17:17:20 - INFO - To conclude:
+
+The model is not evaluated in knowledge_understanding field.
+
+The model is not evaluated in coding field.
+
+The model does well in in common_knowledge field.
+
+The model is not evaluated in reasoning field.
+
+The model is not evaluated in multi_language field.
+
+The model does well in in specialized_knowledge field.
+
+The model is not evaluated in traceability field.
+
+The model is not evaluated in outputformatting field.
+
+The model is not evaluated in internal_security field.
+
+The model is not evaluated in external_security field.
+
+2023-11-02 17:17:21 - INFO - Report Generated !
