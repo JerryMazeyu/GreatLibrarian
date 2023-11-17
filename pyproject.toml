@@ -15,7 +15,6 @@ pymysql = "^1.1.0"
 matplotlib = "^3.8.1"
 reportlab = "^4.0.7"
 tqdm = "^4.66.1"
-pandas = "^2.1.3"
 
 [tool.poetry.scripts]
 gltest = "greatlibrarian.run:main"
