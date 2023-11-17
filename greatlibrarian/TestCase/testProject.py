@@ -3,7 +3,7 @@ import re
 import itertools
 from copy import deepcopy
 from collections import defaultdict
-from Utils import to_list
+from ..Utils import to_list
 from warnings import warn
 
 

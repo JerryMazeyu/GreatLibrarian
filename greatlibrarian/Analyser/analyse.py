@@ -1,11 +1,11 @@
-from Utils import add_logger_name_cls,generate_logger_subfile,generate_name_new
+from ..Utils import add_logger_name_cls,generate_logger_subfile,generate_name_new
 import matplotlib.pyplot as plt
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Image as RLImage
 from matplotlib.backends.backend_pdf import PdfPages
 from reportlab.pdfgen import canvas
 import os 
-from Utils import extract_mistaken_info,extract_example_info
+from ..Utils import extract_mistaken_info,extract_example_info
 import matplotlib
 import textwrap
 from matplotlib.font_manager import FontProperties

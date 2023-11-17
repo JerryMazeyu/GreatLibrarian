@@ -1,4 +1,4 @@
-from Core import LLMs
+from ...Core import LLMs
 import zhipuai
 
 from http import HTTPStatus

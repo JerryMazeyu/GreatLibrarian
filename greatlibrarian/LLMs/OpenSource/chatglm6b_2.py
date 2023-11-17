@@ -1,8 +1,8 @@
-from Core import LLMs
+from ...Core import LLMs
 import requests
 import json
 import configparser
-from LLMs.dbInteractor import get_db_connection, write_data_to_database
+from ..dbInteractor import get_db_connection, write_data_to_database
 
 
 class ChatGLM6B_2(LLMs):

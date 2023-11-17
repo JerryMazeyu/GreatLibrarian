@@ -1,7 +1,7 @@
-from Agents import BookStore, PromptMarket
-from LLMs import *
-from Interactor import *
-from FinalScore import *
+from ..Agents import BookStore, PromptMarket
+from ..LLMs import *
+from ..Interactor import *
+from ..FinalScore import *
 
 
 class ExampleConfig():

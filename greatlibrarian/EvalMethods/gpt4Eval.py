@@ -1,7 +1,7 @@
-from Core import EvalMethods
-from Utils import to_list
+from ..Core import EvalMethods
+from ..Utils import to_list
 import warnings
-from LLMs import chatglm_pro
+from ..LLMs import chatglm_pro
 import re
 
 class GPT4eval(EvalMethods):

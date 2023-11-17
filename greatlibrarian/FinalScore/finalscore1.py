@@ -1,4 +1,4 @@
-from Core import FinalScore
+from ..Core import FinalScore
 
 class FinalScore1 (FinalScore):
      def __init__(self, score_dict,field,threadnum) -> None:

@@ -1,1 +1,0 @@
-from .autoInteractor import AutoInteractor

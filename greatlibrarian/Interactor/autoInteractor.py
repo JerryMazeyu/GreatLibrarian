@@ -1,8 +1,8 @@
 from typing import Any
-from Utils import add_logger_name_cls,load_from_cfg,generate_name_new,generate_logger_subfile,human_evaluation
-from Recoder import Recoder
-from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
-from Analyser import Analyse,Getinfo
+from ..Utils import add_logger_name_cls,load_from_cfg,generate_name_new,generate_logger_subfile,human_evaluation
+from ..Recoder import Recoder
+from ..EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
+from ..Analyser import Analyse,Getinfo
 import os
 import zhipuai
 
