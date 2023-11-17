@@ -4,6 +4,8 @@ __pycache__
 
 Logs/*
 
+greatlibrarian/Logs/*
+
 !Logs/dazzling_shirley.log
 
 .idea
