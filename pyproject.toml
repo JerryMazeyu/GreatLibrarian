@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "greatlibrarian"
-version = "0.0.3"
+version = "0.0.4"
 description = ""
 authors = ["dmj <ggxxding@163.com>"]
 readme = "README.md"
