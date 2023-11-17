@@ -1,0 +1,87 @@
+aiohttp @ file:///croot/aiohttp_1694181079612/work
+aiolimiter==1.1.0
+aiosignal @ file:///home/conda/feedstock_root/build_artifacts/aiosignal_1667935791922/work
+annotated-types==0.6.0
+anyio==3.7.1
+async-timeout @ file:///home/conda/feedstock_root/build_artifacts/async-timeout_1691763562544/work
+attrs @ file:///home/conda/feedstock_root/build_artifacts/attrs_1683424013410/work
+bce-python-sdk==0.8.95
+brotlipy @ file:///home/conda/feedstock_root/build_artifacts/brotlipy_1648854175163/work
+cachetools @ file:///home/conda/feedstock_root/build_artifacts/cachetools_1688227447901/work
+certifi==2021.5.30
+cffi==1.14.6
+chardet==4.0.0
+charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1688813409104/work
+cryptography==35.0.0
+cycler==0.10.0
+dashscope==1.13.1
+dataclasses==0.6
+dataclasses-json @ file:///home/conda/feedstock_root/build_artifacts/dataclasses-json_1648489389285/work
+et-xmlfile==1.1.0
+exceptiongroup==1.1.3
+frozenlist @ file:///croot/frozenlist_1670004507010/work
+future==0.18.3
+google-api-core @ file:///home/conda/feedstock_root/build_artifacts/google-api-core-split_1686812029898/work
+google-auth @ file:///home/conda/feedstock_root/build_artifacts/google-auth_1694495354132/work
+googleapis-common-protos @ file:///home/conda/feedstock_root/build_artifacts/googleapis-common-protos-feedstock_1690830130005/work
+greenlet @ file:///croot/greenlet_1670513226095/work
+idna==2.10
+jsonpatch==1.33
+jsonpointer==2.4
+kiwisolver==1.3.1
+langchain==0.0.333
+langsmith==0.0.63
+marshmallow @ file:///home/conda/feedstock_root/build_artifacts/marshmallow_1689924608696/work
+marshmallow-enum @ file:///home/conda/feedstock_root/build_artifacts/marshmallow-enum_1602427317752/work
+matplotlib==3.4.3
+mkl-fft==1.3.6
+mkl-random @ file:///work/mkl/mkl_random_1682950433854/work
+mkl-service==2.4.0
+multidict @ file:///croot/multidict_1665674239670/work
+mypy-extensions @ file:///home/conda/feedstock_root/build_artifacts/mypy_extensions_1675543315189/work
+numexpr @ file:///croot/numexpr_1683221822650/work
+numpy==1.21.2
+openai==0.28.1
+openapi-schema-pydantic @ file:///home/conda/feedstock_root/build_artifacts/openapi-schema-pydantic_1681130872959/work
+openpyxl==3.0.9
+package-name==0.1
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1681337016113/work
+pandas==1.3.4
+pandas-stubs==1.2.0.40
+Pillow==8.3.2
+protobuf==3.20.3
+pyasn1==0.4.8
+pyasn1-modules==0.2.7
+pycparser==2.20
+pycryptodome==3.19.0
+pydantic==2.4.2
+pydantic-settings==2.0.3
+pydantic_core==2.10.1
+PyJWT==2.8.0
+PyMySQL==1.0.2
+pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1685514481738/work
+pyparsing==2.4.7
+PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1661604839144/work
+python-dateutil==2.8.1
+python-dotenv==1.0.0
+pytz==2021.1
+pyu2f @ file:///home/conda/feedstock_root/build_artifacts/pyu2f_1604248910016/work
+PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1648757091578/work
+qianfan==0.1.3
+-e git+https://github.com/andyzoujm/representation-engineering.git@acd14ab15f6d37710dd9a3b47caa2900ce5c2569#egg=repe
+reportlab==3.6.2
+requests==2.25.1
+rsa @ file:///home/conda/feedstock_root/build_artifacts/rsa_1658328885051/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+sniffio==1.3.0
+some-package==0.1
+SQLAlchemy @ file:///tmp/abs_18b3238f-9c23-4182-a392-63af30a93c1er8j_yw60/croots/recipe/sqlalchemy_1657867856580/work
+stringcase==1.2.0
+tenacity @ file:///home/conda/feedstock_root/build_artifacts/tenacity_1692026804430/work
+textwrap3==0.9.2
+tqdm==4.62.3
+typing-inspect @ file:///home/conda/feedstock_root/build_artifacts/typing_inspect_1685820062773/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1688315532570/work
+urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1678635778344/work
+yarl @ file:///home/conda/feedstock_root/build_artifacts/yarl_1648966513179/work
+zhipuai==1.0.7

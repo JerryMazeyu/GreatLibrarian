@@ -6,7 +6,7 @@ class FinalScore1 (FinalScore):
         self.field = field
         self.threadnum = threadnum
 
-     def get_final_score(self) -> int :
+     def get_final_score(self) -> float :
         """
 
         Used to define the final scoring calculation rules for each testcase.
