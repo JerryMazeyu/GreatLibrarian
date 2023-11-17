@@ -1,5 +1,5 @@
 import re
-from Utils import add_logger,generate_logger_subfile,generate_name_new
+from ..Utils import add_logger,generate_logger_subfile,generate_name_new
 import os
 
 # log_name = generate_name_new('dialog')

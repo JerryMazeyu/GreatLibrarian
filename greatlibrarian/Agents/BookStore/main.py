@@ -1,4 +1,4 @@
-from Core import Agents
+from ...Core import Agents
 import os
 
 class BookStore(Agents):

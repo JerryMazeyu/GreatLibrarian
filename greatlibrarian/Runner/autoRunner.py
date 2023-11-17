@@ -1,15 +1,15 @@
-from Utils import load_from_cfg
-from Interactor import AutoInteractor
-from TestCase import TestProject
+from ..Utils import load_from_cfg
+from ..Interactor import AutoInteractor
+from ..TestCase import TestProject
 import os
 import json
 import concurrent.futures
 from tqdm import tqdm
-from EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
+from ..EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 import threading
-from Utils import clean_log_dialog,to_int
-from Analyser import Analyse,Getinfo
-from FinalScore import FinalScore1
+from ..Utils import clean_log_dialog,to_int
+from ..Analyser import Analyse,Getinfo
+from ..FinalScore import FinalScore1
 
 class AutoRunner():
     def __init__(self, cfg):

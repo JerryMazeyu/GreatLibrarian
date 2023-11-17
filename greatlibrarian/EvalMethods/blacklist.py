@@ -1,5 +1,5 @@
-from Core import EvalMethods
-from Utils import to_list
+from ..Core import EvalMethods
+from ..Utils import to_list
 import re
 
 class Blacklist(EvalMethods):

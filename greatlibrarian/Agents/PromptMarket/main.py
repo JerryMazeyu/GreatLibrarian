@@ -1,6 +1,6 @@
-from Core import Agents
-from Agents.PromptMarket import getContextExamples as ex
-from LLMs.OpenSource import chatglm6b_2
+from ...Core import Agents
+from . import getContextExamples as ex
+from ...LLMs.OpenSource import chatglm6b_2
 
 class PromptMarket(Agents):
     def __init__(self) -> None:

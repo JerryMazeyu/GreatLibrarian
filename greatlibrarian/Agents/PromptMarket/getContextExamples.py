@@ -1,4 +1,4 @@
-from Core import Agents
+from ...Core import Agents
 #import matplotlib.pyplot as pt
 
 "提供针对性且有用的问题，预热大模型，使其能够更好地将大而泛"

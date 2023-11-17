@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from Utils import to_list
+from ..Utils import to_list
 
 class EvalMethods(ABC):
     """Evaluation methods abstract class
