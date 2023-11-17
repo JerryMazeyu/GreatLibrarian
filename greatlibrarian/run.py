@@ -1,7 +1,7 @@
 from Configs import exconf
 from Runner import AutoRunner
-
-runner = AutoRunner(exconf)
-runner.run()
+def main():
+    runner = AutoRunner(exconf)
+    runner.run()
 
 
