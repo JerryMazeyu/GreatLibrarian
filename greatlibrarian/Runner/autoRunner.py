@@ -12,12 +12,14 @@ from ..Analyser import Analyse,Getinfo
 from ..FinalScore import FinalScore1
 
 class AutoRunner():
-    def __init__(self, cfg):
+    def __init__(self, cfg,path):
+        self.path = path
         self.cfg = cfg
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
         self.llm_name = self.llm.__name__
+        
         
         
     def _check(self):
@@ -36,12 +38,30 @@ class AutoRunner():
             self.finalscore = FinalScore1
     
     def load_json(self):
-        self.testprojects = []
-        self.json_paths = [os.path.join('TestCase', x) for x in self.json_paths]
-        for jsp in self.json_paths:
-            with open(jsp) as f:
-                jsonobj = json.load(f)
-                self.testprojects.append(TestProject(jsonobj))
+        if self.path == 'Testcase':
+            self.testprojects = []
+            self.json_paths = [os.path.join(self.path, x) for x in self.json_paths]
+            for jsp in self.json_paths:
+                with open(jsp) as f:
+                    jsonobj = json.load(f)
+                    self.testprojects.append(TestProject(jsonobj))
+        else:
+            self.testprojects = []
+            self.json_paths = []
+            directory = self.path
+
+            for root, dirs, files in os.walk(directory):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    if file.endswith('.json'):
+                        self.json_paths.append(file_path)
+                        
+            for jsp in self.json_paths:
+                with open(jsp) as f:
+                    jsonobj = json.load(f)
+                    self.testprojects.append(TestProject(jsonobj))
+    
+
     
     def run(self):
         """
