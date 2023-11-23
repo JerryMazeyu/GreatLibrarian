@@ -1,4 +1,4 @@
-#!/home/ubuntu/moe/GreatLibrarian/Agents/CodeRunner/VirEnv/bin/python
+#!/home/ubuntu/moe/GreatLibrarian/greatlibrarian/Agents/CodeRunner/my_virtualenv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
