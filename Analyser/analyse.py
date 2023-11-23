@@ -77,7 +77,7 @@ class Analyse():
         print(conclude_info)
         return(get_score_info,conclude_info,plotinfo)
 
-    def report(self,plotinfo,log_path,llm_name):#TODO:用图像展示以下测评结果：各领域题目回答准确率，各领域题目占比，测试题目总数，测试用时等
+    def report(self,plotinfo,log_path,llm_name):
         """
         log_path:The path of the dialog_init.log
         logger_path:A gloabal variable, the path to the analyse.log
