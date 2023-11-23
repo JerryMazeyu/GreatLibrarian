@@ -4,15 +4,15 @@ from ..Interactor import *
 from ..FinalScore import *
 
 
-class ExampleConfig():
-    def __init__(self):
-        # self.llm = chatglm_pro
-        # self.llm = qwen_turbo
-        self.llm = wenxin
-        self.json_paths = ['example1.json','example2.json','example3.json','example4.json','example5.json','example6.json','example7.json']
-        self.interactor = AutoInteractor
-        self.finalscore = FinalScore1
-        # self.register_agents = [BookStore]
+# class ExampleConfig():
+#     def __init__(self):
+#         # self.llm = chatglm_pro
+#         # self.llm = qwen_turbo
+#         self.llm = wenxin
+#         self.json_paths = ['example1.json','example2.json','example3.json','example4.json','example5.json','example6.json','example7.json']
+#         self.interactor = AutoInteractor
+#         self.finalscore = FinalScore1
+#         # self.register_agents = [BookStore]
 
 class ExampleConfig():
     def __init__(self):
@@ -24,12 +24,12 @@ class ExampleConfig():
         self.finalscore = FinalScore1
         # self.register_agents = [BookStore, PromptMarket]
 
-class ExampleConfig():
-    def __init__(self):
-        self.llm = qwen_turbo
-        self.json_paths = ['example11.json']
-        self.interactor = AutoInteractor
-        self.finalscore = FinalScore1
-        # self.register_agents = [BookStore, PromptMarket]
+# class ExampleConfig():
+#     def __init__(self):
+#         self.llm = qwen_turbo
+#         self.json_paths = ['example11.json']
+#         self.interactor = AutoInteractor
+#         self.finalscore = FinalScore1
+#         # self.register_agents = [BookStore, PromptMarket]
         
 exconf = ExampleConfig()

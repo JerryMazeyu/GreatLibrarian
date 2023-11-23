@@ -38,7 +38,7 @@ class AutoRunner():
             self.finalscore = FinalScore1
     
     def load_json(self):
-        if self.path == 'Testcase':
+        if self.path == 'TestCase':
             self.testprojects = []
             self.json_paths = [os.path.join(self.path, x) for x in self.json_paths]
             for jsp in self.json_paths:

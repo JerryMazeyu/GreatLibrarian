@@ -165,19 +165,20 @@ class Analyse():
         #     plt.text(2, -1 - i * 0.5, label, color=colors[i])
         axs[1] = plt.gca()
         axs[1].set_aspect('equal')  
-        axs[1].set_position([0.2, 0.2, 0.6, 0.6])  
+        axs[1].set_position([0.0, 1.0, 0.6, 0.6])  
 
         legend_labels = ['{}'.format(filtered_field) for filtered_field in filtered_fields]
-        legend = axs[1].legend(patches, legend_labels, loc="lower right", bbox_to_anchor=(1.15, 0))
+        legend = axs[1].legend(patches, legend_labels, loc="lower right", bbox_to_anchor=(1.25, 0.1))
 
         for label in legend.get_texts():
             label.set_fontsize(30) 
-            
-        axs[1].set_position([0.2, 0.7, 0.6, 0.6])
+        
+        
+        axs[1].set_position([0.0, 1.0, 0.6, 0.6])
 
         axs[1].axis('off')
 
-        plt.subplots_adjust(wspace=0.5)
+        plt.subplots_adjust(wspace=0.45)
 
         title = "2.测试用例数据"
         plt.suptitle(title, fontsize=32, ha='center',y=0.95, fontfamily='SimSun')
