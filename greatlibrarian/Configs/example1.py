@@ -14,7 +14,6 @@ class ExampleConfig():
         self.finalscore = FinalScore1
         # self.register_agents = [BookStore]
 
-
 class ExampleConfig():
     def __init__(self):
         # self.llm = chatglm_pro
@@ -25,11 +24,12 @@ class ExampleConfig():
         self.finalscore = FinalScore1
         # self.register_agents = [BookStore, PromptMarket]
 
-# class ExampleConfig():
-#     def __init__(self):
-#         self.llm = chatglm6b
-#         self.json_paths = ['example1.json']
-#         # self.register_agents = [BookStore, PromptMarket]
-#         # self.interactor = AutoInteractor
+class ExampleConfig():
+    def __init__(self):
+        self.llm = qwen_turbo
+        self.json_paths = ['example11.json']
+        self.interactor = AutoInteractor
+        self.finalscore = FinalScore1
+        # self.register_agents = [BookStore, PromptMarket]
         
 exconf = ExampleConfig()
