@@ -1,11 +1,6 @@
-<!-- # GreatLibrarian
-![](https://jerrymazeyu.oss-cn-shanghai.aliyuncs.com/2023-07-06-DALL%C2%B7E%202023-07-06%2013.39.16%20-%20An%20omnipotent%20librarian%20with%20a%20galaxy%20as%20his%20head-%20suitable%20for%20a%20logo..png)
-Scenario-based large model testing toolbox -->
-<!-- ![](https://jerrymazeyu.oss-cn-shanghai.aliyuncs.com/2023-07-18-092247.jpg) -->
-
 # 场景化大语言模型自动化测评工具箱  
 
-*******
+*****
 
 本项目旨在对场景化的大语言模型进行**自动化的评测**，用户只需要提供测试的大语言模型的 `API Key` 以及准备用于测试的**测试用例**，该工具就可以自动完成一个完整的测评过程，包括：**用户选择各个评分方法的评分细则** → **工具箱自动的与大语言模型进行交互** → **将对话内容记录进日志** → **对每一条测试用例进行打分** → **对得分情况进行分析** → **总结本次测评的信息并生成报告**。在自动化评测的流程结束后，用户可以在最终生成测评报告中直观的查看到本次测评的所有信息。  
 
@@ -168,21 +163,21 @@ Scenario-based large model testing toolbox -->
 
 在工具箱中，目前每种 **评价方法** 都至少有一种 **评分细则** ，定义于[EvalMethods](https://github.com/JerryMazeyu/GreatLibrarian/tree/main/greatlibrarian/EvalMethods)中方法名称对应的py文件中，如果使用工具箱中已经定义的评分细则，只需要在工具箱 **开始自动化测评前** 根据提示输入评分细则的序号，即可完成每种评价方法对应的评分细则的选用；若用户需要 **新增评分细则** ，需要在[EvalMethods](https://github.com/JerryMazeyu/GreatLibrarian/tree/main/greatlibrarian/EvalMethods)中方法名称对应的py文件中的评价方法类中新建方法，方法名称为“eval+序号”，该方法要求通过 `self.evalinfo` （一个key为评价方法字符串，对应的value为评价方法关键字列表的字典，如上文中提到的"`evaluation`"）、 `self.prompt` (本条测试用例的问题）以及 `self.ans` （LLM的回答）来评判本条测试用例，并返回评分（浮点数）。  
   
-    class Keyword(EvalMethods):
-           def eval1(self):
-           """
-           A method for scoring models based on keywords.
-           Rule:For each propmt, the model's response that contains at least one of the keywords gets a score of 1/n, and n is the number of prompts.
-           Returns:Score of the model.
+        class Keyword(EvalMethods):
+            def eval1(self):
+            """
+            A method for scoring models based on keywords.
+            Rule:For each propmt, the model's response that contains at least one of the keywords gets a score of 1/n, and n is the number of prompts.
+            Returns:Score of the model.
 
-           """
-           score = 0.0
-           keywords = self.evalinfo['keywords']
-           keywords = to_list(keywords)
-           for ind, pt in enumerate(self.prompt):
-               if self.if_there_is(self.ans[ind], self.keywords[ind]):
-                   score += 1 / len(self.prompt)
-           return score
+            """
+            score = 0.0
+            keywords = self.evalinfo['keywords']
+            keywords = to_list(keywords)
+            for ind, pt in enumerate(self.prompt):
+                if self.if_there_is(self.ans[ind], self.keywords[ind]):
+                    score += 1 / len(self.prompt)
+            return score
 
 **注意：在用户在某个评价方法类中新增了评分细则后，需要更新类中的`self.methodtotal`为目前的eval方法数量，以保证选择评分细则功能的鲁棒性。**  
   
@@ -321,6 +316,8 @@ Windows (Powershell)：
     cd greatlibrarian
 
 运行以下命令：`gltest`  
+  
+若用户需要在项目代码外的某个路径创建文件夹并添加测试用例的json文件，可以新建一个文件夹并将测试用例的json文件放进文件夹`file`中，然后通过`cd ..`回退至`GreatLibrarian`路径，然后运行：`gltest --path=path/to/the/file`
 
 然后工具箱会提示用户进行每种评价方法下的评分细则的选择，需要用户**根据提示信息输入评分细则序号**。  
   
