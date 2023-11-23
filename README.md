@@ -30,7 +30,8 @@ Scenario-based large model testing toolbox -->
 如果需要自行加入新的LLM并用其`API Key`进行测试，需要先在[openai](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/LLMs/APIs/openai.py#L17)中创建一个新的LLMs的子类（下文用`new_llm`指代这个新的子类的名称），其方法需包括：  
 1. 包括LLM的 `API Key` 以及`name` 等信息的 `__init__` 函数  
 2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其**鲁棒性** ，以防因**响应故障**等非工具箱内部原因导致的测试异常中止。 
-  
+    
+
     class chatglm_pro(LLMs):
         def __init__(self):
             self.apikey = "Your API Key"
@@ -72,7 +73,7 @@ Scenario-based large model testing toolbox -->
         "邻省最多的省级行政区：",
         "我国面积最大的平原： "],
     "evaluation": {
-            "0": [{"keywords":[["中关村""中关"]],"blacklist":[["硅谷"]]}],
+            "0": [{"keywords":[["中关村"]],"blacklist":[["硅谷"]]}],
             "1": [{"keywords":[["黑龙江省"]]},"GPT4eval":[[True]]],
             "2": [{"keywords":[["新疆维吾尔自治区"]]}],
             "3": [{"keywords":[["内蒙古自治区", "陕西省"]]}],
