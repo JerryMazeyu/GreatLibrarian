@@ -1,14 +1,17 @@
 # 场景化大语言模型自动化测评工具箱  
 
 *****
-
+  
+![piwcGVK.jpg](https://z1.ax1x.com/2023/11/24/piwcGVK.jpg)
+  
+  
 本项目旨在对场景化的大语言模型进行**自动化的评测**，用户只需要提供测试的大语言模型的 `API Key` 以及准备用于测试的**测试用例**，该工具就可以自动完成一个完整的测评过程，包括：**用户选择各个评分方法的评分细则** → **工具箱自动的与大语言模型进行交互** → **将对话内容记录进日志** → **对每一条测试用例进行打分** → **对得分情况进行分析** → **总结本次测评的信息并生成报告**。在自动化评测的流程结束后，用户可以在最终生成测评报告中直观的查看到本次测评的所有信息。  
 
 ![](https://jerrymazeyu.oss-cn-shanghai.aliyuncs.com/2023-07-06-DALL%C2%B7E%202023-07-06%2013.39.16%20-%20An%20omnipotent%20librarian%20with%20a%20galaxy%20as%20his%20head-%20suitable%20for%20a%20logo..png)  
 
 ## 介绍  
 
-本项目主要实现语言为python，测试用例为json格式，最终生成的报告为PDF格式。按照工具的功能模块，分为四个部分介绍工具箱，分别为：**测前准备、自动化测评、评分规则、报告生成**。  
+本项目主要实现语言为python，测试用例为`json`格式，最终生成的报告为PDF格式。按照工具的功能模块，分为四个部分介绍工具箱，分别为：**测前准备、自动化测评、评分规则、报告生成**。  
 
 ### 测前准备
 
@@ -55,7 +58,7 @@
 #### 测试用例配置  
 
 
-本工具箱使用的测试用例为统一的json格式，示范格式如下：
+本工具箱使用的测试用例为统一的`json`格式，示范格式如下：
 
     {
     "name": "地理知识",  
@@ -87,11 +90,11 @@
 `evaluation`字典用于存储当前测试用例组的答案，字典的key从"0"开始，分别对应第1、2、3...条测试用例的答案，其中每一条测试用例的答案是一个列表，由于**当前工具箱仅用于测试单轮对话** ，所以这里的列表长度始终为1。列表的内部元素是一个字典，字典的key是评分方法，目前包括`keywords`、`blacklist`和`GPT4eval`三种，分别对应着三种不同的评分方法，字典的key对应的value是当前测试用例的该评分方法的 **关键字**。   
 1. `keywords`：根据LLM的回答是否含有字典里`"keywords"`对应的列表中给出的 **关键字** 评分。  
 2. `blacklist`：根据LLM的回答是否含有字典里`"blacklist"`对应的列表中给出的 **黑名单字符串** 评分。  
-3. `GPT4eval`：让 **GPT4** 对该LLM对于该条测试用例的回答打分， `"GPT4eval"`对应的value始终为示范中的[[True]]。  
+3. `GPT4eval`：让 **GPT4** 对该LLM对于该条测试用例的回答打分， `"GPT4eval"`对应的value始终为示范中的`[[True]]`。  
 
 以上方法如果出现在字典中，该条测试用例就会用该方法进行打分，对于所有的评分方法，每一条测试用例的 **分数范围** 都为 **0-1** 。  
   
-按照以上json格式创建测试用例组，并在[Testcase](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/TestCase)中**新建json文件**（这里假设为`example.json`），然后将测试用例组写进文件内，并将其添加到[example1](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/Configs/example1.py#L12)中本次使用的`ExampleConfig()`类的`self.json_paths`列表中，添加内容为：`example.json`。  
+按照以上`json`格式创建测试用例组，并在[Testcase](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/TestCase)中**新建`json`文件**（这里假设为`example.json`），然后将测试用例组写进文件内，并将其添加到[example1](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/Configs/example1.py#L12)中本次使用的`ExampleConfig()`类的`self.json_paths`列表中，添加内容为：`example.json`。  
   
     class ExampleConfig():
         def __init__(self):
@@ -200,8 +203,8 @@
    
 做好所有测前配置后，工具箱可以开始进行自动化的测评。测评的过程主要包括三个工作： 
  
-1. **自动的与当前测试的LLM进行交互**。工具箱会将所有需要用于测试的json文件中的prompt通过`API Key`发送给LLM，然后接收并记录LLM的回应。在本工具箱中，此过程做了并行化处理，提高了交互的效率。
-2. **根据json文件中提供的`evaluation`进行评分**。对于每一条测试用例，工具箱会首先使用`evaluation`中的所有评价方法评分，然后根据用户选择的`FinalScore`方法进行最终分数的评判。
+1. **自动的与当前测试的LLM进行交互**。工具箱会将所有需要用于测试的`json`文件中的prompt通过`API Key`发送给LLM，然后接收并记录LLM的回应。在本工具箱中，此过程做了并行化处理，提高了交互的效率。
+2. **根据`json`文件中提供的`evaluation`进行评分**。对于每一条测试用例，工具箱会首先使用`evaluation`中的所有评价方法评分，然后根据用户选择的`FinalScore`方法进行最终分数的评判。
 3. **记录交互日志**。对于每一条测试用例，工具箱都会记录其交互的记录，记录的具体内容如下：  
 
 >2023-11-10 16:03:18 - INFO - ---------- New Epoch ---------- from thread 2  
@@ -317,8 +320,8 @@ Windows (Powershell)：
 
 运行以下命令：`gltest`  
   
-若用户需要在项目代码外的某个路径创建文件夹并添加测试用例的json文件，可以新建一个文件夹并将测试用例的json文件放进文件夹`file`中，然后通过`cd ..`回退至`GreatLibrarian`路径，然后运行：`gltest --path=path/to/the/file`
+若用户需要在项目代码外的某个路径创建文件夹并添加测试用例的`json`文件，可以新建一个文件夹并将测试用例的`json`文件放进文件夹`file`中，然后通过`cd ..`回退至`GreatLibrarian`路径，然后运行：`gltest --path=path/to/the/file`
 
 然后工具箱会提示用户进行每种评价方法下的评分细则的选择，需要用户**根据提示信息输入评分细则序号**。  
   
-选择完成后开始自动化评测，评测结束后的所有相关文件（log文件，测试报告等）记录在**GreatLibrarian/greatlibrarian/Logs**中。
+选择完成后开始自动化评测，评测结束后的所有相关文件（log文件，测试报告等）记录在`**GreatLibrarian/greatlibrarian/Logs**`中。
