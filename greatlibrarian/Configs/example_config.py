@@ -4,7 +4,7 @@ from ..Interactor import *
 from ..FinalScore import *
 
 class ExampleConfig():
-    def __init__(self,llm,interactor=AutoInteractor,finalscore=FinalScore1):
+    def __init__(self,llm,finalscore=FinalScore1,interactor=AutoInteractor):
         self.llm = llm
         self.interactor = interactor
         self.finalscore = finalscore
