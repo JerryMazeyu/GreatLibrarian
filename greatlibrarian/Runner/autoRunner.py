@@ -25,8 +25,8 @@ class AutoRunner():
     def _check(self):
         if not hasattr(self, 'llm'):
             raise ValueError("There is no llm in the configure file.")
-        if not hasattr(self, 'json_paths'):
-            raise ValueError("There is no json_paths in the configure file.")
+        # if not hasattr(self, 'json_paths'):
+        #     raise ValueError("There is no json_paths in the configure file.")
         if not hasattr(self, 'interactor'):
             print("Find no interactor, default as auto interactor.")
             self.interactor_cls = AutoInteractor
@@ -39,8 +39,11 @@ class AutoRunner():
     
     def load_json(self):
         if self.path == 'TestCase':
+            current_script_directory = os.path.dirname(os.path.abspath(__file__))
+            target_directory = os.path.join(current_script_directory, "..", "TestCase")
+            absolute_target_directory = os.path.abspath(target_directory)
             self.testprojects = []
-            self.json_paths = [os.path.join(self.path, x) for x in self.json_paths]
+            self.json_paths = [os.path.join(absolute_target_directory, x) for x in self.json_paths]
             for jsp in self.json_paths:
                 with open(jsp) as f:
                     jsonobj = json.load(f)

@@ -40,7 +40,7 @@ class qwen_turbo(LLMs):
     def __call__(self, prompt: str) -> str:
         dashscope.api_key = self.apikey
         response = dashscope.Generation.call(
-        model=dashscope.Generation.Models.qwen_turbo,
+        model = dashscope.Generation.Models.qwen_turbo,
         prompt=prompt
         )
 
@@ -72,4 +72,3 @@ class wenxin(LLMs):
                     return(resp['body']['result'])
         return('API Problem')
         
-chatgpt = ChatGPT()
