@@ -73,6 +73,8 @@ class GPT4eval(EvalMethods):
             docstring = method.__doc__
             if docstring:
                 print(f"{method.__name__}:\n{docstring}\n")
+            else:
+                print('A method defined by user.')
         
 
     def getmethodtotal(self):

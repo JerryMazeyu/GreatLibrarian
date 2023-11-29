@@ -5,14 +5,14 @@ class LLMs(ABC):
     """LLMs abstract class
     """
     @abstractmethod
-    def __call__(self, prompt:str) -> dict:
+    def __call__(self, prompt:str) -> str:
         """Main function of the LLM
 
         Args:
             prompt (str): Prompt.
 
         Returns:
-            str: Response from the LLM.
+            str: Response from the LLM when nothing is wrong(str) / 'API Problem'(str) when the API is not working.
         """
         pass
     

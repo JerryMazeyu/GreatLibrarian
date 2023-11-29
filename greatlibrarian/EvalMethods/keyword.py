@@ -84,7 +84,8 @@ class Keyword(EvalMethods):
             docstring = method.__doc__
             if docstring:
                 print(f"{method.__name__}:\n{docstring}\n")
-        
+            else:
+                print('A method defined by user.')     
 
     def if_there_is(self, ans, keywords):
         for kw in keywords:

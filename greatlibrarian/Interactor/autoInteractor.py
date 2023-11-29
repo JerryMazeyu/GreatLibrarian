@@ -59,8 +59,8 @@ class AutoInteractor():
             # recoder.dialoge[ind] = ''
             print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-            # ans = self.llm(pr)
-            ans="Yes"
+            ans = self.llm(pr)
+            # ans="Yes"
             ans_list.append(ans.lower())
         return(ans_list)
 

@@ -2,7 +2,7 @@
 
 *****
   
-![piwcGVK.jpg](https://z1.ax1x.com/2023/11/24/piwcGVK.jpg)
+![piDYfgK.jpg](https://z1.ax1x.com/2023/11/29/piDYfgK.jpg)
   
   
 本项目旨在对场景化的大语言模型进行**自动化的评测**，用户只需要提供测试的大语言模型的 `API Key` 以及准备用于测试的**测试用例**，该工具就可以自动完成一个完整的测评过程，包括：**用户选择各个评分方法的评分细则** → **工具箱自动的与大语言模型进行交互** → **将对话内容记录进日志** → **对每一条测试用例进行打分** → **对得分情况进行分析** → **总结本次测评的信息并生成报告**。在自动化评测的流程结束后，用户可以在最终生成测评报告中直观的查看到本次测评的所有信息。  
@@ -13,46 +13,49 @@
 
 本项目主要实现语言为python，测试用例为`json`格式，最终生成的报告为PDF格式。按照工具的功能模块，分为四个部分介绍工具箱，分别为：**测前准备、自动化测评、评分规则、报告生成**。  
 
-### 测前准备
-
-#### API Key配置  
+### 测前准备  
+  
+需要用户在`GreatLibrarian`目录下的`register_usr.py`文件中进行一些基本的配置
+  
+#### LLM配置  
 
 工具箱内部目前配置了三个`API Key`，分别为**ChatGLMpro**、**通义千问** 以及**文心一言**。  
 
-如果需要调用这三者中的一个作为本次测试的大语言模型，需要先在[example1](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/Configs/example1.py#L7) 中创建一个`ExampleConfig()`类，设置`self.llm`为`chatglm_pro`，`qwen_turbo`，`wenxin`中的一个，即可用选择的LLM进行测试。    
+如果需要调用这三者中的一个作为本次测试的大语言模型，需要先在[example1](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/Configs/example1.py#L7) 中创建一个`ExampleConfig()`类，设置`self.llm`为`chatglm_pro`，`qwen_turbo`，`wenxin`中的一个，即可用选择的LLM进行测试。 
   
     class ExampleConfig():
         def __init__(self):
              self.llm = chatglm_pro
+  
+如果需要自行加入新的LLM并用其`API Key`进行测试，需要先在`/GreatLibrarian/register_usr.py`中创建一个新的LLMs的子类（下文用`new_llm`指代这个新的子类的名称），其方法需包括：  
+1. 包括LLM的 `API Key` 以及`name` 等信息的 `__init__` 函数(**`self.llm_intro`可以选择设置成该LLM的背景介绍或为空，但是建议设置为LLM的详细背景介绍**）  
+2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其**鲁棒性** ，以防因**响应故障**等非工具箱内部原因导致的测试异常中止。   
+3. 以下是一个例子，该范例也在`register_usr.py`文件中，可以用于用户新增LLM类时的参考。  
 
-如果需要自行加入新的LLM并用其`API Key`进行测试，需要先在[openai](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/LLMs/APIs/openai.py#L17)中创建一个新的LLMs的子类（下文用`new_llm`指代这个新的子类的名称），其方法需包括：  
-1. 包括LLM的 `API Key` 以及`name` 等信息的 `__init__` 函数  
-2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其**鲁棒性** ，以防因**响应故障**等非工具箱内部原因导致的测试异常中止。 
+    import dashscope
+
+    class new_llm(LLMs):
+    def __init__(self):
+        self.apikey = "your API Key"
+        self.name = "qwen_turbo"
+        self.llm_intro = "通义千问是由阿里巴巴集团开发的一款人工智能语言模型应用，它采用了大规模机器学习技术，能够模拟人类自然语言的能力，提供多种服务，如文本翻译、聊天机器人、\n\n自动回复、文档摘要等。\n\n它的核心特点是多轮对话，可以理解用户的意图并进行有效的回复；同时，它还具有强大的文案创作能力，可以为用户提供优秀的文字创意，比如续写小说、撰写邮件等。\n\n此外，通义千问还具备多模态的知识理解能力，可以识别图片、音频、视频等多种媒体形式，并从中提取出关键信息。不仅如此，通义千问还支持多语言，可以实现中文、\n\n英文等不同语言之间的自由转换。\n\n目前，通义千问正在接受内测阶段，并已在各大手机应用市场上线，所有人都可以通过APP直接体验最新模型能力。\n\n"
     
+    def __call__(self, prompt: str) -> str:
+        dashscope.api_key = self.apikey
+        response = dashscope.Generation.call(
+        model=dashscope.Generation.Models.qwen_turbo,
+        prompt=prompt
+        )
 
-    class chatglm_pro(LLMs):
-        def __init__(self):
-            self.apikey = "Your API Key"
-            self.name = "chatglm_pro"
-    
-        def __call__(self, prompt: str) -> str:
-            zhipuai.api_key = self.apikey
-            response = zhipuai.model_api.invoke(
-            model="chatglm_pro",
-            prompt=[{"role": "user", "content": prompt}],
-            top_p=0.7,
-            temperature=0.9,
-            )
-            if response['code']==200:
-                return(response['data']['choices'][0]['content'])
-            else:
-                return('API Problem')  
+        if response:
+            if response['output']:
+                if response['output']['text']:
+                    return(response['output']['text'])
+        return('API Problem')  
 
-然后用户需要在[example1](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/Configs/example1.py#L7)中创建一个`ExampleConfig()`类，并设置`self.llm = new_llm`  
-
-    class ExampleConfig():
-        def __init__(self):
-            self.llm = new_llm
+然后用户需要在该文件中中创建一个`ExampleConfig()`类的实例config（**请勿修改该实例名称**），并用`new_llm`对其进行初始化  
+  
+`config = ExampleConfig(new_llm)`
 
 
 #### 测试用例配置  
@@ -94,11 +97,8 @@
 
 以上方法如果出现在字典中，该条测试用例就会用该方法进行打分，对于所有的评分方法，每一条测试用例的 **分数范围** 都为 **0-1** 。  
   
-按照以上`json`格式创建测试用例组，并在[Testcase](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/TestCase)中**新建`json`文件**（这里假设为`example.json`），然后将测试用例组写进文件内，并将其添加到[example1](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/Configs/example1.py#L12)中本次使用的`ExampleConfig()`类的`self.json_paths`列表中，添加内容为：`example.json`。  
-  
-    class ExampleConfig():
-        def __init__(self):
-            self.json_paths = ['example.json']  
+按照以上`json`格式创建测试用例组，并在某个文件夹（这里假设该文件夹的绝对路径为：`/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase`）中**新建`json`文件**（这里假设为`example1.json`），然后将测试用例组写进文件内，支持将多个`json`文件放入至同一文件夹中用于一次测试。
+ 
 
 #### 评分规则配置
 
@@ -106,16 +106,11 @@
 
 在使用 `evaluation` 字典评分的过程中，使用字典中的每个方法打分后，用户可以选用一个分数结算方法 `FinalScore` ，用于根据所有评分方法的打分给该条测试用确定一个最终得分。  
 
-目前工具箱中有一个默认的 `FinalScore` 方法，如果用户使用该默认方法，需要在上文中提到的[example1](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/Configs/example1.py#L14)中新建的`ExampleConfig()`类设置`self.finalscore = FinalScore1`。   
-  
-    class ExampleConfig():
-        def __init__(self):
-            self.finalscore = FinalScore1   
+目前工具箱中有一个默认的 `FinalScore` 方法，如果用户使用该默认方法，则不需要对配置文件`register_usr.py`作出任何改动   
 
-
-如果用户需要自定义分数结算方法，需要在[finalscore1](https://github.com/JerryMazeyu/GreatLibrarian/tree/main/greatlibrarian/FinalScore)中创建一个新的`FinalScore`的子类，类中包含三种方法，其中 `__init__` 和 `final_score_info` 为 **固定配置** ，无需修改，用户需要自己定义。用户需要定义 `get_final_score` 方法，该方法利用 `self.score` 来计算 `final score` 并返回一个浮点数作为该条测试用例的最终得分。其中 `self.score` 是一个字典，字典内容格式如下所示： `{'keywords':0.5,'blacklist':1,'GPT4eval':1}` 。该字典的 **key为评分方法的字符串** ， **value为该方法对应的得分**。  
+如果用户需要自定义分数结算方法，需要在`register_usr.py`中创建一个新的`FinalScore`的子类，类中包含三种方法，其中 `__init__` 和 `final_score_info` 为 **固定配置** ，无需修改，用户需要自己定义。用户需要定义 `get_final_score` 方法，该方法利用 `self.score` 来计算 `final score` 并返回一个浮点数作为该条测试用例的最终得分。其中 `self.score` 是一个字典，字典内容格式如下所示： `{'keywords':0.5,'blacklist':1,'GPT4eval':1}` 。该字典的 **key为评分方法的字符串** ， **value为该方法对应的得分**。  
   
-    from ..Core import FinalScore
+    from greatlibrarian.Core import FinalScore
 
     class FinalScore2 (FinalScore):
          def __init__(self, score_dict,field,threadnum) -> None:
@@ -142,14 +137,12 @@
             if self.score.get('GPT4_eval') is not None:
                 return(self.score['GPT4_eval'])
 
-     def final_score_info(self) -> str:
-        return (self.get_final_score(),f'The final score of this testcase is {self.get_final_score()}, in {self.field} field.'+f'from thread {self.threadnum}',self.get_final_score())  
+         def final_score_info(self) -> str:
+         return (self.get_final_score(),f'The final score of this testcase is {self.get_final_score()}, in {self.field} field.'+f'from thread {self.threadnum}',self.get_final_score())  
 
-创建完新的`FinalScore`子类（假设为`FinalScore2`）后，需要在`ExampleConfig()`类设置`self.finalscore = FinalScore2`  
+创建完新的`FinalScore`子类（假设为`FinalScore2`）后，需要同步修改ExampleConfig实例的初始化：  
   
-    class ExampleConfig():
-        def __init__(self):
-            self.finalscore = FinalScore2 
+`config = ExampleConfig(new_llm,FinalScore1) `
 
   
 
@@ -187,17 +180,6 @@
     class Keyword(EvalMethods):
         def __init__(self, prompt, ans, evalinfo,field,threadnum):
             self.methodtotal=2
-
-#### 背景介绍配置  
-
-在自动化测评结束后，工具箱会自动生成报告，报告的第一页为**LLM的背景介绍**以及本次测试中回答正确的测试用例的展示。对于工具箱中已经配置的LLM，我们已经为其准备好了背景介绍的文档内容，若用户需要使用新的LLM进行测试并介绍其背景，需要在[introduction](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/Analyser/analyse.py#L314)处按照已经配置好的三个背景介绍的格式新增LLM的背景介绍，具体代码如下（假设新增的**LLM类名**为`new_llm`）：  
-
-    if name == 'new_llm':    
-        intro = 'Your introduction'    
-        intro += example_txt 
-    return intro
-  
-*****
   
 ### 自动化测评  
    
@@ -316,12 +298,13 @@ Windows (Powershell)：
     conda create --name GL python=3.10
     conda activate GL
     poetry install
-    cd greatlibrarian
 
-运行以下命令：`gltest`  
+运行以下命令：`gltest --testcase_path=/path/to/your/testcases/ --config_path=/path/to/your/config_file/`  
+
+在这里，我们假设本次测试的测试用例存放在目录/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase下，配置文件的绝对路径为：/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py，则用如下命令启动自动测评：  
   
-若用户需要在项目代码外的某个路径创建文件夹并添加测试用例的`json`文件，可以新建一个文件夹并将测试用例的`json`文件放进文件夹`file`中，然后通过`cd ..`回退至`GreatLibrarian`路径，然后运行：`gltest --path=path/to/the/file`
-
+`gltest --testcase_path=/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase --config_path=/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py`  
+  
 然后工具箱会提示用户进行每种评价方法下的评分细则的选择，需要用户**根据提示信息输入评分细则序号**。  
   
-选择完成后开始自动化评测，评测结束后的所有相关文件（log文件，测试报告等）记录在`**GreatLibrarian/greatlibrarian/Logs**`中。
+选择完成后开始自动化评测，评测结束后的所有相关文件（log文件，测试报告等）记录在`GreatLibrarian/Logs`中。

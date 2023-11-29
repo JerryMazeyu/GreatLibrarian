@@ -1,2 +1,2 @@
 from .base import base
-from .example1 import exconf
+from .example_config import ExampleConfig
