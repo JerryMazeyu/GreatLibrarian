@@ -18,7 +18,9 @@ class AutoRunner():
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
+        llm = self.llm()
         self.llm_name = self.llm.__name__
+        self.llm_intro = llm.get_intro()
         
         
         
@@ -38,17 +40,16 @@ class AutoRunner():
             self.finalscore = FinalScore1
     
     def load_json(self):
-        if self.path == 'TestCase':
-            current_script_directory = os.path.dirname(os.path.abspath(__file__))
-            target_directory = os.path.join(current_script_directory, "..", "TestCase")
-            absolute_target_directory = os.path.abspath(target_directory)
-            self.testprojects = []
-            self.json_paths = [os.path.join(absolute_target_directory, x) for x in self.json_paths]
-            for jsp in self.json_paths:
-                with open(jsp) as f:
-                    jsonobj = json.load(f)
-                    self.testprojects.append(TestProject(jsonobj))
-        else:
+        # if self.path == 'TestCase':
+        #     current_script_directory = os.path.dirname(os.path.abspath(__file__))
+        #     target_directory = os.path.join(current_script_directory, "..", "TestCase")
+        #     absolute_target_directory = os.path.abspath(target_directory)
+        #     self.testprojects = []
+        #     self.json_paths = [os.path.join(absolute_target_directory, x) for x in self.json_paths]
+        #     for jsp in self.json_paths:
+        #         with open(jsp) as f:
+        #             jsonobj = json.load(f)
+        #             self.testprojects.append(TestProject(jsonobj))
             self.testprojects = []
             self.json_paths = []
             directory = self.path
@@ -113,7 +114,7 @@ class AutoRunner():
         print(score_dict)
         analyse=Analyse(score_dict)
         mean_score_info,sum_info,plotinfo=analyse.analyse()
-        analyse.report(plotinfo,logger_path,self.llm_name)
+        analyse.report(plotinfo,logger_path,self.llm_name,self.llm_intro)
 
     def selectmethod(self):
         """

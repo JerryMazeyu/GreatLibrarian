@@ -1,4 +1,3 @@
-from greatlibrarian.Configs import exconf
 from greatlibrarian.Runner import AutoRunner
 import click
 from greatlibrarian.register import *
@@ -22,9 +21,6 @@ def main(testcase_path,config_path):
         runner.run()
     else:
         print('Something went wrong in your config file!')
-        
-    # runner = AutoRunner(testcase_path,config_path)
-    # runner.run()
 
 if __name__ =='__main__':
     main()
