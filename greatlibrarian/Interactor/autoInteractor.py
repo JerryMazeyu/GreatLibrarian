@@ -20,7 +20,7 @@ class AutoInteractor():
         # self.recoders = []
         self.methodnum = methodnum
         self.threadnum = threadnum
-        self.llm = self.llm()
+        self.llm = self.llm
         self.logger_path = logger_path
     
     def eval(self):

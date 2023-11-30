@@ -18,8 +18,8 @@ class AutoRunner():
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
-        llm = self.llm()
-        self.llm_name = self.llm.__name__
+        llm = self.llm
+        self.llm_name = self.llm.get_name()
         self.llm_intro = llm.get_intro()
         
         

@@ -38,7 +38,7 @@ class register():
         self.llm = conf.llm
 
     def checkllm(self):
-        testobj = self.llm()
+        testobj = self.llm
         test = Test(testobj)
         mock_post = MagicMock()
         # api_failure = test.test_api_failure(mock_post)
