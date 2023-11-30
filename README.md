@@ -18,44 +18,54 @@
 需要用户在`GreatLibrarian`目录下的`register_usr.py`文件中进行一些基本的配置
   
 #### LLM配置  
-
-工具箱内部目前配置了三个`API Key`，分别为**ChatGLMpro**、**通义千问** 以及**文心一言**。  
-
-如果需要调用这三者中的一个作为本次测试的大语言模型，需要先在[example1](https://github.com/JerryMazeyu/GreatLibrarian/blob/main/greatlibrarian/Configs/example1.py#L7) 中创建一个`ExampleConfig()`类，设置`self.llm`为`chatglm_pro`，`qwen_turbo`，`wenxin`中的一个，即可用选择的LLM进行测试。 
-  
-    class ExampleConfig():
-        def __init__(self):
-             self.llm = chatglm_pro
-  
-如果需要自行加入新的LLM并用其`API Key`进行测试，需要先在`/GreatLibrarian/register_usr.py`中创建一个新的LLMs的子类（下文用`new_llm`指代这个新的子类的名称），其方法需包括：  
+ 
+如果需要加入LLM并用其`API Key`进行测试，需要先在`/GreatLibrarian/register_usr.py`中创建一个新的LLMs的子类（下文用`new_llm`指代这个新的子类的名称），并用LLM_base.register_module("name of your LLM")装饰器装饰，其方法需包括：  
 1. 包括LLM的 `API Key` 以及`name` 等信息的 `__init__` 函数(**`self.llm_intro`可以选择设置成该LLM的背景介绍或为空，但是建议设置为LLM的详细背景介绍**）  
-2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其**鲁棒性** ，以防因**响应故障**等非工具箱内部原因导致的测试异常中止。   
-3. 以下是一个例子，该范例也在`register_usr.py`文件中，可以用于用户新增LLM类时的参考。  
+2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其**鲁棒性** ，以防因**响应故障**等非工具箱内部原因导致的测试异常中止。**我们要求在API正常响应时返回字符串类型的回答，API异常时返回"API Problem"**。
+3. 使用该LLM类设置基本信息（`name`,`API Key`等等）作为参数，创建一个`llm_cfg`  
 
-    import dashscope
+`llm_cfg = dict(type='qwen_turbo',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = '千问')`  
 
-    class new_llm(LLMs):
-    def __init__(self):
-        self.apikey = "your API Key"
-        self.name = "qwen_turbo"
-        self.llm_intro = "通义千问是由阿里巴巴集团开发的一款人工智能语言模型应用，它采用了大规模机器学习技术，能够模拟人类自然语言的能力，提供多种服务，如文本翻译、聊天机器人、\n\n自动回复、文档摘要等。\n\n它的核心特点是多轮对话，可以理解用户的意图并进行有效的回复；同时，它还具有强大的文案创作能力，可以为用户提供优秀的文字创意，比如续写小说、撰写邮件等。\n\n此外，通义千问还具备多模态的知识理解能力，可以识别图片、音频、视频等多种媒体形式，并从中提取出关键信息。不仅如此，通义千问还支持多语言，可以实现中文、\n\n英文等不同语言之间的自由转换。\n\n目前，通义千问正在接受内测阶段，并已在各大手机应用市场上线，所有人都可以通过APP直接体验最新模型能力。\n\n"
-    
-    def __call__(self, prompt: str) -> str:
-        dashscope.api_key = self.apikey
-        response = dashscope.Generation.call(
-        model=dashscope.Generation.Models.qwen_turbo,
-        prompt=prompt
-        )
-
-        if response:
-            if response['output']:
-                if response['output']['text']:
-                    return(response['output']['text'])
-        return('API Problem')  
-
-然后用户需要在该文件中中创建一个`ExampleConfig()`类的实例config（**请勿修改该实例名称**），并用`new_llm`对其进行初始化  
+4. 使用创建的`llm_cfg`作为参数，用LLM_base.build（）创建一个LLM的实例
+5.  以下是一个例子，该范例也在`register_usr.py`文件中，可以用于用户新增LLM类时的参考，请注意，**务必使用范例中的装饰器，参数为LLM的名称，类型是字符串；并且该类必须继承抽象类LLMs**。   
   
-`config = ExampleConfig(new_llm)`
+
+        from greatlibrarian.Configs import ExampleConfig
+        from greatlibrarian.Utils import Registry
+        from greatlibrarian.Core import LLMs,FinalScore  
+  
+        @LLM_base.register_module("qwen_turbo")
+        class new_llm(LLMs):
+            def __init__(self,apikey,name,llm_intro):
+                self.apikey = apikey
+                self.name = name
+                self.llm_intro = llm_intro
+    
+            def get_intro(self):
+                return self.llm_intro
+    
+            def get_name(self):
+                return self.name
+    
+            def __call__(self, prompt: str) -> str:
+                dashscope.api_key = self.apikey
+                response = dashscope.Generation.call(
+                model = dashscope.Generation.Models.qwen_turbo,
+                prompt=prompt
+                )
+
+                if response:
+                    if response['output']:
+                        if response['output']['text']:
+                           return(response['output']['text'])
+                return('API Problem')
+
+        llm_cfg = dict(type='qwen_turbo',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = '千问')
+        qw = LLM_base.build(llm_cfg)
+    
+然后用户需要在该文件中中创建一个`ExampleConfig()`类的实例config（**请勿修改该实例名称config**），并用刚刚创建的实例（`qw`）对其进行初始化  
+  
+`config = ExampleConfig(qw)`
 
 
 #### 测试用例配置  
@@ -111,6 +121,8 @@
 如果用户需要自定义分数结算方法，需要在`register_usr.py`中创建一个新的`FinalScore`的子类，类中包含三种方法，其中 `__init__` 和 `final_score_info` 为 **固定配置** ，无需修改，用户需要自己定义。用户需要定义 `get_final_score` 方法，该方法利用 `self.score` 来计算 `final score` 并返回一个浮点数作为该条测试用例的最终得分。其中 `self.score` 是一个字典，字典内容格式如下所示： `{'keywords':0.5,'blacklist':1,'GPT4eval':1}` 。该字典的 **key为评分方法的字符串** ， **value为该方法对应的得分**。  
   
     from greatlibrarian.Core import FinalScore
+    from greatlibrarian.Configs import ExampleConfig
+    from greatlibrarian.Utils import Registry
 
     class FinalScore2 (FinalScore):
          def __init__(self, score_dict,field,threadnum) -> None:
@@ -142,7 +154,7 @@
 
 创建完新的`FinalScore`子类（假设为`FinalScore2`）后，需要同步修改ExampleConfig实例的初始化：  
   
-`config = ExampleConfig(new_llm,FinalScore1) `
+`config = ExampleConfig(qw,FinalScore1) `
 
   
 

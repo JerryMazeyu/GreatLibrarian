@@ -1,15 +1,22 @@
 from greatlibrarian.Core import LLMs,FinalScore
 from greatlibrarian.Configs import ExampleConfig
+from greatlibrarian.Utils import Registry
 import dashscope
 
+LLM_base = Registry('LLMs')
+
+@LLM_base.register_module("qwen_turbo")
 class new_llm(LLMs):
-    def __init__(self):
-        self.apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8"
-        self.name = "qwen_turbo"
-        self.llm_intro = "通义千问是由阿里巴巴集团开发的一款人工智能语言模型应用，它采用了大规模机器学习技术，能够模拟人类自然语言的能力，提供多种服务，如文本翻译、聊天机器人、\n\n自动回复、文档摘要等。\n\n它的核心特点是多轮对话，可以理解用户的意图并进行有效的回复；同时，它还具有强大的文案创作能力，可以为用户提供优秀的文字创意，比如续写小说、撰写邮件等。\n\n此外，通义千问还具备多模态的知识理解能力，可以识别图片、音频、视频等多种媒体形式，并从中提取出关键信息。不仅如此，通义千问还支持多语言，可以实现中文、\n\n英文等不同语言之间的自由转换。\n\n目前，通义千问正在接受内测阶段，并已在各大手机应用市场上线，所有人都可以通过APP直接体验最新模型能力。\n\n"
+    def __init__(self,apikey,name,llm_intro):
+        self.apikey = apikey
+        self.name = name
+        self.llm_intro = llm_intro
     
     def get_intro(self):
         return self.llm_intro
+    
+    def get_name(self):
+        return self.name
     
     def __call__(self, prompt: str) -> str:
         dashscope.api_key = self.apikey
@@ -51,6 +58,9 @@ class FinalScore1 (FinalScore):
 
      def final_score_info(self) -> str:
         return (self.get_final_score(),f'The final score of this testcase is {self.get_final_score()}, in {self.field} field.'+f'from thread {self.threadnum}',self.get_final_score())
-        
+     
 
-config = ExampleConfig(new_llm,FinalScore1) 
+
+llm_cfg = dict(type='qwen_turbo',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = '千问')
+qw = LLM_base.build(llm_cfg)
+config = ExampleConfig(qw,FinalScore1) 
