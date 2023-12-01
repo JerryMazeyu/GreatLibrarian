@@ -1,4 +1,5 @@
 import re
+import platform
 
 
 class Getinfo():
@@ -20,7 +21,7 @@ class Getinfo():
         lines = []
         score_dict = {'knowledge_understanding': [], 'coding': [], 'common_knowledge': [], 'reasoning':[], 'multi_language' : [], 'specialized_knowledge' : [], 'traceability' : [], 'outputformatting' : [], 'internal_security' : [], 'external_security' : []}
 
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, 'r', encoding = 'utf-8' if platform.system() != 'Windows' else 'gbk') as file:
             lines = file.readlines()
 
         for line in lines:
