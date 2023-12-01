@@ -61,6 +61,6 @@ class FinalScore1 (FinalScore):
      
 
 
-llm_cfg = dict(type='qwen_turbo',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = '千问')
+llm_cfg = dict(type='qwen_turbo',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = '千问\n\n')
 qw = LLM_base.build(llm_cfg)
 config = ExampleConfig(qw,FinalScore1) 

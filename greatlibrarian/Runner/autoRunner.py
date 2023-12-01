@@ -61,7 +61,7 @@ class AutoRunner():
                         self.json_paths.append(file_path)
                         
             for jsp in self.json_paths:
-                with open(jsp) as f:
+                with open(jsp,encoding='utf-8') as f:
                     jsonobj = json.load(f)
                     self.testprojects.append(TestProject(jsonobj))
     
