@@ -4,8 +4,8 @@ from greatlibrarian.register import *
 import importlib.util
 
 @click.command()
-@click.option('--testcase_path', default='TestCase', help='testcase的json文件所存放的文件夹路径')
-@click.option('--config_path', default=' ', help='配置文件的绝对路径')
+@click.option('--testcase_path', default='/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase', help='testcase的json文件所存放的文件夹路径')
+@click.option('--config_path', default='/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py', help='配置文件的绝对路径')
 def main(testcase_path,config_path):
 
     spec = importlib.util.spec_from_file_location('conf', config_path)

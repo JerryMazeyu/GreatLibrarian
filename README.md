@@ -5,13 +5,13 @@
 ![piDYfgK.jpg](https://z1.ax1x.com/2023/11/29/piDYfgK.jpg)
   
   
-本项目旨在对场景化的大语言模型进行**自动化的评测**，用户只需要提供测试的大语言模型的 `API Key` 以及准备用于测试的**测试用例**，该工具就可以自动完成一个完整的测评过程，包括：**用户对配置文件按需求修改** →**用户选择各个评分方法的评分细则** → **工具箱自动的与大语言模型进行交互** → **将对话内容记录进日志** → **对每一条测试用例进行打分** → **对得分情况进行分析** → **总结本次测评的信息并生成报告**。在自动化评测的流程结束后，用户可以在最终生成测评报告中直观的查看到本次测评的所有信息。  
+本项目旨在对场景化的大语言模型进行**自动化的评测**，用户只需要提供测试的大语言模型的 `API Key` 以及准备用于测试的**测试用例**，该工具就可以自动完成一个完整的测评过程，包括：**用户对配置文件按需求修改** →**用户选择各个评分方法的评分细则** → **工具箱自动的与大语言模型进行交互** → **将对话内容记录进日志** → **对每一条测试用例进行打分** → **对得分情况进行分析** → **总结本次测评的信息并生成报告**。在自动化评测的流程结束后，用户可以在最终生成的测评报告中直观的查看到本次测评的所有信息。  
 
 ![](https://jerrymazeyu.oss-cn-shanghai.aliyuncs.com/2023-07-06-DALL%C2%B7E%202023-07-06%2013.39.16%20-%20An%20omnipotent%20librarian%20with%20a%20galaxy%20as%20his%20head-%20suitable%20for%20a%20logo..png)  
 
 ## 介绍  
 
-本项目主要实现语言为python，测试用例为`json`格式，最终生成的报告为PDF格式。按照工具的功能模块，分为四个部分介绍工具箱，分别为：**测前准备、自动化测评、评分规则、报告生成**。  
+本项目主要实现语言为`python`，测试用例为`json`格式，最终生成的报告为`PDF`格式。按照工具的功能模块，分为四个部分介绍工具箱，分别为：**测前准备、自动化测评、评分规则、报告生成**。  
 
 ### 测前准备  
   
@@ -20,13 +20,10 @@
 #### LLM配置  
  
 如果需要加入LLM并用其`API Key`进行测试，需要先在`/GreatLibrarian/register_usr.py`中创建一个新的`LLMs`的子类（下文用`new_llm`指代这个新的子类的名称），并用`LLM_base.register_module("name of your LLM")`装饰器装饰，其方法需包括：  
-1. 包括LLM的 `API Key` 以及`name` 等信息的 `__init__` 函数(**`self.llm_intro`可以选择设置成该LLM的背景介绍或为空，但是建议设置为LLM的详细背景介绍.请注意：对于self.llm_intro，在编辑字符串时，需要考虑适当的添加换行符号`\n`，建议每一行大约为72个汉字**）  
-2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其**鲁棒性** ，以防因**响应故障**等非工具箱内部原因导致的测试异常中止。**我们要求在API正常响应时返回字符串类型的回答，API异常时返回"API Problem"**。
-3. 使用该LLM类设置基本信息（`name`,`API Key`等等）作为参数，创建一个`llm_cfg`  
-
-`llm_cfg = dict(type='qwen_turbo',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = '千问')`  
-
-4. 使用创建的`llm_cfg`作为参数，用LLM_base.build（）创建一个LLM的实例
+1. 包括LLM的 `API Key` 以及`name` 等信息的 `__init__` 函数(**`self.llm_intro`可以选择设置成该LLM的背景介绍或为空，但是建议设置为LLM的详细背景介绍。）  
+2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其 **鲁棒性** ，以防 **响应故障** 等非工具箱内部原因导致的测试异常中止。**我们要求在API正常响应时返回字符串类型的回答，API异常时返回"API Problem"**。  
+3. 使用该LLM类设置基本信息（`name`,`API Key`等等）作为参数，创建一个`llm_cfg`    
+4. 使用创建的`llm_cfg`作为参数，用LLM_base.build（）创建一个LLM的实例  
 5.  以下是一个例子，该范例也在`register_usr.py`文件中，可以用于用户新增LLM类时的参考，请注意，**务必使用范例中的装饰器，参数为LLM的名称，类型是字符串；并且该类必须继承抽象类LLMs**。   
   
 
@@ -34,7 +31,7 @@
         from greatlibrarian.Utils import Registry
         from greatlibrarian.Core import LLMs,FinalScore  
   
-        @LLM_base.register_module("qwen_turbo")
+        @LLM_base.register_module("name of your LLM")
         class new_llm(LLMs):
             def __init__(self,apikey,name,llm_intro):
                 self.apikey = apikey
@@ -51,7 +48,7 @@
                 dashscope.api_key = self.apikey
                 response = dashscope.Generation.call(
                 model = dashscope.Generation.Models.qwen_turbo,
-                prompt=prompt
+                prompt = prompt
                 )
 
                 if response:
@@ -60,7 +57,7 @@
                            return(response['output']['text'])
                 return('API Problem')
 
-        llm_cfg = dict(type='qwen_turbo',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = '千问')
+        llm_cfg = dict(type='name of your LLM',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = 'introduction of your LLM')
         qw = LLM_base.build(llm_cfg)
     
 然后用户需要在该文件中中创建一个`ExampleConfig()`类的实例config（**请勿修改该实例名称config**），并用刚刚创建的实例（`qw`）对其进行初始化  
@@ -71,7 +68,7 @@
 #### 测试用例配置  
 
 
-本工具箱使用的测试用例为统一的`json`格式，示范格式如下：
+本工具箱使用的测试用例文件为统一的`json`格式，示范格式如下：
 
     {
     "name": "地理知识",  
@@ -114,7 +111,7 @@
 
 除了测试用例配置中提到的 `evaluation` 字典，工具箱的评分过程中还可以进行更具体的 **评分规则配置**。
 
-在使用 `evaluation` 字典评分的过程中，使用字典中的每个方法打分后，用户可以选用一个分数结算方法 `FinalScore` ，用于根据所有评分方法的打分给该条测试用确定一个最终得分。  
+在使用 `evaluation` 字典评分的过程中，使用字典中的每个方法打分后，用户可以选用一个分数结算方法 `FinalScore` ，用于根据所有评分方法的打分给该条测试用例确定一个最终得分。  
 
 目前工具箱中有一个默认的 `FinalScore` 方法，如果用户使用该默认方法，则不需要对配置文件`register_usr.py`作出任何改动   
 

@@ -22,7 +22,7 @@ class new_llm(LLMs):
         dashscope.api_key = self.apikey
         response = dashscope.Generation.call(
         model = dashscope.Generation.Models.qwen_turbo,
-        prompt=prompt
+        prompt = prompt
         )
 
         if response:
