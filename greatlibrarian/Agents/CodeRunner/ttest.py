@@ -1,11 +1,41 @@
 import os
 import subprocess
 import shlex
+import logging
 
 class VirtualEnvRunner:
     def __init__(self, env_name,env_path):
         self.env_name = env_name
         self.env_path=env_path
+        self.logger=self.setup_logger()
+
+    def setup_logger(self):
+       logger=logging.getLogger(__name__)
+       logger.setLevel(logging.DEBUG)
+
+       #创建一个文件处理程序，将日志记录到文件中
+       log_file=os.path.join*(self.env_path,'virtualenv_runner.log')
+       file_handler=logging.FileHandler(log_file)
+       file_handler.setLevel(logging.DEBUG)
+
+       #创建一个控制台处理程序，将日志输出到控制台
+       console_handler=logging.StreamHandler()
+       console_handler.setLevel(logging.INFO)
+
+       #创建一个格式器，规定日志的输出格式
+       formatter=logging.Formatter('%(asctime)s-%(levelname)s-%(message)s')
+       file_handler.setFormatter(formatter)
+       console_handler.setFormatter(formatter)
+
+       #将处理程序添加到日志记录器
+       logger.addHandler(file_handler)
+       logger.addHandler(console_handler)
+
+       return logger
+
+
+
+
 
     def create_virtualenv(self):
         if not os.path.exists(self.env_path):
