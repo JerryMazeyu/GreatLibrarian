@@ -327,7 +327,7 @@ class Analyse():
         if llm_intro != '':
             llm_intro = textwrap.fill(llm_intro, width=72)
             intro = llm_intro
-            intro += '本次对该大语言模型的测试涉及多个领域的问题，测试的结果和分析如下文所示。\n\n'
+            intro += '\n\n本次对该大语言模型的测试涉及多个领域的问题，测试的结果和分析如下文所示。\n\n'
             intro += example_txt
         return intro
 
