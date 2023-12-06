@@ -325,7 +325,7 @@ class Analyse():
         #     intro += example_txt
         #     return intro
         if llm_intro != '':
-            llm_intro = textwrap.fill(llm_intro, width=72)
+            llm_intro = '\n\n'.join([textwrap.fill(paragraph, width=70) for paragraph in llm_intro.split('\n\n')])
             intro = llm_intro
             intro += '\n\n本次对该大语言模型的测试涉及多个领域的问题，测试的结果和分析如下文所示。\n\n'
             intro += example_txt
