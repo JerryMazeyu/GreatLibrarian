@@ -271,8 +271,8 @@ class Analyse():
         plt.figure(figsize=(30, 30))
         bars = plt.bar(field, accuracies)
         plt.xlabel('领域',fontsize = 25, fontfamily='SimSun')
-        plt.ylabel('准确率',fontsize = 25, fontfamily='SimSun')
-        plt.title('4.各领域答题准确率',fontsize=32, y=1.15, fontfamily='SimSun')
+        plt.ylabel('得分率',fontsize = 25, fontfamily='SimSun')
+        plt.title('4.各领域答题得分率',fontsize=32, y=1.15, fontfamily='SimSun')
         plt.xticks(rotation=45, ha="right",fontsize=28, fontfamily='SimSun')
 
         for i, (bar, label) in enumerate(zip(bars, labels)):
@@ -325,9 +325,9 @@ class Analyse():
         #     intro += example_txt
         #     return intro
         if llm_intro != '':
-            llm_intro = textwrap.fill(llm_intro, width=72)
+            llm_intro = '\n\n'.join([textwrap.fill(paragraph, width=70) for paragraph in llm_intro.split('\n\n')])
             intro = llm_intro
-            intro += '本次对该大语言模型的测试涉及多个领域的问题，测试的结果和分析如下文所示。\n\n'
+            intro += '\n\n本次对该大语言模型的测试涉及多个领域的问题，测试的结果和分析如下文所示。\n\n'
             intro += example_txt
         return intro
 

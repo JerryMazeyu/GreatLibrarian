@@ -2,7 +2,7 @@
 
 *****
   
-![pi64bW9.png](https://z1.ax1x.com/2023/12/05/pi64bW9.png)
+![piDYfgK.jpg](https://z1.ax1x.com/2023/11/29/piDYfgK.jpg)
   
   
 本项目旨在对场景化的大语言模型进行**自动化的评测**，用户只需要提供测试的大语言模型的 `API Key` 以及准备用于测试的**测试用例**，该工具就可以自动完成一个完整的测评过程，包括：**用户对配置文件按需求修改** →**用户选择各个评分方法的评分细则** → **工具箱自动的与大语言模型进行交互** → **将对话内容记录进日志** → **对每一条测试用例进行打分** → **对得分情况进行分析** → **总结本次测评的信息并生成报告**。在自动化评测的流程结束后，用户可以在最终生成的测评报告中直观的查看到本次测评的所有信息。  
@@ -82,7 +82,7 @@
         "我国面积最大的平原： "],
     "evaluation": {
             "0": [{"keywords":[["中关村"]],"blacklist":[["硅谷"]]}],
-            "1": [{"keywords":[["黑龙江省"]]},"GPT4eval":[[True]]],
+            "1": [{"keywords":[["黑龙江省"]],"GPT4eval":[["True"]]}],
             "2": [{"keywords":[["新疆维吾尔自治区"]]}],
             "3": [{"keywords":[["内蒙古自治区", "陕西省"]]}],
             "4": [{"keywords":[["东北平原"]]}]
@@ -215,7 +215,7 @@
 
 ### 报告生成
   
-前三条工作结束后，工具箱会根据测评所得到的分数信息以及测试用例的数据来生成测评报告。测评报告一共有四个模块，分别为**背景介绍、测试用例数据介绍、错误测试用例展示、各领域正确率对比**。  
+前三条工作结束后，工具箱会根据测评所得到的分数信息以及测试用例的数据来生成测评报告。测评报告一共有四个模块，分别为**背景介绍、测试用例数据介绍、错误测试用例展示、各领域得分率对比**。  
   
 以下是报告内容的展示（**该报告中的测试样例可能出现错误，仅用于展示报告内容**）
   
@@ -239,8 +239,11 @@ Windows (Powershell)：
 在终端运行以下命令：  
 
 `git clone https://github.com/JerryMazeyu/GreatLibrarian.git`
+  
     
-## 快速开始  
+## 快速开始   
+1.git clone方法：  
+
 在终端运行以下命令完成环境配置：  
 
     cd GreatLibrarian  
@@ -253,6 +256,20 @@ Windows (Powershell)：
 在这里，我们假设本次测试的测试用例存放在目录/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase下，配置文件的绝对路径为：/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py，则用如下命令启动自动测评：  
   
 `gltest --testcase_path=/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase --config_path=/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py`  
+  
+2.pip install 方法    
+
+新建`register_usr.py`作为前文中介绍的配置文件并进行相应配置。
+
+在终端运行以下命令完成环境配置：  
+
+    conda create --name GL python=3.10
+    conda activate GL
+    pip install greatlibrarian 
+ 
+然后同git clone方法，使用如下命令启动自动化测评：  
+
+`gltest --testcase_path=/path/to/your/testcases/ --config_path=/path/to/your/config_file/`  
   
 然后工具箱会提示用户进行每种评价方法下的评分细则的选择，需要用户**根据提示信息输入评分细则序号**。  
   
