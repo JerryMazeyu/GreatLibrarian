@@ -2,6 +2,7 @@ from greatlibrarian.Runner import AutoRunner
 import click
 from greatlibrarian.register import *
 import importlib.util
+import warnings
 
 @click.command()
 @click.option('--testcase_path', default='/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase', help='testcase的json文件所存放的文件夹路径')
@@ -20,7 +21,8 @@ def main(testcase_path,config_path):
         runner = AutoRunner(config,testcase)
         runner.run()
     else:
-        print('Something went wrong in your config file!')
+        error_message = "The __call__ function of your LLM can't work properly!"
+        raise Warning(error_message)
 
 if __name__ =='__main__':
     main()
