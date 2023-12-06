@@ -271,8 +271,8 @@ class Analyse():
         plt.figure(figsize=(30, 30))
         bars = plt.bar(field, accuracies)
         plt.xlabel('领域',fontsize = 25, fontfamily='SimSun')
-        plt.ylabel('准确率',fontsize = 25, fontfamily='SimSun')
-        plt.title('4.各领域答题准确率',fontsize=32, y=1.15, fontfamily='SimSun')
+        plt.ylabel('得分率',fontsize = 25, fontfamily='SimSun')
+        plt.title('4.各领域答题得分率',fontsize=32, y=1.15, fontfamily='SimSun')
         plt.xticks(rotation=45, ha="right",fontsize=28, fontfamily='SimSun')
 
         for i, (bar, label) in enumerate(zip(bars, labels)):
