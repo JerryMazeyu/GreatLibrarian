@@ -30,6 +30,7 @@
         from greatlibrarian.Configs import ExampleConfig
         from greatlibrarian.Utils import Registry
         from greatlibrarian.Core import LLMs,FinalScore  
+        import dashscope
   
         @LLM_base.register_module("name of your LLM")
         class new_llm(LLMs):
@@ -57,7 +58,7 @@
                            return(response['output']['text'])
                 return('API Problem')
 
-        llm_cfg = dict(type='name of your LLM',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = 'introduction of your LLM')
+        llm_cfg = dict(type='name of your LLM',apikey = "your apikey", name = "qwen_turbo",llm_intro = 'introduction of your LLM')
         qw = LLM_base.build(llm_cfg)
     
 然后用户需要在该文件中中创建一个`ExampleConfig()`类的实例config（**请勿修改该实例名称config**），并用刚刚创建的实例（`qw`）对其进行初始化  
@@ -215,7 +216,7 @@
 
 ### 报告生成
   
-前三条工作结束后，工具箱会根据测评所得到的分数信息以及测试用例的数据来生成测评报告。测评报告一共有四个模块，分别为**背景介绍、测试用例数据介绍、错误测试用例展示、各领域得分率对比**。  
+前三条工作结束后，工具箱会根据测评所得到的分数信息以及测试用例的数据来生成测评报告。测评报告一共有四个模块，分别为**背景介绍、测试用例数据介绍、错误测试用例展示、各领域正确率对比**。  
   
 以下是报告内容的展示（**该报告中的测试样例可能出现错误，仅用于展示报告内容**）
   

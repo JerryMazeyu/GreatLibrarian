@@ -72,8 +72,9 @@ class new_llm3(LLMs):
         top_p=0.7,
         temperature=0.9,
         )
-        if response['code']==200:
-            return(response['data']['choices'][0]['content'])
+        if response:
+            if response['code']==200:
+                return(response['data']['choices'][0]['content'])
         else:
             return('API Problem')
 
@@ -115,7 +116,7 @@ llm_cfg2 = dict(type='wenxin',ak="B00yKgZuin8IolPHYsHggVyU", sk="B19OtdVn0jwwaBy
 wx = LLM_base.build(llm_cfg2)
 config2 = ExampleConfig(wx,FinalScore1) 
 
-llm_cfg3 = dict(type='chatglm',apikey="7df1ae9704c48bada1482b83cbee9f18.smQ4Sf6QC6PgaMV3", name="chatglm_pro",llm_intro="ChatGLMpro 是一款基于人工智能的聊天机器人，它基于清华大学 KEG 实验室与智谱 AI 于 2023 年联合训练的语言模型 GLM 开发而成。\n\nChatGLMpro 具有强大的自然语言处理能力和丰富的知识库，能够理解和回应各种类型的问题和指令，包括但不限于文本生成、问答、闲聊、翻译、推荐等领域。\n\n相比于其他聊天机器人，ChatGLMpro 具有以下优势：\n\n高性能的语言模型：ChatGLMpro 基于 GLM 模型，拥有超过 1300 亿参数，能够高效地处理和生成自然语言文本。\n\n丰富的知识库：ChatGLMpro 拥有涵盖多个领域的知识库，包括科技、历史、文化、娱乐等方面，能够回应各种类型的问题。\n\n强大的问答能力：ChatGLMpro 具有出色的问答能力，能够理解用户的问题并给出准确的回答。\n\n个性化交互：ChatGLMpro 能够根据用户的语气和兴趣进行个性化交互，让用户感受到更加自然的对话体验。\n\n开放的接口：ChatGLMpro 还提供了开放的接口，方便其他应用程序和企业将其集成到自己的系统中。\n\n总的来说，ChatGLMpro 是一款高性能、智能化、多功能的聊天机器人，能够为企业和个人提供高效的智能化服务。总的来说，通义千问是一个智能、灵活、友好的AI助手，可以帮助用户解决各种问题和需求。\n\n")
+llm_cfg3 = dict(type='chatglm',apikey="4d20ccb15be8f0afc1913d0f8347563e.aG9JcXxqCv8z74pl", name="chatglm_pro",llm_intro="ChatGLMpro 是一款基于人工智能的聊天机器人，它基于清华大学 KEG 实验室与智谱 AI 于 2023 年联合训练的语言模型 GLM 开发而成。\n\nChatGLMpro 具有强大的自然语言处理能力和丰富的知识库，能够理解和回应各种类型的问题和指令，包括但不限于文本生成、问答、闲聊、翻译、推荐等领域。\n\n相比于其他聊天机器人，ChatGLMpro 具有以下优势：\n\n高性能的语言模型：ChatGLMpro 基于 GLM 模型，拥有超过 1300 亿参数，能够高效地处理和生成自然语言文本。\n\n丰富的知识库：ChatGLMpro 拥有涵盖多个领域的知识库，包括科技、历史、文化、娱乐等方面，能够回应各种类型的问题。\n\n强大的问答能力：ChatGLMpro 具有出色的问答能力，能够理解用户的问题并给出准确的回答。\n\n个性化交互：ChatGLMpro 能够根据用户的语气和兴趣进行个性化交互，让用户感受到更加自然的对话体验。\n\n开放的接口：ChatGLMpro 还提供了开放的接口，方便其他应用程序和企业将其集成到自己的系统中。\n\n总的来说，ChatGLMpro 是一款高性能、智能化、多功能的聊天机器人，能够为企业和个人提供高效的智能化服务。总的来说，通义千问是一个智能、灵活、友好的AI助手，可以帮助用户解决各种问题和需求。\n\n")
 chat = LLM_base.build(llm_cfg3)
 config3 = ExampleConfig(chat,FinalScore1) 
 

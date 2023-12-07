@@ -5,6 +5,7 @@ from ..EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 from ..Analyser import Analyse,Getinfo
 import os
 import zhipuai
+import warnings
 
 
 # log_name = generate_name_new('dialog_init')
@@ -61,7 +62,15 @@ class AutoInteractor():
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
             ans = self.llm(pr)
             # ans="Yes"
-            ans_list.append(ans.lower())
+            print(f"To User:\t {ans} from thread {self.threadnum}")
+
+            try:
+                ans_list.append(ans.lower())
+            except Exception as e:
+                warning_message = f"Warning: An API exception occurred - {e}"
+                warnings.warn(warning_message, RuntimeWarning)
+                ans_list.append('default_value')
+
         return(ans_list)
 
 
