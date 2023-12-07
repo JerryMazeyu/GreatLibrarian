@@ -216,6 +216,8 @@ class Analyse():
                 else:
                     mistaken = f'\n\n对于以下这条属于"{field_dict[mistaken_list[i][2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
                     mistaken_txt += mistaken
+        if mistaken_txt == '':
+            mistaken_txt += '该LLM完全通过了本次测试，正确回答了所有的测试用例，无错误用例。'
 
         fig.text(0.1,0.55, mistaken_txt, fontsize=25, fontfamily='SimSun',ha='left', va='center')
 
@@ -325,7 +327,7 @@ class Analyse():
         #     intro += example_txt
         #     return intro
         if llm_intro != '':
-            llm_intro = '\n\n'.join([textwrap.fill(paragraph, width=70) for paragraph in llm_intro.split('\n\n')])
+            llm_intro = '\n\n'.join([textwrap.fill(paragraph, width=76) for paragraph in llm_intro.split('\n\n')])
             intro = llm_intro
             intro += '\n\n本次对该大语言模型的测试涉及多个领域的问题，测试的结果和分析如下文所示。\n\n'
             intro += example_txt
