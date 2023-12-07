@@ -10,6 +10,7 @@ import matplotlib
 import textwrap
 from matplotlib.font_manager import FontProperties
 from matplotlib import rcParams
+import warnings
 
 
 # log_name = generate_name_new('analyse')
@@ -105,6 +106,8 @@ class Analyse():
 
         #1.背景介绍
         fig = plt.figure(figsize=(30, 30))
+        plt.rcParams['font.sans-serif'] = ['SimSun'] 
+        plt.rcParams['mathtext.fontset'] = 'stix'
 
         title = "1.背景介绍"
         plt.title(title, fontsize=32, ha='center',y=1.1, fontfamily='SimSun')
@@ -115,7 +118,11 @@ class Analyse():
         fig.text(0.1,0.55, intro, fontsize=25, fontfamily='SimSun',ha='left', va='center')
         plt.axis('off')
 
-        pdf_pages.savefig(fig)
+        try:
+            pdf_pages.savefig(fig)
+        except Exception as e:
+                warning_message = f"Warning: An report exception occurred - {e}"
+                warnings.warn(warning_message, RuntimeWarning)
 
          #2.测试用例数据信息
 
@@ -183,13 +190,19 @@ class Analyse():
         title = "2.测试用例数据"
         plt.suptitle(title, fontsize=32, ha='center',y=0.95, fontfamily='SimSun')
 
-        pdf_pages.savefig(fig)
+        try:
+            pdf_pages.savefig(fig)
+        except Exception as e:
+                warning_message = f"Warning: An report exception occurred - {e}"
+                warnings.warn(warning_message, RuntimeWarning)
 
         #3.错误的测试用例
 
         fig = plt.figure(figsize=(30, 30))
 
         title = "3.回答错误的测试用例"
+        plt.rcParams['font.sans-serif'] = ['SimSun'] 
+        plt.rcParams['mathtext.fontset'] = 'stix'
         plt.title(title, fontsize=32, ha='center',y=1.1, fontfamily='SimSun')
 
         mistaken_list = extract_mistaken_info(log_path)
@@ -197,24 +210,36 @@ class Analyse():
 
         
         for i in range (len(mistaken_list)):
-            mistaken_list[i][0] = textwrap.fill(mistaken_list[i][0], width=70)
-            mistaken_list[i][1] = textwrap.fill(mistaken_list[i][1], width=70)
+            mistaken_list[i][0] = textwrap.fill(mistaken_list[i][0], width=68)
+            mistaken_list[i][1] = textwrap.fill(mistaken_list[i][1], width=68)
 
         if len(mistaken_list) <= 4:
             for mistakens in mistaken_list:
                 if len(mistakens) == 5:
-                    mistaken = f'\n\n对于以下这条属于"{field_dict[mistakens[2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
+                    if mistakens[2] in field_dict:
+                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistakens[2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
+                    else:
+                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistakens[2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
-                    mistaken = f'\n\n对于以下这条属于"{field_dict[mistakens[2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
+                    if mistakens[2] in field_dict:
+                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistakens[2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
+                    else:
+                        mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
                     mistaken_txt += mistaken
         else:  
             for i in range (4):
                 if len(mistaken_list[i]) == 5:
-                    mistaken = f'\n\n对于以下这条属于"{field_dict[mistaken_list[i][2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
+                    if mistaken_list[i][2] in field_dict:
+                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistaken_list[i][2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
+                    else:
+                        mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
-                    mistaken = f'\n\n对于以下这条属于"{field_dict[mistaken_list[i][2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
+                    if mistaken_list[i][2] in field_dict:
+                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistaken_list[i][2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
+                    else:
+                        mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
                     mistaken_txt += mistaken
         if mistaken_txt == '':
             mistaken_txt += '该LLM完全通过了本次测试，正确回答了所有的测试用例，无错误用例。'
@@ -223,7 +248,13 @@ class Analyse():
 
         plt.axis('off')
 
-        pdf_pages.savefig(fig)
+        try:
+            pdf_pages.savefig(fig)
+        except Exception as e:
+                warning_message = f"Warning: An report exception occurred - {e}"
+                warnings.warn(warning_message, RuntimeWarning)
+
+
         
 
 
@@ -253,40 +284,35 @@ class Analyse():
 
         # pdf_pages.savefig()
         # plt.clf()
-
-
-        #5.各领域答题准确率柱状图
+        
+        #5.测试的各领域的得分率柱状图
 
         accuracies = []
         labels = []
-
+        
         for score, total in zip(score_get, total_score):
             if total == 0:
-                accuracy = 0
-                label = "未测试"
+                # 跳过未测试的数据
+                continue
             else:
                 accuracy = (score / total) * 100
                 label = f"{accuracy:.2f}%"
             accuracies.append(accuracy)
             labels.append(label)
 
-        plt.figure(figsize=(30, 30))
-        bars = plt.bar(field, accuracies)
-        plt.xlabel('领域',fontsize = 25, fontfamily='SimSun')
-        plt.ylabel('得分率',fontsize = 25, fontfamily='SimSun')
-        plt.title('4.各领域答题得分率',fontsize=32, y=1.15, fontfamily='SimSun')
-        plt.xticks(rotation=45, ha="right",fontsize=28, fontfamily='SimSun')
+        plt.figure(figsize=(30, 30))                                       
+        bars = plt.bar(filtered_fields, accuracies)
+        plt.xlabel('领域', fontsize=25, fontfamily='SimSun')
+        plt.ylabel('得分率', fontsize=25, fontfamily='SimSun')
+        plt.title('4.各领域答题得分率', fontsize=32, y=1.15, fontfamily='SimSun')
+        plt.xticks(rotation=45, ha="right", fontsize=28, fontfamily='SimSun')
 
         for i, (bar, label) in enumerate(zip(bars, labels)):
-            if label == "Not Tested":
-                plt.text(i, bar.get_height(), label, ha="center", va="bottom",fontsize=28)
-            elif accuracies[i] >= 0:
-                plt.text(i, bar.get_height(), label, ha="center", va="bottom",fontsize=28)
+            plt.text(i, bar.get_height(), label, ha="center", va="bottom", fontsize=28)
 
         plt.tight_layout()
         pdf_pages.savefig()
         pdf_pages.close()
-
         print("Report Generated !")
 
     def introduction_of_llm(self,llm_name,log_path,llm_intro):

@@ -30,6 +30,7 @@
         from greatlibrarian.Configs import ExampleConfig
         from greatlibrarian.Utils import Registry
         from greatlibrarian.Core import LLMs,FinalScore  
+        import dashscope
   
         @LLM_base.register_module("name of your LLM")
         class new_llm(LLMs):
@@ -57,7 +58,7 @@
                            return(response['output']['text'])
                 return('API Problem')
 
-        llm_cfg = dict(type='name of your LLM',apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8", name = "qwen_turbo",llm_intro = 'introduction of your LLM')
+        llm_cfg = dict(type='name of your LLM',apikey = "your apikey", name = "qwen_turbo",llm_intro = 'introduction of your LLM')
         qw = LLM_base.build(llm_cfg)
     
 然后用户需要在该文件中中创建一个`ExampleConfig()`类的实例config（**请勿修改该实例名称config**），并用刚刚创建的实例（`qw`）对其进行初始化  
