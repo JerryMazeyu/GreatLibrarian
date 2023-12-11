@@ -7,20 +7,23 @@ import concurrent.futures
 from tqdm import tqdm
 from ..EvalMethods import ToolUse,Keyword,GPT4eval,Blacklist
 import threading
-from ..Utils import clean_log_dialog,to_int
+from ..Utils import clean_log_dialog,to_int,record_project_info,record_process
 from ..Analyser import Analyse,Getinfo
 from ..FinalScore import FinalScore1
 
 class AutoRunner():
-    def __init__(self, cfg,path):
+    def __init__(self, cfg,path,project_name):
         self.path = path
         self.cfg = cfg
+        self.testproject_num = 0
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
         llm = self.llm
         self.llm_name = self.llm.get_name()
         self.llm_intro = llm.get_intro()
+        self.project_name = project_name
+        
         
         
         
@@ -59,6 +62,7 @@ class AutoRunner():
                     file_path = os.path.join(root, file)
                     if file.endswith('.json'):
                         self.json_paths.append(file_path)
+                        self.testproject_num += 1 
                         
             for jsp in self.json_paths:
                 with open(jsp,encoding='utf-8') as f:
@@ -95,14 +99,17 @@ class AutoRunner():
 
                 futures.append(future)
 
+            completed_futures_count = 0
+            record_process(f'目前的进度为：{completed_futures_count}/{len(futures)}')
+
             for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
                 result = future.result()
+                completed_futures_count += 1
+                record_process(f'目前的进度为：{completed_futures_count}/{len(futures)}')
 
         self.mk_clean_log(logger_path)
         self.analyse(logger_path)
-        
-
-
+        record_project_info(self.project_name,self.llm_name,self.path,self.testproject_num)
 
     def analyse(self,logger_path):
         """
