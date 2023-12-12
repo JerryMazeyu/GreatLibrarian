@@ -4,7 +4,7 @@ def extract_example_info(log_file):
 
     pattern = r"Example case:prompt:\['(.*?)'\],ans:\['(.*?)'\],field:(\w+)"
     
-    mistaken_list = []
+    example_list = []
 
     with open(log_file,'r') as file:
         log_messages = file.readlines()
@@ -15,5 +15,5 @@ def extract_example_info(log_file):
             prompt = match.group(1)
             ans = match.group(2)
             field = match.group(3)
-            mistaken_list.append([prompt,ans,field])
-    return(mistaken_list)
+            example_list.append([prompt,ans,field])
+    return(example_list)

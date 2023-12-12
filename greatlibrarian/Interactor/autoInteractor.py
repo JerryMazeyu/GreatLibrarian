@@ -175,7 +175,7 @@ class AutoInteractor():
             else:
                 print(f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]}')
 
-        if final_score != 0:
+        if final_score != 0 and final_score != 'Human Evaluation':
             print(f'Example case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}')
             
 

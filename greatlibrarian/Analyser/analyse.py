@@ -248,14 +248,14 @@ class Analyse():
 
         plt.axis('off')
 
+
         try:
             pdf_pages.savefig(fig)
         except Exception as e:
-                warning_message = f"Warning: An report exception occurred - {e}"
-                warnings.warn(warning_message, RuntimeWarning)
+            warning_message = f"Warning: An report exception occurred - {e}"
+            warnings.warn(warning_message, RuntimeWarning)
 
-
-        
+    
 
 
         #4.各领域测试用例占比的饼图
@@ -285,7 +285,7 @@ class Analyse():
         # pdf_pages.savefig()
         # plt.clf()
         
-        #5.测试的各领域的得分率柱状图
+  #5.测试的各领域的得分率柱状图
 
         accuracies = []
         labels = []
@@ -311,7 +311,12 @@ class Analyse():
             plt.text(i, bar.get_height(), label, ha="center", va="bottom", fontsize=28)
 
         plt.tight_layout()
-        pdf_pages.savefig()
+        try:
+            pdf_pages.savefig()
+        except Exception as e:
+            warning_message = f"Warning: An report exception occurred - {e}"
+            warnings.warn(warning_message, RuntimeWarning)
+
         pdf_pages.close()
         print("Report Generated !")
 
@@ -324,7 +329,7 @@ class Analyse():
             ex_list[i][0] = textwrap.fill(ex_list[i][0], width=70)
             ex_list[i][1] = textwrap.fill(ex_list[i][1], width=70)
         
-        example_txt = '以下是本次测试中的几条回答正确的测试用例：\n\n'
+        example_txt = '以下是本次测试中的几条测试用例及其回答：\n\n'
 
         if len(ex_list) == 0:
             example_txt += '本次测试中，该大语言模型未答对任何问题'
