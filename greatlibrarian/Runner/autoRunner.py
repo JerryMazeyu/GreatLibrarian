@@ -16,13 +16,14 @@ class AutoRunner():
         self.path = path
         self.cfg = cfg
         self.testproject_num = 0
+        self.project_name = project_name
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
         llm = self.llm
         self.llm_name = self.llm.get_name()
         self.llm_intro = llm.get_intro()
-        self.project_name = project_name
+        
         
         
         
