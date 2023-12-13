@@ -2,8 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class Agents(ABC):
-    """Agents abstract class
-    """
+    """Agents abstract class"""
 
     @abstractmethod
     def __call__(self, prompt: str) -> str:
@@ -19,8 +18,7 @@ class Agents(ABC):
 
     @abstractmethod
     def process(self, *args, **kwds):
-        """What agents actually do.
-        """
+        """What agents actually do."""
         pass
 
     @abstractmethod

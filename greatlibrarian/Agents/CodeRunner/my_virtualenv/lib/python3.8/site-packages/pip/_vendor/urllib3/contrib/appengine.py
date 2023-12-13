@@ -137,9 +137,8 @@ class AppEngineManager(RequestMethods):
         retries=None,
         redirect=True,
         timeout=Timeout.DEFAULT_TIMEOUT,
-        **response_kw
+        **response_kw,
     ):
-
         retries = self._get_retries(retries, redirect)
 
         try:
@@ -220,7 +219,7 @@ class AppEngineManager(RequestMethods):
                     retries=retries,
                     redirect=redirect,
                     timeout=timeout,
-                    **response_kw
+                    **response_kw,
                 )
 
         # Check if we should retry the HTTP response.
@@ -237,13 +236,12 @@ class AppEngineManager(RequestMethods):
                 retries=retries,
                 redirect=redirect,
                 timeout=timeout,
-                **response_kw
+                **response_kw,
             )
 
         return http_response
 
     def _urlfetch_response_to_http_response(self, urlfetch_resp, **response_kw):
-
         if is_prod_appengine():
             # Production GAE handles deflate encoding automatically, but does
             # not remove the encoding header.
@@ -267,7 +265,7 @@ class AppEngineManager(RequestMethods):
             msg=urlfetch_resp.header_msg,
             headers=urlfetch_resp.headers,
             status=urlfetch_resp.status_code,
-            **response_kw
+            **response_kw,
         )
 
         return HTTPResponse(
@@ -275,7 +273,7 @@ class AppEngineManager(RequestMethods):
             headers=urlfetch_resp.headers,
             status=urlfetch_resp.status_code,
             original_response=original_response,
-            **response_kw
+            **response_kw,
         )
 
     def _get_absolute_timeout(self, timeout):

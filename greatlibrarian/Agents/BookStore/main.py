@@ -3,7 +3,6 @@ import os
 
 
 class BookStore(Agents):
-
     def __init__(self):
         self.data_root = "Agents/BookStore/RawData"
         self.subjects = os.listdir(self.data_root)

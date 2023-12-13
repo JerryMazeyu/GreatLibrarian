@@ -1,9 +1,10 @@
-class BaseConfig():
-    """Base config abstract class
-    """
+class BaseConfig:
+    """Base config abstract class"""
+
     def __init__(self):
         self.testcases = []
-        self.model = ''
-        self.logger = ''
+        self.model = ""
+        self.logger = ""
+
 
 base = BaseConfig()

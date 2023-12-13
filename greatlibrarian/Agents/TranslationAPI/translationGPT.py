@@ -6,7 +6,7 @@ from langchain.prompts import (
     AIMessagePromptTemplate,
     HumanMessagePromptTemplate
 )
-from langchain.schema import(
+from langchain.schema import (
     AIMessage,
     HumanMessage,
     SystemMessage

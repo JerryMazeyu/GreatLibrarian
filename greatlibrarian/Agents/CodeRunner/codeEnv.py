@@ -14,47 +14,47 @@ import os
 # runcmd("exit 1")#字符串参数
 
 
-class CodeRunner():
-
+class CodeRunner:
     def __init__(self):
-        self.virtual_env_path = 'VirEnv'
+        self.virtual_env_path = "VirEnv"
 
     def create_virtual_env(self):
         try:
-            #create virtual env
-            subprocess.run(['python', '-m', 'venv', 'VirEnv'],
-                           stdout=subprocess,
-                           stderr=subprocess.PIPE,
-                           timeout=None)
+            # create virtual env
+            subprocess.run(
+                ["python", "-m", "venv", "VirEnv"],
+                stdout=subprocess,
+                stderr=subprocess.PIPE,
+                timeout=None,
+            )
 
         except Exception as e:
-            return {
-                'error': f"Failed to create a virtual environment :{str(e)}"
-            }
+            return {"error": f"Failed to create a virtual environment :{str(e)}"}
 
     def run_code(self, user_code):
         try:
-            #create virtual environment
+            # create virtual environment
             self.create_virtual_env()
 
-            #run code from user in virtual environment
+            # run code from user in virtual environment
             result = subprocess.run(
-                [f'{self.virtual_env_path}/bin/python', '-c', user_code],
+                [f"{self.virtual_env_path}/bin/python", "-c", user_code],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                shell=True)
+                shell=True,
+            )
 
-            #get result
-            output = result.stdout.decode('utf-8')
-            error = result.stderr.decode('utf-8')
+            # get result
+            output = result.stdout.decode("utf-8")
+            error = result.stderr.decode("utf-8")
 
-            return {'output': output, 'error': error}
+            return {"output": output, "error": error}
 
         except Exception as e:
-            return {'error': str(e)}
+            return {"error": str(e)}
 
         finally:
-            #clear virtual environment
+            # clear virtual environment
             shutil.rmtree(self.virtual_env_path, ignore_errors=True)
 
 

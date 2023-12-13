@@ -10,15 +10,14 @@ def remove_duplicates(csv_file):
 
     if not dupli_rows.empty:
         print(f"Duplicate rows found:{dupli_rows}")
-        unique_dupli = df.drop_duplicates(keep='first')
+        unique_dupli = df.drop_duplicates(keep="first")
         unique_dupli.to_csv(csv_file, index=False)
 
         # df.drop_duplicates(keep=False,inplace=True)
         # df.to_csv(csv_file,index=False)
-        print('Duplicates removed successfully!Remain one')
+        print("Duplicates removed successfully!Remain one")
     else:
-        print('No duplicates found.')
+        print("No duplicates found.")
 
 
-remove_duplicates(
-    'Agents/BookStore/RawData/Area Studies/African American Studies.csv')
+remove_duplicates("Agents/BookStore/RawData/Area Studies/African American Studies.csv")

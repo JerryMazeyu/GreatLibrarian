@@ -1,7 +1,6 @@
 import codeEnv
 
 
-class codeComprehensionExplanation():
-
+class codeComprehensionExplanation:
     def __init__(self):
         pass

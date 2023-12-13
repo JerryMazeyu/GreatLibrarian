@@ -1,5 +1,6 @@
 import os
 
+
 def join(*x):
     """Join path.
 
@@ -30,6 +31,3 @@ def soft_mkdir(path, soft=True):
     else:
         os.mkdir(path)
         return True
-    
-
-

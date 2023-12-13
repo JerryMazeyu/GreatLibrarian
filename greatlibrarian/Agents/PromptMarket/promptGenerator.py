@@ -8,15 +8,12 @@ from langchain.prompts import (
     PromptTemplate,
     SystemMessagePromptTemplate,
     AIMessagePromptTemplate,
-    HumanMessagePromptTemplate
+    HumanMessagePromptTemplate,
 )
-from langchain.schema import(
-    AIMessage,
-    HumanMessage,
-    SystemMessage
-)
+from langchain.schema import AIMessage, HumanMessage, SystemMessage
 import os
-os.environ["OPENAI_API_KEY"]="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"
+
+os.environ["OPENAI_API_KEY"] = "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"
 """environment configuration"""
 
 """This is intended to generate formatted prompts for the LLM to get the response from LLM
@@ -24,11 +21,10 @@ os.environ["OPENAI_API_KEY"]="sk-8EWPaDQa4mQ9NLCBmwGLT3BlbkFJQuibldrKYAszCQkCkvk
    input: domain name you want to ask
    return: answer
 """
-llm=OpenAI(temperature=0.0)
+llm = OpenAI(temperature=0.0)
 
 
-
-#创建与角色相关联的消息模板使用MessagePromptTemplate
+# 创建与角色相关联的消息模板使用MessagePromptTemplate
 """方法1"""
 """简单的prompt模板生成"""
 # prompt=PromptTemplate(
@@ -37,8 +33,8 @@ llm=OpenAI(temperature=0.0)
 # )
 
 # print(prompt.format(domain="math"))
-openai_api_key=os.environ["OPENAI_API_KEY"]
-mytext="介绍下ChatGPT"
+openai_api_key = os.environ["OPENAI_API_KEY"]
+mytext = "介绍下ChatGPT"
 print(llm(mytext))
 
 """方法2"""
@@ -55,4 +51,3 @@ print(llm(mytext))
 # print("LLM输出:", llm(final_prompt))
 
 """生成模板+与llm交互-多轮对话"""
-
