@@ -1,13 +1,16 @@
 import re
 import platform
-
+import warnings
 
 class Getinfo():
-    def __init__(self, log_path, ) -> None:
+
+    def __init__(
+        self,
+        log_path,
+    ) -> None:
         self.log_path = log_path
 
     def get_eval_result(self) -> dict:
-
         """
         A function to get the socre information from the log file.
         The function can find the score record by finding text in a particular format that defined by the field(language understanding/coding...)
@@ -19,20 +22,39 @@ class Getinfo():
         """
         file_path = self.log_path
         lines = []
-        score_dict = {'knowledge_understanding': [], 'coding': [], 'common_knowledge': [], 'reasoning':[], 'multi_language' : [], 'specialized_knowledge' : [], 'traceability' : [], 'outputformatting' : [], 'internal_security' : [], 'external_security' : []}
+        score_dict = {
+            'knowledge_understanding': [],
+            'coding': [],
+            'common_knowledge': [],
+            'reasoning': [],
+            'multi_language': [],
+            'specialized_knowledge': [],
+            'traceability': [],
+            'outputformatting': [],
+            'internal_security': [],
+            'external_security': []
+        }
 
-        with open(file_path, 'r', encoding = 'utf-8' if platform.system() != 'Windows' else 'gbk') as file:
+        with open(file_path,
+                  'r',
+                  encoding='utf-8'
+                  if platform.system() != 'Windows' else 'gbk') as file:
             lines = file.readlines()
 
         for line in lines:
             score, field = self.extract_info(line)
-            if field :
-                score_dict[field].append(score)
+            if field:
+                try:
+                    score_dict[field].append(score)
+                except Exception as e:
+                    warning_message = f"Warning: Find a field not included in GL! - {e}"
+                    warnings.warn(warning_message, RuntimeWarning)
+
+
 
         return (score_dict)
 
-    def extract_info(self,line):
-
+    def extract_info(self, line):
         """
         A function to extract the valid information of score from the log file.
         The function can find the score information after the dialogue in a log file, such as: The model gets 0.3 points in this testcase by keyword method.
