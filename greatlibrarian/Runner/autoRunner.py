@@ -20,19 +20,22 @@ class AutoRunner():
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
-        llm = self.llm
-        self.llm_name = self.llm.get_name()
-        self.llm_intro = llm.get_intro()
+        # llm = self.llm
+        self.test_llm_name = self.test_llm.get_name()
+        self.GPT4_eval_llm_name = self.GPT4_eval_llm.get_name()
+        self.llm_intro = self.test_llm.get_intro()
         
         
         
         
         
     def _check(self):
-        if not hasattr(self, 'llm'):
-            raise ValueError("There is no llm in the configure file.")
+        if not hasattr(self, 'test_llm'):
+            raise ValueError("There is no test_llm in the configure file.")
         # if not hasattr(self, 'json_paths'):
         #     raise ValueError("There is no json_paths in the configure file.")
+        if not hasattr(self, 'GPT4_eval_llm'):
+            raise ValueError("There is no GPT4_eval_llm in the configure file.")
         if not hasattr(self, 'interactor'):
             print("Find no interactor, default as auto interactor.")
             self.interactor_cls = AutoInteractor
@@ -110,7 +113,7 @@ class AutoRunner():
 
         self.mk_clean_log(logger_path)
         self.analyse(logger_path)
-        record_project_info(self.project_name,self.llm_name,self.path,self.testproject_num)
+        record_project_info(self.project_name,self.test_llm_name,self.GPT4_eval_llm_name,self.path,self.testproject_num)
 
     def analyse(self,logger_path):
         """
@@ -122,7 +125,7 @@ class AutoRunner():
         print(score_dict)
         analyse=Analyse(score_dict)
         mean_score_info,sum_info,plotinfo=analyse.analyse()
-        analyse.report(plotinfo,logger_path,self.llm_name,self.llm_intro)
+        analyse.report(plotinfo,logger_path,self.test_llm_name,self.llm_intro)
 
     def selectmethod(self):
         """

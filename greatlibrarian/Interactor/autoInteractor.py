@@ -21,7 +21,6 @@ class AutoInteractor():
         # self.recoders = []
         self.methodnum = methodnum
         self.threadnum = threadnum
-        self.llm = self.llm
         self.logger_path = logger_path
     
     def eval(self):
@@ -60,7 +59,7 @@ class AutoInteractor():
             # recoder.dialoge[ind] = ''
             print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-            ans = self.llm(pr)
+            ans = self.test_llm(pr)
             # ans="Yes"
             print(f"To User:\t {ans} from thread {self.threadnum}")
 
@@ -89,12 +88,12 @@ class AutoInteractor():
         # recoder.ind = ind
         # recoder.prompt = prompt
         print(f"---------- New Epoch ---------- from thread {self.threadnum}")
-        ans_list=[]
+        ans_list = []
         for ind, pr in enumerate(prompt):
             # recoder.dialoge[ind] = ''
             print(f"To LLM:\t {pr} from thread {self.threadnum}")
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-            ans = self.llm(pr)
+            ans = self.test_llm(pr)
             ans_list.append(ans.lower())
             if ans.find(tools[0]['name']) != -1:  # TODO: add multi tools
                 # recoder.tools = tools[0].name
@@ -123,8 +122,8 @@ class AutoInteractor():
         blacklist_score = 1
         score_dict = {}
         if self.eval_info.get('tool', None):#TODO:如果这里按照这个逻辑执行，对于同一个prompt，有了tool评价方法就不能再使用其他方法，并且所有prompt的答案设置都必须含有keyword评价方法。
-            toolusage_ans=self.tool_interact(self.prompt, self.eval_info['tool'])
-            eval_obj=eval_stack['tool']
+            toolusage_ans = self.tool_interact(self.prompt, self.eval_info['tool'])
+            eval_obj = eval_stack['tool']
             eval_obj.set_ans(toolusage_ans)
             eval_obj.set_field(self.field)
             eval_obj.set_threadnum(self.threadnum)
@@ -132,32 +131,33 @@ class AutoInteractor():
             print(tool_eval_info+f'from thread {self.threadnum}')
             score_dict['toolusage'] = toolusage_score
         else:
-            keywords_ans=self.base_interact(self.prompt)
+            keywords_ans = self.base_interact(self.prompt)
             if  self.eval_info.get('blacklist', None):
-                eval_obj=eval_stack['blacklist']
+                eval_obj = eval_stack['blacklist']
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
                 eval_obj.set_threadnum(self.threadnum)
-                blacklist_score,blacklist_eval_info=eval_obj.score(self.methodnum[2]) 
+                blacklist_score,blacklist_eval_info = eval_obj.score(self.methodnum[2]) 
                 print(blacklist_eval_info+f'from thread {self.threadnum}')
                 score_dict['blacklist'] = blacklist_score
 
-            if  blacklist_score!=0 and self.eval_info.get('keywords', None):
+            if  blacklist_score !=0 and self.eval_info.get('keywords', None):
                 eval_obj=eval_stack['keywords']
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
                 eval_obj.set_threadnum(self.threadnum)
-                keywords_score,keywords_eval_info=eval_obj.score(self.methodnum[1]) 
+                keywords_score,keywords_eval_info = eval_obj.score(self.methodnum[1]) 
                 print(keywords_eval_info+f'from thread {self.threadnum}')
                 score_dict['keywords'] = keywords_score
 
-            if  blacklist_score!=0 and self.eval_info.get('GPT4eval', None):
-                eval_obj=eval_stack['GPT4eval']
+            if  blacklist_score !=0 and self.eval_info.get('GPT4eval', None):
+                eval_obj = eval_stack['GPT4eval']
+                eval_obj.set_llm(self.GPT4_eval_llm)
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
                 eval_obj.set_prompt(self.prompt)
                 eval_obj.set_threadnum(self.threadnum)
-                GPT4_eval_score,GPT4_eval_info=eval_obj.score(self.methodnum[3]) 
+                GPT4_eval_score,GPT4_eval_info = eval_obj.score(self.methodnum[3]) 
                 print(GPT4_eval_info+f'from thread {self.threadnum}')
                 score_dict['GPT4_eval'] = GPT4_eval_score
         final_score_obj = self.finalscore(score_dict,self.field,self.threadnum)

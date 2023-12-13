@@ -24,6 +24,6 @@ def main(testcase_path,config_path,project_name):
     else:
         error_message = "The __call__ function of your LLM can't work properly!"
         raise Warning(error_message)
-
+    
 if __name__ =='__main__':
     main()

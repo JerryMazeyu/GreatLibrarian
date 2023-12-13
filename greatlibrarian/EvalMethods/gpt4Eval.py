@@ -1,7 +1,6 @@
 from ..Core import EvalMethods
 from ..Utils import to_list
 import warnings
-from ..LLMs import chatglm_pro
 import re
 
 class GPT4eval(EvalMethods):
@@ -9,10 +8,11 @@ class GPT4eval(EvalMethods):
         super().__init__(prompt, ans, evalinfo,field,threadnum)
         if not self.evalinfo.get("GPT4eval", None):
             warnings.warn("There is no GPT4eval.", RuntimeWarning)
-        self.methodtotal=1
-        self.field=field
-        self.llm = chatglm_pro()
+        self.methodtotal = 1
+        self.field = field
     
+    def set_llm(self,llm):
+        self.llm = llm 
 
     def set_field(self,field):
         self.field = field

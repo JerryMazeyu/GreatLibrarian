@@ -113,7 +113,8 @@ class TestProject:
                 cfg = {'name': self.name, 'description': self.description, 'field':self.fields, \
                         'prompt': to_list(pr), 'eval_info': self.raw_eval_info[str(k)][ind]}
                 if baseconf:
-                    cfg['llm'] = getattr(baseconf, 'llm', None)
+                    cfg['test_llm'] = getattr(baseconf, 'test_llm', None)
+                    cfg['GPT4_eval_llm'] = getattr(baseconf, 'GPT4_eval_llm', None)
                     cfg['register_agents'] = getattr(baseconf, 'register_agents', None)
                     cfg['finalscore'] = getattr(baseconf, 'finalscore', None)
                     if not cfg['register_agents']:
