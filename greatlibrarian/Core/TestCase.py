@@ -5,7 +5,7 @@ class TestCase(ABC):
     """TestCase abstract class"""
 
     @abstractmethod
-    def run(self):
+    def run(self) -> str:
         """Main function of the LLM
 
         Args:

@@ -1,6 +1,6 @@
 from greatlibrarian.Runner import AutoRunner
 import click
-from greatlibrarian.register import *
+from greatlibrarian.register import register
 import importlib.util
 import warnings
 
@@ -17,7 +17,7 @@ import warnings
     help="配置文件的绝对路径",
 )
 @click.option("--project_name", default="", help="项目名称，默认为空字符串")
-def main(testcase_path, config_path, project_name):
+def main(testcase_path, config_path, project_name) -> None:
     spec = importlib.util.spec_from_file_location("conf", config_path)
     # spec = importlib.util.spec_from_file_location('conf', '/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py')
     conf_module = importlib.util.module_from_spec(spec)

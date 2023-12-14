@@ -1,6 +1,7 @@
 import re
-from ..Utils import add_logger, generate_logger_subfile, generate_name_new
+from ..Utils import add_logger, generate_logger_subfile
 import os
+from typing import Dict, List
 
 # log_name = generate_name_new('dialog')
 log_name = "dialog"
@@ -8,11 +9,8 @@ logger_subfile = generate_logger_subfile()
 
 
 @add_logger(log_name, os.path.join("Logs", logger_subfile))
-def clean_log_dialog(log_file):
-    """
-    Organize disordered logs in the order of line numbers to create properly ordered logs.
-
-    """
+def clean_log_dialog(log_file) -> None:
+    """Organize disordered logs in the order of line numbers to create properly ordered logs."""
     thread_messages = info_extract(log_file)
 
     for i in range(1, len(thread_messages) + 1):
@@ -22,7 +20,7 @@ def clean_log_dialog(log_file):
         print()
 
 
-def info_extract(log):
+def info_extract(log) -> Dict[str, List[str]]:
     pattern = r"from thread (\d+)"
     with open(log, "r") as file:
         log_messages = file.readlines()

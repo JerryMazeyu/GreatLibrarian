@@ -1,33 +1,36 @@
 from ..Core import EvalMethods
 from ..Utils import to_list
 import re
+from typing import Tuple
 
 
 class Blacklist(EvalMethods):
-    def __init__(self, prompt, ans, evalinfo, field, threadnum):
+    """Blacklist evaluation"""
+
+    def __init__(self, prompt, ans, evalinfo, field, threadnum) -> None:
         super().__init__(prompt, ans, evalinfo, field, threadnum)
         self.blacklist = to_list(self.evalinfo.get("blacklist"))
         self.field = field
         self.methodtotal = 1
 
-    def getmethodtotal(self):
+    def getmethodtotal(self) -> int:
         return int((self.methodtotal))
 
-    def set_ans(self, ans):
+    def set_ans(self, ans) -> None:
         self.ans = ans
 
-    def set_field(self, field):
+    def set_field(self, field) -> None:
         self.field = field
 
-    def set_threadnum(self, threadnum):
+    def set_threadnum(self, threadnum) -> None:
         self.threadnum = threadnum
 
-    def eval1(self):
+    def eval1(self) -> float:
         """
         A method for scoring models based on blacklist.
         Rule:For each propmt,if the model's response that contains at least one of the words in the blacklist, it will get a score of 0 in this evaluation method.
-        Returns:Score of the model.
-
+        Returns:
+            Score of the model.
         """
         score = 1.0
         blacklist = self.evalinfo["blacklist"]
@@ -38,12 +41,11 @@ class Blacklist(EvalMethods):
                 return score
         return score
 
-    def score(self, method_num):
+    def score(self, method_num) -> Tuple[float, str]:
         """
         A method for choosing one of the methods in keywords to score the model.
         Given a number n and the method will choose the nth eval_method to score the model and print the score. (the number n starts from 1)
         The function will return a string like 'The model gets ***{score}*** points in this testcase by keywords method.'
-
         """
         eval_dict = {1: self.eval1}
         eval_method = eval_dict[method_num]
@@ -51,10 +53,9 @@ class Blacklist(EvalMethods):
         score_info = f"The model gets {score} points in this testcase by blacklist method, in {self.field} field."
         return (score, score_info)
 
-    def showmethod(self):
+    def showmethod(self) -> None:
         """
         A method to show the methods in this evaluation method for the users to choose the method they want.
-
         """
         method_pattern = re.compile(r"^eval\d+$")
         methods = [
@@ -72,7 +73,7 @@ class Blacklist(EvalMethods):
             else:
                 print("A method defined by user.")
 
-    def if_there_is(self, ans, keywords):
+    def if_there_is(self, ans, keywords) -> bool:
         for kw in keywords:
             if ans.find(kw.lower()) != -1:
                 print(f"blacklist:{kw}")

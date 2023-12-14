@@ -4,15 +4,15 @@ from abc import ABC, abstractmethod
 class LLMs(ABC):
     """LLMs abstract class"""
 
-    def __init__(self, apikey, name, llm_intro):
+    def __init__(self, apikey, name, llm_intro) -> None:
         self.apikey = apikey
         self.name = name
         self.llm_intro = llm_intro
 
-    def get_intro(self):
+    def get_intro(self) -> str:
         return self.llm_intro
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self.name
 
     @abstractmethod

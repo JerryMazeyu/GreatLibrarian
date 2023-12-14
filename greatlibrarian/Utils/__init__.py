@@ -8,4 +8,4 @@ from .mistaken_case import extract_mistaken_info
 from .extract_example import extract_example_info
 from .project_info import record_project_info
 from .process import record_process
-from .registry import Registry
+from .registry import register

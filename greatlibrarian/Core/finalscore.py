@@ -2,9 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class FinalScore(ABC):
-    """
-    FinalScore abstract class
-    """
+    """FinalScore abstract class"""
 
     def __init__(self, score_dict, field, threadnum) -> None:
         self.score = score_dict
@@ -12,7 +10,7 @@ class FinalScore(ABC):
         self.threadnum = threadnum
 
     @abstractmethod
-    def get_final_score(self) -> int:
+    def get_final_score(self) -> float:
         """
         The rule to determine the final score of a testcase based by the score of every evalmethod.
         Return:

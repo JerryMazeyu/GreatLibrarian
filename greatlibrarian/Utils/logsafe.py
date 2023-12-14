@@ -1,7 +1,10 @@
 from cryptography.fernet import Fernet
+from typing import Tuple
 
 
 class log_encrypt:
+    """A class to encrypt and decrypt the logs."""
+
     def __init__(self, logpath) -> None:
         self.path = logpath
 
@@ -23,7 +26,7 @@ class log_encrypt:
             encrypted_file.write(encrypted_data)
         return encrypted_file_path
 
-    def decrypt_file(encrypted_file_path, key):
+    def decrypt_file(encrypted_file_path, key) -> str:
         """
         A function to decrypt a log by AES.
         After the decryption, the decrypted file will be saved in a new path "encrypted_file_path + '.decrypted.log'", in which the "encrypted_file_path" is a parameter of the function.
@@ -38,11 +41,11 @@ class log_encrypt:
             decrypted_file.write(decrypted_data)
         return decrypted_file_path
 
-    def log_safe(self, log_path):
+    def log_safe(self, log_path) -> Tuple[str, str]:
         """
         A function to run the encrypt_file and decrypt_file function.
         Args:
-            logpath (str)
+            log_path (str)
         Returns:
             encrypted_file_path,decrypted_file_path
         """

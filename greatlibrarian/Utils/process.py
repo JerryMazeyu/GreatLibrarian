@@ -1,7 +1,5 @@
-import re
-from ..Utils import add_logger, generate_logger_subfile, generate_name_new
+from ..Utils import generate_logger_subfile
 import os
-import json
 
 temp_name = "process"
 logger_subfile = generate_logger_subfile()
@@ -9,7 +7,7 @@ file_path = os.path.join("Logs", logger_subfile)
 temp_path = os.path.join(file_path, f"{temp_name}.temp")
 
 
-def record_process(process_info):
+def record_process(process_info) -> None:
     if process_info is not None:
         if not os.path.exists(temp_path):
             os.makedirs(os.path.dirname(temp_path), exist_ok=True)

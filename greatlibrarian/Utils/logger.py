@@ -5,9 +5,10 @@ import datetime
 import contextlib
 import functools
 import inspect
+from typing import Callable, Type
 
 
-def generate_name():
+def generate_name() -> str:
     """Random generate a name.
 
     Returns:
@@ -330,13 +331,13 @@ def generate_name():
     return f"{random.choice(adjectives)}_{random.choice(scientists)}_{datetime.datetime.now().strftime('%Y_%m_%d_%H:%M:%S')}"
 
 
-def generate_name_new(type):
+def generate_name_new(type) -> str:
     current_time = datetime.datetime.now()
     current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
     return f"{type}_{current_time_str}"
 
 
-def generate_logger_subfile():
+def generate_logger_subfile() -> str:
     subfilenum = "1"
     subfilename = "Test" + subfilenum
     logger_file = os.path.join("Logs", subfilename)
@@ -362,14 +363,14 @@ def generate_logger_subfile():
     return subfilename
 
 
-def setup_logger(logger_name, logger_file, level=logging.INFO):
+def setup_logger(logger_name, logger_file, level=logging.INFO) -> None:
     """Setup logger only if there is no logger.
 
-    #     Args:
-    #         logger_name (str): Unique name of the logger.
-    #         log_file (str): The path of log, like /xxx/xxx/, don't add the name of logger.
-    #         level (logging.LEVEL, optional): Defaults to logging.INFO.
-    #"""
+    Args:
+        logger_name (str): Unique name of the logger.
+        log_file (str): The path of log, like /xxx/xxx/, don't add the name of logger.
+        level (logging.LEVEL, optional): Defaults to logging.INFO.
+    """
     l = logging.getLogger(logger_name)
     if not l.handlers:  # Only add handlers if there are none yet
         formatter = logging.Formatter("%(levelname)s:%(asctime)s:%(name)s: %(message)s")
@@ -384,7 +385,7 @@ def setup_logger(logger_name, logger_file, level=logging.INFO):
         l.addHandler(streamHandler)
 
 
-def get_logger(logger_name):
+def get_logger(logger_name) -> logging.Logger:
     """Get logger instance by name.
 
     Args:
@@ -397,10 +398,7 @@ def get_logger(logger_name):
 
 
 class LoggerWriter:
-    """
-    A class for logging purposes that behaves like a file-like object. It can be used to
-    redirect standard output (like the print function) to a logger from Python's logging
-    module.
+    """A class for logging purposes that behaves like a file-like object. It can be used to redirect standard output (like the print function) to a logger from Python's logging module.
 
     Methods
     -------
@@ -426,10 +424,10 @@ class LoggerWriter:
         An instance of a logger from Python's logging module.
     """
 
-    def __init__(self, logger):
+    def __init__(self, logger) -> None:
         self.logger = logger
 
-    def write(self, message):
+    def write(self, message) -> None:
         if message != "\n":
             now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             level_name, _, msg = message.partition(" ")
@@ -439,16 +437,15 @@ class LoggerWriter:
                 formatted_message = f"{now} - INFO - {message}"
             self.logger.info(formatted_message)
 
-    def flush(self):
+    def flush(self) -> None:
         try:
             self.logger.flush()
         except:
             pass
 
 
-def add_logger(logger_name, logger_file):
-    """
-    A decorator function that adds a logger to the function it decorates.
+def add_logger(logger_name, logger_file) -> Callable:
+    """A decorator function that adds a logger to the function it decorates.
 
     This decorator redirects the standard output from the decorated function
     to a file-like logger, allowing the function to log its output with a
@@ -495,7 +492,7 @@ def add_logger(logger_name, logger_file):
     return decorate
 
 
-def add_logger_name_cls(logger_name, logger_file):
+def add_logger_name_cls(logger_name, logger_file) -> Callable[[Type], Type]:
     def add_logger_to_class(cls):
         """
         A decorator to add logging functionality to all methods of a class.

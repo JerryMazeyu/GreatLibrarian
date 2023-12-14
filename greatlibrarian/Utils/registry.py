@@ -1,4 +1,5 @@
 import inspect
+from typing import Type, Callable
 
 
 def build_from_cfg(cfg: dict, registry: "Registry") -> object():
@@ -68,26 +69,27 @@ class Registry:
         name (str): Registry name.
     """
 
-    def __init__(self, name, build_func=None):
+    def __init__(self, name, build_func=None) -> None:
         self._name = name
         self._module_dict = dict()
         self.build_func = build_from_cfg
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._module_dict)
 
-    def __contains__(self, key):
+    def __contains__(self, key) -> bool:
         return self.get(key) is not None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         format_str = (
             self.__class__.__name__ + f"(name={self._name}, "
             f"items={self._module_dict})"
         )
         return format_str
 
-    def get(self, key):
-        """Get the registry record.
+    def get(self, key) -> Type:
+        """
+        Get the registry record.
 
         Args:
             key (str): The class name in string format.
@@ -97,10 +99,10 @@ class Registry:
         """
         return self._module_dict[key]
 
-    def build(self, *args, **kwargs):
+    def build(self, *args, **kwargs) -> object():
         return self.build_func(*args, **kwargs, registry=self)
 
-    def _register_module(self, module, module_name=None, force=False):
+    def _register_module(self, module, module_name=None, force=False) -> None:
         if not inspect.isclass(module) and not inspect.isfunction(module):
             raise TypeError(
                 "module must be a class or a function, " f"but got {type(module)}"
@@ -115,8 +117,9 @@ class Registry:
                 raise KeyError(f"{name} is already registered " f"in {self.name}")
             self._module_dict[name] = module
 
-    def register_module(self, name=None, force=False, module=None):
-        """Register a module.
+    def register_module(self, name=None, force=False, module=None) -> Callable:
+        """
+        Register a module.
 
         A record will be added to `self._module_dict`, whose key is the class
         name or the specified name, and value is the class itself.
@@ -155,7 +158,7 @@ class Registry:
             )
 
         # use it as a decorator: @x.register_module()
-        def _register(module):
+        def _register(module) -> Type:
             self._register_module(module=module, module_name=name, force=force)
             return module
 

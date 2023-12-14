@@ -2,7 +2,7 @@ from typing import Union
 from warnings import warn
 
 
-def load_from_cfg(obj: object, cfg: Union[dict, object]):
+def load_from_cfg(obj: object, cfg: Union[dict, object]) -> None:
     """Load a config to the object, every key and value will be inserted into the target object.
 
     Args:

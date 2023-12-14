@@ -13,7 +13,9 @@ from ..FinalScore import FinalScore1
 
 
 class AutoRunner:
-    def __init__(self, cfg, path, project_name):
+    """A class responsible for orchestrating the overall program operation"""
+
+    def __init__(self, cfg, path, project_name) -> None:
         self.path = path
         self.cfg = cfg
         self.testproject_num = 0
@@ -26,7 +28,7 @@ class AutoRunner:
         self.GPT4_eval_llm_name = self.GPT4_eval_llm.get_name()
         self.llm_intro = self.test_llm.get_intro()
 
-    def _check(self):
+    def _check(self) -> None:
         if not hasattr(self, "test_llm"):
             raise ValueError("There is no test_llm in the configure file.")
         # if not hasattr(self, 'json_paths'):
@@ -43,17 +45,7 @@ class AutoRunner:
             print("Find no finalscore, default is FinalScore1.")
             self.finalscore = FinalScore1
 
-    def load_json(self):
-        # if self.path == 'TestCase':
-        #     current_script_directory = os.path.dirname(os.path.abspath(__file__))
-        #     target_directory = os.path.join(current_script_directory, "..", "TestCase")
-        #     absolute_target_directory = os.path.abspath(target_directory)
-        #     self.testprojects = []
-        #     self.json_paths = [os.path.join(absolute_target_directory, x) for x in self.json_paths]
-        #     for jsp in self.json_paths:
-        #         with open(jsp) as f:
-        #             jsonobj = json.load(f)
-        #             self.testprojects.append(TestProject(jsonobj))
+    def load_json(self) -> None:
         self.testprojects = []
         self.json_paths = []
         directory = self.path
@@ -70,9 +62,9 @@ class AutoRunner:
                 jsonobj = json.load(f)
                 self.testprojects.append(TestProject(jsonobj))
 
-    def run(self):
+    def run(self) -> None:
         """
-        Multi-threaded to run each test file to speed up
+        A function enabling parallel execution for each test project.
         """
         lock = threading.Lock()
 
@@ -99,7 +91,6 @@ class AutoRunner:
                     method_num,
                     threadnum,
                 )
-                # future = executor.submit(run_interactor, testproj, AutoInteractor, self.cfg,method_num,threadnum)
                 threadnum += 1
 
                 futures.append(future)
@@ -126,7 +117,7 @@ class AutoRunner:
             self.testproject_num,
         )
 
-    def analyse(self, logger_path):
+    def analyse(self, logger_path) -> None:
         """
         The analysis module controls the function,
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation
@@ -136,15 +127,14 @@ class AutoRunner:
         print(score_dict)
         analyse = Analyse(score_dict)
         mean_score_info, sum_info, plotinfo = analyse.analyse()
-        analyse.report(plotinfo, logger_path, self.test_llm_name, self.llm_intro)
+        analyse.report(plotinfo, logger_path, self.llm_intro)
 
-    def selectmethod(self):
+    def selectmethod(self) -> list[int]:
         """
         A function to record a list, which represents the method that user chooses in each evaluation method.
         The evaluation method that doesn't appear in this testcase will be recorded as 0.
         For example, if the evalstack is like: {"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist},and the return of the method is [1,2,1,0].
         That means the user chooses method1 in toolUse method, method2 in keyword method and method1 in blacklist method.
-
         """
         eval_dict = {
             "tool": ToolUse,
@@ -173,7 +163,7 @@ class AutoRunner:
             eval_method.showmethod()
             usr_input = input("Please enter the number of your chosen method:")
             trans_result = to_int(usr_input)
-            while trans_result == None or trans_result > eval_method.getmethodtotal():
+            while trans_result is None or trans_result > eval_method.getmethodtotal():
                 print(f"Please input a number from 1 to {eval_method.getmethodtotal()}")
                 usr_input = input("Please enter the number of your chosen method:")
                 trans_result = to_int(usr_input)
@@ -181,5 +171,5 @@ class AutoRunner:
             methodnum.append(trans_result)
         return methodnum
 
-    def mk_clean_log(self, logger_path):
+    def mk_clean_log(self, logger_path) -> None:
         clean_log_dialog(logger_path)

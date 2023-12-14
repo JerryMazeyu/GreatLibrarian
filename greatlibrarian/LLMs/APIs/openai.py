@@ -1,23 +1,15 @@
 from ...Core import LLMs
 import zhipuai
 
-from http import HTTPStatus
 import dashscope
 
 import qianfan
 
 
-class ChatGPT(LLMs):
-    def __init__(self):
-        self.apikey = ""
-        self.name = "gpt-3.5-turbo"
-
-    def __call__(self, prompt: str) -> str:
-        pass
-
-
 class chatglm_pro(LLMs):
-    def __init__(self):
+    """A LLM used in GreatLibrarian:chatglm_pro"""
+
+    def __init__(self) -> None:
         self.apikey = "450fe9e4faec64c0a48234a5d92115ef.aWoqpjlhWO2Kpbvw"
         self.name = "chatglm_pro"
         self.llm_intro = "ChatGLMpro 是一款基于人工智能的聊天机器人，它基于清华大学 KEG 实验室与智谱 AI 于 2023 年联合训练的语言模型 GLM 开发而成。\n\nChatGLMpro 具有强大的自然语言处理能力和丰富的知识库，能够理解和回应各种类型的问题和指令，包括但不限于文本生成、问答、闲聊、翻译、推荐等领域。\n\n相比于其他聊天机器人，ChatGLMpro 具有以下优势：\n\n1.高性能的语言模型：ChatGLMpro 基于 GLM 模型，拥有超过 1300 亿参数，能够高效地处理和生成自然语言文本。\n\n2.丰富的知识库：ChatGLMpro 拥有涵盖多个领域的知识库，包括科技、历史、文化、娱乐等方面，能够回应各种类型的问题。\n\n3.强大的问答能力：ChatGLMpro 具有出色的问答能力，能够理解用户的问题并给出准确的回答。\n\n4.个性化交互：ChatGLMpro 能够根据用户的语气和兴趣进行个性化交互，让用户感受到更加自然的对话体验。\n\n5.开放的接口：ChatGLMpro 还提供了开放的接口，方便其他应用程序和企业将其集成到自己的系统中。\n\n总的来说，ChatGLMpro 是一款高性能、智能化、多功能的聊天机器人，能够为企业和个人提供高效的智能化服务。\n\n"
@@ -37,7 +29,9 @@ class chatglm_pro(LLMs):
 
 
 class qwen_turbo(LLMs):
-    def __init__(self):
+    """A LLM used in GreatLibrarian:qwen_turbo"""
+
+    def __init__(self) -> None:
         self.apikey = "sk-9ca2ad73e7d34bd4903eedd6fc70d0d8"
         self.name = "qwen_turbo"
         self.llm_intro = "通义千问是由阿里巴巴集团开发的一款人工智能语言模型应用，它采用了大规模机器学习技术，能够模拟人类自然语言的能力，提供多种服务，如文本翻译、聊天机器人、\n\n自动回复、文档摘要等。\n\n它的核心特点是多轮对话，可以理解用户的意图并进行有效的回复；同时，它还具有强大的文案创作能力，可以为用户提供优秀的文字创意，比如续写小说、撰写邮件等。\n\n此外，通义千问还具备多模态的知识理解能力，可以识别图片、音频、视频等多种媒体形式，并从中提取出关键信息。不仅如此，通义千问还支持多语言，可以实现中文、\n\n英文等不同语言之间的自由转换。\n\n目前，通义千问正在接受内测阶段，并已在各大手机应用市场上线，所有人都可以通过APP直接体验最新模型能力。\n\n"
@@ -56,7 +50,9 @@ class qwen_turbo(LLMs):
 
 
 class wenxin(LLMs):
-    def __init__(self):
+    """A LLM used in GreatLibrarian:wenxin"""
+
+    def __init__(self) -> None:
         self.ak = "B00yKgZuin8IolPHYsHggVyU"
         self.sk = "B19OtdVn0jwwaByK9RgovfukUQWv2rT6"
         self.name = "wenxin"

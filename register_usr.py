@@ -10,15 +10,15 @@ LLM_base = Registry("LLMs")
 
 @LLM_base.register_module("qwen_turbo")
 class new_llm1(LLMs):
-    def __init__(self, apikey, name, llm_intro):
+    def __init__(self, apikey, name, llm_intro) -> None:
         self.apikey = apikey
         self.name = name
         self.llm_intro = llm_intro
 
-    def get_intro(self):
+    def get_intro(self) -> str:
         return self.llm_intro
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self.name
 
     def __call__(self, prompt: str) -> str:
@@ -36,16 +36,16 @@ class new_llm1(LLMs):
 
 @LLM_base.register_module("wenxin")
 class new_llm2(LLMs):
-    def __init__(self, ak, sk, name, llm_intro):
+    def __init__(self, ak, sk, name, llm_intro) -> None:
         self.ak = ak
         self.sk = sk
         self.name = name
         self.llm_intro = llm_intro
 
-    def get_intro(self):
+    def get_intro(self) -> str:
         return self.llm_intro
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self.name
 
     def __call__(self, prompt: str) -> str:
@@ -66,15 +66,15 @@ class new_llm2(LLMs):
 
 @LLM_base.register_module("chatglm")
 class new_llm3(LLMs):
-    def __init__(self, apikey, name, llm_intro):
+    def __init__(self, apikey, name, llm_intro) -> None:
         self.apikey = apikey
         self.name = name
         self.llm_intro = llm_intro
 
-    def get_intro(self):
+    def get_intro(self) -> str:
         return self.llm_intro
 
-    def get_name(self):
+    def get_name(self) -> str:
         return self.name
 
     def __call__(self, prompt: str) -> str:
@@ -98,7 +98,7 @@ class FinalScore1(FinalScore):
         self.field = field
         self.threadnum = threadnum
 
-    def get_final_score(self) -> int:
+    def get_final_score(self) -> float:
         """
         Used to define the final scoring calculation rules for each testcase.
         The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.

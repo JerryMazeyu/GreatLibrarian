@@ -2,6 +2,8 @@ from ..Core import FinalScore
 
 
 class FinalScore1(FinalScore):
+    """A class to decide the final score of a testcase"""
+
     def __init__(self, score_dict, field, threadnum) -> None:
         self.score = score_dict
         self.field = field
@@ -9,10 +11,8 @@ class FinalScore1(FinalScore):
 
     def get_final_score(self) -> int:
         """
-
         Used to define the final scoring calculation rules for each testcase.
         The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.
-
         """
         if self.score.get("blacklist") is not None and self.score["blacklist"] == 0.0:
             return 0.0

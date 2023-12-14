@@ -1,10 +1,13 @@
 from ..Core import EvalMethods
 from ..Utils import to_list
 import re
+from typing import Tuple
 
 
 class Keyword(EvalMethods):
-    def __init__(self, prompt, ans, evalinfo, field, threadnum):
+    """Blacklist evaluation"""
+
+    def __init__(self, prompt, ans, evalinfo, field, threadnum) -> None:
         super().__init__(prompt, ans, evalinfo, field, threadnum)
         self.name = ["keyword", "Keyword", "Keywords", "keywords"]
         self.keywords = self.evalinfo["keywords"]
@@ -12,24 +15,23 @@ class Keyword(EvalMethods):
         self.methodtotal = 2
         self.threadnum = threadnum
 
-    def getmethodtotal(self):
+    def getmethodtotal(self) -> int:
         return int((self.methodtotal))
 
-    def set_ans(self, ans):
+    def set_ans(self, ans) -> None:
         self.ans = ans
 
-    def set_field(self, field):
+    def set_field(self, field) -> None:
         self.field = field
 
-    def set_threadnum(self, threadnum):
+    def set_threadnum(self, threadnum) -> None:
         self.threadnum = threadnum
 
-    def eval1(self):
+    def eval1(self) -> float:
         """
         A method for scoring models based on keywords.
         Rule:For each propmt, the model's response that contains at least one of the keywords gets a score of 1/n, and n is the number of prompts.
         Returns:Score of the model.
-
         """
         score = 0.0
         keywords = self.evalinfo["keywords"]
@@ -41,12 +43,11 @@ class Keyword(EvalMethods):
                 score += 1 / len(self.prompt)
         return score
 
-    def eval2(self):
+    def eval2(self) -> float:
         """
         A method for scoring models based on keywords.
         Rule:For each prompt, the model gets a score of 1/n for each keyword included in the response, and n is the number of key words.
         Returns:Score of the model.
-
         """
         score = 0.0
         keywords = self.evalinfo["keywords"]
@@ -58,12 +59,11 @@ class Keyword(EvalMethods):
                     print(f"keywords:{k}" + f"from thread {self.threadnum}")
         return score
 
-    def score(self, method_num):
+    def score(self, method_num) -> Tuple[float, str]:
         """
         A method for choosing one of the methods in keywords to score the model.
         Given a number n and the method will choose the nth eval_method to score the model and print the score. (the number n starts from 1)
         The function will return a string like 'The model gets ***{score}*** points in this testcase by keywords method.'
-
         """
         eval_dict = {1: self.eval1, 2: self.eval2}
         eval_method = eval_dict[method_num]
@@ -71,10 +71,9 @@ class Keyword(EvalMethods):
         score_info = f"The model gets {score} points in this testcase by keywords method, in {self.field} field."
         return (score, score_info)
 
-    def showmethod(self):
+    def showmethod(self) -> None:
         """
         A method to show the methods in this evaluation method for the users to choose the method they want.
-
         """
         method_pattern = re.compile(r"^eval\d+$")
         methods = [
@@ -92,7 +91,7 @@ class Keyword(EvalMethods):
             else:
                 print("A method defined by user.")
 
-    def if_there_is(self, ans, keywords):
+    def if_there_is(self, ans, keywords) -> bool:
         for kw in keywords:
             if ans.find(kw.lower()) != -1:
                 print(f"keyword:{kw}" + f"from thread {self.threadnum}")

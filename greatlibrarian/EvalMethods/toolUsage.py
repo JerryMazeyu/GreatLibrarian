@@ -2,10 +2,13 @@ from ..Core import EvalMethods
 from ..Utils import to_list
 import warnings
 import re
+from typing import Tuple
 
 
 class ToolUse(EvalMethods):
-    def __init__(self, prompt, ans, evalinfo, field, threadnum):
+    """Blacklist evaluation"""
+
+    def __init__(self, prompt, ans, evalinfo, field, threadnum) -> None:
         super().__init__(prompt, ans, evalinfo, field, threadnum)
         if not self.evalinfo.get("tool", None):
             warnings.warn("There is no tool usage.", RuntimeWarning)
@@ -13,24 +16,24 @@ class ToolUse(EvalMethods):
         self.methodtotal = 2
         self.field = field
 
-    def getmethodtotal(self):
+    def getmethodtotal(self) -> int:
         return int((self.methodtotal))
 
-    def set_ans(self, ans):
+    def set_ans(self, ans) -> None:
         self.ans = ans
 
-    def set_field(self, field):
+    def set_field(self, field) -> None:
         self.field = field
 
-    def set_threadnum(self, threadnum):
+    def set_threadnum(self, threadnum) -> None:
         self.threadnum = threadnum
 
-    def eval1(self):
+    def eval1(self) -> float:
         """
         A method for scoring models based on toolUsage.
         Rule:Suppose there are n prompts in total, unit_point = 1/n, for each prompt, the model gets a score of unit_point * (2/3) if it chooses the correct tool, and it gets a score of unit_point * (1/3) if the model sends the correct arguments.
-        Returns:Score of the model.
-
+        Returns:
+            Score of the model.
         """
         unit_point = 1.0 / len(self.prompt)
         res = 0.0
@@ -43,12 +46,12 @@ class ToolUse(EvalMethods):
                 res += unit_point * (1 / 3)
         return res
 
-    def eval2(self):
+    def eval2(self) -> float:
         """
         A method for scoring models based on toolUsage.
         Rule:Suppose there are n prompts in total, unit_point = 1/n, for each prompt, the model gets a score of unit_point if it both chooses the correct tool and sends the correct arguments.
-        Returns:Score of the model.
-
+        Returns:
+            Score of the model.
         """
         unit_point = 1.0 / len(self.prompt)
         res = 0.0
@@ -62,12 +65,11 @@ class ToolUse(EvalMethods):
                 res += unit_point
         return res
 
-    def score(self, method_num):
+    def score(self, method_num) -> Tuple[float, str]:
         """
         A method for choosing one of the methods in toolUsage to score the model.
         Given a number n and the method will choose the nth eval_method to score the model and print the score.
         The function will return a string like 'The model gets ***{score}*** points in this testcase by toolUsage method.'
-
         """
         eval_dict = {1: self.eval1, 2: self.eval2}
         eval_method = eval_dict[method_num]
@@ -77,10 +79,9 @@ class ToolUse(EvalMethods):
         )
         return (score, score_info)
 
-    def showmethod(self):
+    def showmethod(self) -> None:
         """
         A method to show the methods in this evaluation method for the users to choose the method they want.
-
         """
         method_pattern = re.compile(r"^eval\d+$")
         methods = [
