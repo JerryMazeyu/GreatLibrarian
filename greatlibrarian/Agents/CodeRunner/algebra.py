@@ -1,2 +1,2 @@
-ans=("yes or no?")
+ans = "yes or no?"
 print(ans)

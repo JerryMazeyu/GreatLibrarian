@@ -235,7 +235,7 @@ class Analyse:
             "{}".format(filtered_field) for filtered_field in filtered_fields
         ]
         legend = axs[1].legend(
-            patches, legend_labels, loc="lower right", bbox_to_anchor=(1.25, 0.2)
+            patches, legend_labels, loc="lower right", bbox_to_anchor=(1.25, 0.10)
         )
 
         for label in legend.get_texts():

@@ -2,7 +2,7 @@ import re
 from typing import List
 
 
-def extract_example_info(log_file) -> List[List[str, str, str]]:
+def extract_example_info(log_file) -> List[List[str]]:
     pattern = r"Example case:prompt:\['(.*?)'\],ans:\['(.*?)'\],field:(\w+)"
 
     example_list = []

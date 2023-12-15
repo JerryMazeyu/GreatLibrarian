@@ -11,5 +11,5 @@ class ExampleConfig(ABC):
     ) -> None:
         self.test_llm = test_llm
         self.GPT4_eval_llm = GPT4_eval_llm
-        self.interactor = interactor
         self.finalscore = finalscore
+        self.interactor = interactor

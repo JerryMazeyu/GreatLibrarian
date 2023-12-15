@@ -2,7 +2,7 @@ import re
 from typing import List
 
 
-def extract_mistaken_info(log_file) -> List[List[str, str, str, str]]:
+def extract_mistaken_info(log_file) -> List[List[str]]:
     pattern = re.compile(
         r"Mistaken case:prompt:\s*\['(.*?)'\],\s*ans:\s*\['(.*?)'\],\s*field:\s*(.*?),\s*keywords:\s*\[(.*?)\](?:,\s*blacklist:\s*\[(.*?)\])?"
     )
