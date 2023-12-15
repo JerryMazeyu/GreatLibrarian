@@ -1,10 +1,9 @@
 from ..Interactor import AutoInteractor
 from ..FinalScore import FinalScore1
-from abc import ABC
 
 
-class ExampleConfig(ABC):
-    """ExampleConfig abstract class"""
+class ExampleConfig:
+    """ExampleConfig class for users to decide the config of a test."""
 
     def __init__(
         self, test_llm, GPT4_eval_llm, finalscore=FinalScore1, interactor=AutoInteractor

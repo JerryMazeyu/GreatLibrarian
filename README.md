@@ -58,13 +58,14 @@
                            return(response['output']['text'])
                 return('API Problem')
 
-        llm_cfg = dict(type='name of your LLM',apikey = "your apikey", name = "qwen_turbo",llm_intro = 'introduction of your LLM')
-        qw = LLM_base.build(llm_cfg)
+        llm_cfg1 = dict(
+            type="name of your LLM",
+            apikey="your apikey",
+            name="qwen_turbo",
+            llm_intro="introduction of your LLM",
+        )
+        qw = LLM_base.build(llm_cfg1)
     
-然后用户需要在该文件中中创建一个`ExampleConfig()`类的实例config（**请勿修改该实例名称config**），并用刚刚创建的实例（`qw`）对其进行初始化  
-  
-`config = ExampleConfig(qw)`
-
 
 #### 测试用例配置  
 
@@ -108,7 +109,7 @@
 按照以上`json`格式创建测试用例组，并在某个文件夹（这里假设该文件夹的绝对路径为：`/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase`）中**新建`json`文件**（这里假设为`example1.json`），然后将测试用例组写进文件内，支持将多个`json`文件放入至同一文件夹中用于一次测试。
  
 
-#### 评分规则配置
+
 
 除了测试用例配置中提到的 `evaluation` 字典，工具箱的评分过程中还可以进行更具体的 **评分规则配置**。
 
@@ -148,11 +149,6 @@
 
          def final_score_info(self) -> str:
          return (self.get_final_score(),f'The final score of this testcase is {self.get_final_score()}, in {self.field} field.'+f'from thread {self.threadnum}',self.get_final_score())  
-
-创建完新的`FinalScore`子类（假设为`FinalScore2`）后，需要同步修改ExampleConfig实例的初始化：  
-  
-`config = ExampleConfig(qw,FinalScore1) `
-
   
 
 工具箱还配置了每一种评价方法内部的（`keywords、blacklist、GPT4eval`）的 **不同评分细则** 。  
@@ -168,6 +164,30 @@
 
 在工具箱中，目前每种 **评价方法** 都至少有一种 **评分细则** 。想要使用这些评分细则，用户只需要在工具箱 **开始自动化测评前** 根据提示输入评分细则的序号，即可完成每种评价方法对应的评分细则的选用。  
   
+  
+####config定义  
+  
+  
+`ExampleConfig`是工具箱中定义用于确定本次测试所有配置的类，其定义如下：  
+    class ExampleConfig():
+        """ExampleConfig abstract class"""
+
+        def __init__(
+            self, test_llm, GPT4_eval_llm, finalscore=FinalScore1, interactor=AutoInteractor
+        ) -> None:
+            self.test_llm = test_llm
+            self.GPT4_eval_llm = GPT4_eval_llm
+            self.finalscore = finalscore
+            self.interactor = interactor  
+
+配置好`LLM`与`FinalScore`后，需要定义用于本次测试的整体的`config`，`config`需要包含本次测试选择的`Finalscore`、用于测评的`LLM`以及用于做`GPT4_eval`的`LLM`（即用于给测试用例和其对应的测试`LLM`的回答打分的`LLM`）。代码如下：
+  
+    config = ExampleConfig(chat, qw)  
+  
+这里的chat和qw都是配置好的LLM，在本示例中chat用作被测试的LLM，qw用于做GPT4_eval的LLM。这里选择FinalScore1，是工具箱默认使用的FinalScore子类，可省略。若需要选用用户自定义的FinalScore2，可以使用以下定义：  
+  
+    config = ExampleConfig(chat, qw, FinalScore2)  
+
 
   
 ### 自动化测评  
@@ -206,7 +226,7 @@
 1. `keywords`：主要使用`eval1`方法，具体的评分细则为： **当LLM的回答包含`keywords`列表中至少一个关键字时，LLM在本条测试用例中获得1分，否则获得0分**。
 2. `blacklist`：主要使用`eval1`方法，具体的评分细则为：**当LLM的回答包含`blacklist`列表中的任何一个黑名单字符串时，LLM在本条测试用例中获得0分，否则获得1分**。
 3. `GPT4eval`：主要使用`eval1`方法，由于需要调用另一个LLM对当前测试用例进行评分，所以同样需要调用`API Key`。由于目前我们没有GPT4的`API Key`，所以暂时用了其他LLM进行替代。  
-4. `FinalScore`：主要使用`finalscore1`，具体的评分细则为：  
+4. `FinalScore`：主要使用`FinalScore1`，具体的评分细则为：  
 ①首先判断`blacklist`评分是否为0，若为0则最终得分直接为0；  
 ②然后判断`keywords`评分，若无`GPT4eval`则最终得分等于`keywords`评分；  
 ③若有`GPT4eval`，则计算`keywords`评分与`GPT4eval`评分的差，若差的绝对值大于0.5则输出"Human Evaluation"，将该条测试用例记录进`human_evaluation.log`中，用于后续进行人工测评；若差的绝对值小于0.5，则取两者的均值作为最终得分。  
@@ -273,5 +293,174 @@ Windows (Powershell)：
   
 然后工具箱会提示用户进行每种评价方法下的评分细则的选择，需要用户**根据提示信息输入评分细则序号**。  
   
-选择完成后开始自动化评测，评测结束后的所有相关文件（log文件，测试报告等）记录在`GreatLibrarian/Logs`中。   
+选择完成后开始自动化评测，评测结束后的所有相关文件（log文件，测试报告等）记录在`GreatLibrarian/Logs`中。    
+  
+  
+##配置文件register_usr.py 范例及注意事项  
 
+        from greatlibrarian.Core import LLMs, FinalScore
+        from greatlibrarian.Configs import ExampleConfig
+        from greatlibrarian.Utils import Registry
+        import dashscope
+        import qianfan
+        import zhipuai
+
+        LLM_base = Registry("LLMs")
+
+
+        @LLM_base.register_module("qwen_turbo")
+        class new_llm1(LLMs):
+            def __init__(self, apikey, name, llm_intro) -> None:
+                self.apikey = apikey
+                self.name = name
+                self.llm_intro = llm_intro
+
+            def get_intro(self) -> str:
+                return self.llm_intro
+
+            def get_name(self) -> str:
+                return self.name
+
+            def __call__(self, prompt: str) -> str:
+                dashscope.api_key = self.apikey
+                response = dashscope.Generation.call(
+                    model=dashscope.Generation.Models.qwen_turbo, prompt=prompt
+                )
+
+                if response:
+                    if response["output"]:
+                        if response["output"]["text"]:
+                            return response["output"]["text"]
+                return "API Problem"
+
+
+        @LLM_base.register_module("wenxin")
+        class new_llm2(LLMs):
+            def __init__(self, ak, sk, name, llm_intro) -> None:
+                self.ak = ak
+                self.sk = sk
+                self.name = name
+                self.llm_intro = llm_intro
+
+            def get_intro(self) -> str:
+                return self.llm_intro
+
+            def get_name(self) -> str:
+                return self.name
+
+            def __call__(self, prompt: str) -> str:
+                chat_comp = qianfan.ChatCompletion(ak=self.ak, sk=self.sk)
+
+                resp = chat_comp.do(
+                    model="ERNIE-Bot", messages=[{"role": "user", "content": prompt}]
+                )
+
+                if resp:
+                    if resp["body"]:
+                        if resp["body"]["result"]:
+                            return resp["body"]["result"]
+                return "API Problem"
+
+
+        @LLM_base.register_module("chatglm")
+        class new_llm3(LLMs):
+            def __init__(self, apikey, name, llm_intro) -> None:
+                self.apikey = apikey
+                self.name = name
+                self.llm_intro = llm_intro
+
+            def get_intro(self) -> str:
+                return self.llm_intro
+
+            def get_name(self) -> str:
+                return self.name
+
+            def __call__(self, prompt: str) -> str:
+                zhipuai.api_key = self.apikey
+                response = zhipuai.model_api.invoke(
+                    model="chatglm_pro",
+                    prompt=[{"role": "user", "content": prompt}],
+                    top_p=0.7,
+                    temperature=0.9,
+                )
+                if response:
+                    if response["code"] == 200:
+                        return response["data"]["choices"][0]["content"]
+                else:
+                    return "API Problem"
+
+
+        class FinalScore1(FinalScore):
+            def __init__(self, score_dict, field, threadnum) -> None:
+                self.score = score_dict
+                self.field = field
+                self.threadnum = threadnum
+
+            def get_final_score(self) -> float:
+                """
+                Used to define the final scoring calculation rules for each testcase.
+                The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.
+
+                """
+                if self.score.get("blacklist") is not None and self.score["blacklist"] == 0.0:
+                    return 0.0
+                if (
+                    self.score.get("keywords") is not None
+                    and self.score.get("GPT4_eval") is not None
+                ):
+                    if abs(self.score["keywords"] - self.score["GPT4_eval"]) <= 0.5:
+                        return float(
+                            "%.3f" % ((self.score["keywords"] + self.score["GPT4_eval"]) / 2)
+                        )
+                    else:
+                        return "Human Evaluation"
+                if self.score.get("keywords") is not None:
+                    return self.score["keywords"]
+                if self.score.get("GPT4_eval") is not None:
+                    return self.score["GPT4_eval"]
+
+            def final_score_info(self) -> str:
+                return (
+                    self.get_final_score(),
+                    f"The final score of this testcase is {self.get_final_score()}, in {self.field} field."
+                    + f"from thread {self.threadnum}",
+                    self.get_final_score(),
+                )
+
+
+        llm_cfg1 = dict(
+            type="qwen_turbo",
+            apikey="apikey1",
+            name="qwen_turbo",
+            llm_intro="intro1",
+        )
+        qw = LLM_base.build(llm_cfg1)
+        config1 = ExampleConfig(qw, qw, FinalScore1)
+
+        llm_cfg2 = dict(
+            type="wenxin",
+            ak="ak1",
+            sk="sk1",
+            name="wenxin",
+            llm_intro="intro2",
+        )
+        wx = LLM_base.build(llm_cfg2)
+        config2 = ExampleConfig(wx, qw, FinalScore1)
+
+        llm_cfg3 = dict(
+            type="chatglm",
+            apikey="apikey2",
+            name="chatglm_pro",
+            llm_intro="ChatGLMpro 是一款基于人工智能的聊天机器人，它基于清华大学 KEG 实验室与智谱 AI 于 2023 年联合训练的语言模型 GLM 开发而成。\n\nChatGLMpro 具有强大的自然语言处理能力和丰富的知识库，能够理解和回应各种类型的问题和指令，包括但不限于文本生成、问答、闲聊、翻译、推荐等领域。\n\n相比于其他聊天机器人，ChatGLMpro 具有以下优势：\n\n高性能的语言模型：ChatGLMpro 基于 GLM 模型，拥有超过 1300 亿参数，能够高效地处理和生成自然语言文本。\n\n丰富的知识库：ChatGLMpro 拥有涵盖多个领域的知识库，包括科技、历史、文化、娱乐等方面，能够回应各种类型的问题。\n\n强大的问答能力：ChatGLMpro 具有出色的问答能力，能够理解用户的问题并给出准确的回答。\n\n个性化交互：ChatGLMpro 能够根据用户的语气和兴趣进行个性化交互，让用户感受到更加自然的对话体验。\n\n开放的接口：ChatGLMpro 还提供了开放的接口，方便其他应用程序和企业将其集成到自己的系统中。\n\n总的来说，ChatGLMpro 是一款高性能、智能化、多功能的聊天机器人，能够为企业和个人提供高效的智能化服务。总的来说，通义千问是一个智能、灵活、友好的AI助手，可以帮助用户解决各种问题和需求。\n\n",
+        )
+        chat = LLM_base.build(llm_cfg3)
+        config3 = ExampleConfig(chat, qw, FinalScore1)
+
+        config = config3
+  
+
+  
+**注意事项：**  
+1.`from greatlibrarian.Core import LLMs, FinalScore`、`from greatlibrarian.Configs import ExampleConfig`、`from greatlibrarian.Utils import Registry`是配置文件中不可缺少的引用。其他引用用户可以根据自身的需求增加。    
+2. `LLM_base = Registry("LLMs")`以及定义LLM类前的`@LLM_base.register_module("qwen_turbo")`为必要配置，用于完成用户定义的LLM的注册。  
+3. 定义本次测试的`config`时注意前文中展示的`ExampleConfig`的定义以及参数的默认值。
