@@ -92,7 +92,7 @@ class new_llm3(LLMs):
             return "API Problem"
 
 
-class FinalScore1(FinalScore):
+class FinalScore2(FinalScore):
     def __init__(self, score_dict, field, threadnum) -> None:
         self.score = score_dict
         self.field = field
