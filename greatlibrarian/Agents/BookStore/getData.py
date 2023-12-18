@@ -10,37 +10,46 @@ def extract_journal_information(text, subject, subsubject):
         subject (str): Subject of the journal, e.g. "Area Studies"
         subsubject (str): Sub subject of the journal, e.g. "African American Studies"
     """
-    res = {"TITLE": "", "PUBLISHED BY": "", "COVERAGE": "", "MOVING WALL": "", "ISSN":"", "EISSN": "", "SUBJECTS": "", "COLLECTIONS": "", "ABSTRACT": ""}
-    sentences = text.split('\n')
+    res = {
+        "TITLE": "",
+        "PUBLISHED BY": "",
+        "COVERAGE": "",
+        "MOVING WALL": "",
+        "ISSN": "",
+        "EISSN": "",
+        "SUBJECTS": "",
+        "COLLECTIONS": "",
+        "ABSTRACT": "",
+    }
+    sentences = text.split("\n")
     max_len = 0
-    abstract = ''
-    for (ind, content) in enumerate(sentences):
+    abstract = ""
+    for ind, content in enumerate(sentences):
         if len(content) > max_len:
             max_len = len(content)
             abstract = content
-        if content == 'Support':
-            res["TITLE"] = sentences[ind+1]
-        if content == 'PUBLISHED BY':
-            res["PUBLISHED BY"] = sentences[ind+1]
-        if content == 'COVERAGE':
-            res["COVERAGE"] = sentences[ind+1]
-        if content == 'MOVING WALL':
-            res["MOVING WALL"] = sentences[ind+1]
-        if content == 'ISSN':
-            res["ISSN"] = sentences[ind+1]
-        if content == 'EISSN':
-            res["EISSN"] = sentences[ind+1]
-        if content == 'SUBJECTS':
-            res["SUBJECTS"] = sentences[ind+1] 
-        if content == 'COLLECTIONS':
-            res["COLLECTIONS"] = sentences[ind+1]   
-        
+        if content == "Support":
+            res["TITLE"] = sentences[ind + 1]
+        if content == "PUBLISHED BY":
+            res["PUBLISHED BY"] = sentences[ind + 1]
+        if content == "COVERAGE":
+            res["COVERAGE"] = sentences[ind + 1]
+        if content == "MOVING WALL":
+            res["MOVING WALL"] = sentences[ind + 1]
+        if content == "ISSN":
+            res["ISSN"] = sentences[ind + 1]
+        if content == "EISSN":
+            res["EISSN"] = sentences[ind + 1]
+        if content == "SUBJECTS":
+            res["SUBJECTS"] = sentences[ind + 1]
+        if content == "COLLECTIONS":
+            res["COLLECTIONS"] = sentences[ind + 1]
+
         res["ABSTRACT"] = abstract
     return res
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     data_root = "Agents/BookStore/RawData"
     subject = "Area Studies"
     subsubject = "African American Studies"
@@ -271,16 +280,26 @@ Cookie Settings
     """
 
     soft_mkdir(join(data_root, subject), soft=True)
-    
+
     tar_csv_path = join(data_root, subject, f"{subsubject}.csv")
     if not os.path.exists(tar_csv_path):
-        df = pd.DataFrame(columns=["TITLE", "PUBLISHED BY", "COVERAGE", "MOVING WALL", "ISSN", "EISSN", "SUBJECTS", "COLLECTIONS", "ABSTRACT"])
+        df = pd.DataFrame(
+            columns=[
+                "TITLE",
+                "PUBLISHED BY",
+                "COVERAGE",
+                "MOVING WALL",
+                "ISSN",
+                "EISSN",
+                "SUBJECTS",
+                "COLLECTIONS",
+                "ABSTRACT",
+            ]
+        )
     else:
         df = pd.read_csv(tar_csv_path)
-    
+
     journal_info = extract_journal_information(text, subject, subsubject)
     print(journal_info)
     df = df._append(journal_info, ignore_index=True)
     df.to_csv(tar_csv_path, index=False)
-
-    

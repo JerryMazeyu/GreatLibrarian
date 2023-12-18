@@ -1,19 +1,14 @@
-from ..Agents import BookStore, PromptMarket
-from ..LLMs import *
-from ..Interactor import *
-from ..FinalScore import *
+from ..Interactor import AutoInteractor
+from ..FinalScore import FinalScore1
 
-class ExampleConfig():
-    def __init__(self,llm,finalscore=FinalScore1,interactor=AutoInteractor):
-        self.llm = llm
-        self.interactor = interactor
+
+class ExampleConfig:
+    """ExampleConfig class for users to decide the config of a test."""
+
+    def __init__(
+        self, test_llm, GPT4_eval_llm, finalscore=FinalScore1, interactor=AutoInteractor
+    ) -> None:
+        self.test_llm = test_llm
+        self.GPT4_eval_llm = GPT4_eval_llm
         self.finalscore = finalscore
-
-# class ExampleConfig():
-#     def __init__(self):
-#         self.llm = qwen_turbo
-#         self.json_paths = ['example11.json']
-#         self.interactor = AutoInteractor
-#         self.finalscore = FinalScore1
-#         # self.register_agents = [BookStore, PromptMarket]
-        
+        self.interactor = interactor

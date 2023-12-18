@@ -34,4 +34,3 @@ API使用建议
 
 def __init__():
     pass
-

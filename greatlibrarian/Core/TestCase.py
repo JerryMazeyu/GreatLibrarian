@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 
 
 class TestCase(ABC):
-    """TestCase abstract class
-    """
+    """TestCase abstract class"""
+
     @abstractmethod
-    def run(self):
+    def run(self) -> str:
         """Main function of the LLM
 
         Args:
@@ -15,7 +15,7 @@ class TestCase(ABC):
             str: Response from the LLM.
         """
         pass
-    
+
     @abstractmethod
     def eval(self) -> float:
         """Evaluate if the testcase is good enough.
@@ -24,6 +24,3 @@ class TestCase(ABC):
             float: The score of the case, best is 1.0 and worst is 0.0.
         """
         pass
-    
-    
-    

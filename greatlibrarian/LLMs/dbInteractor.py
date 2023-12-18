@@ -5,11 +5,7 @@ import json
 def get_db_connection(hostname, port, username, password, dbname):
     try:
         db = pymysql.connect(
-            host=hostname,
-            port=port,
-            user=username,
-            password=password,
-            db=dbname
+            host=hostname, port=port, user=username, password=password, db=dbname
         )
         return db
 
@@ -25,12 +21,14 @@ def write_data_to_database(db, tablename, data):
         sql_query = f"""INSERT INTO {tablename} (llm_name, prompt, history, response, status, time)
                         VALUES (%s, %s, %s, %s, %s, %s)"""
 
-        llm_name = data.get('llm_name', '')
-        prompt = data.get('prompt', '')
-        history = json.dumps(data.get('history', []), ensure_ascii=False)  # convert list to string
-        response = data.get('response', '')
-        status = data.get('status', 0)
-        time = data.get('time', '')
+        llm_name = data.get("llm_name", "")
+        prompt = data.get("prompt", "")
+        history = json.dumps(
+            data.get("history", []), ensure_ascii=False
+        )  # convert list to string
+        response = data.get("response", "")
+        status = data.get("status", 0)
+        time = data.get("time", "")
 
         values = (llm_name, prompt, history, response, status, time)
         cur.execute(sql_query, values)
@@ -58,4 +56,3 @@ def write_data_to_database(db, tablename, data):
 #     print("Connection successful!")
 # else:
 #     print("Connection failed.")
-

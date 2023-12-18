@@ -1,6 +1,7 @@
 import os
 
-def join(*x):
+
+def join(*x) -> str:
     """Join path.
 
     Args:
@@ -12,7 +13,7 @@ def join(*x):
     return os.path.join(*x)
 
 
-def soft_mkdir(path, soft=True):
+def soft_mkdir(path, soft=True) -> bool:
     """Make direction if there is no file exists.
 
     Args:
@@ -30,6 +31,3 @@ def soft_mkdir(path, soft=True):
     else:
         os.mkdir(path)
         return True
-    
-
-

@@ -305,9 +305,8 @@ class HTTPSConnection(HTTPConnection):
         timeout=socket._GLOBAL_DEFAULT_TIMEOUT,
         ssl_context=None,
         server_hostname=None,
-        **kw
+        **kw,
     ):
-
         HTTPConnection.__init__(self, host, port, strict=strict, timeout=timeout, **kw)
 
         self.key_file = key_file
