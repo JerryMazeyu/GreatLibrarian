@@ -126,7 +126,6 @@ class Analyse:
         pdf_file_path = os.path.join(logger_path, pdf_name)
 
         pdf_pages = PdfPages(pdf_file_path)
-        # colors = ['blue', 'green', 'red', 'purple', 'orange', 'brown', 'pink', 'gray', 'cyan', 'magenta']
 
         filtered_fields = [
             fields
@@ -152,7 +151,6 @@ class Analyse:
         plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
 
         intro = self.introduction_of_llm(log_path, llm_intro)
-        # intro = textwrap.fill(intro, width=80)
 
         fig.text(
             0.1, 0.55, intro, fontsize=25, fontfamily="SimSun", ha="left", va="center"
@@ -225,8 +223,7 @@ class Analyse:
             text.set_size(28)
 
         axs[1].axis("equal")
-        # for i, label in enumerate(field):
-        #     plt.text(2, -1 - i * 0.5, label, color=colors[i])
+
         axs[1] = plt.gca()
         axs[1].set_aspect("equal")
         axs[1].set_position([0.0, 1.0, 0.6, 0.6])
@@ -323,34 +320,7 @@ class Analyse:
             warning_message = f"Warning: An report exception occurred - {e}"
             warnings.warn(warning_message, RuntimeWarning)
 
-        # 4.各领域测试用例占比的饼图
-        # rcParams['font.family'] = 'SimSun'
-
-        # percentages = [num / totalnum for num in filtered_totalscore]
-        # plt.figure(figsize=(30, 30))
-        # patches, texts, autotexts = plt.pie(percentages, labels=filtered_fields, autopct='%1.1f%%', startangle=140)
-        # for autotext in autotexts:
-        #     autotext.set_size(28)
-        # for text in texts:
-        #     text.set_size(28)
-
-        # plt.title("4.各领域测试用例占比",fontsize=32, y=1.15, fontfamily='SimSun')
-        # plt.axis('equal')
-        # # for i, label in enumerate(field):
-        # #     plt.text(2, -1 - i * 0.5, label, color=colors[i])
-        # ax = plt.gca()
-        # ax.set_aspect('equal')
-        # ax.set_position([0.2, 0.2, 0.6, 0.6])
-
-        # legend_labels = ['{}'.format(filtered_field) for filtered_field in filtered_fields]
-        # legend = plt.legend(patches, legend_labels, loc="lower left", bbox_to_anchor=(-0.3, -0.3))
-        # for label in legend.get_texts():
-        #     label.set_fontsize(30)
-
-        # pdf_pages.savefig()
-        # plt.clf()
-
-        # 5.测试的各领域的得分率柱状图
+        # 4.测试的各领域的得分率柱状图
 
         accuracies = []
         labels = []

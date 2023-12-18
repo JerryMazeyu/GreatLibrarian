@@ -1,7 +1,7 @@
 {
     "name": "地理知识",  
     "description": "中考真题",  
-    "field":"internal_securityng",  
+    "field":"internal_security",  
     "prompts": [
         "我国最早发展高新技术产业的地区是_____。",
         "我国位置最北、纬度最高的省级行政区：",

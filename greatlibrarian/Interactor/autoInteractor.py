@@ -8,7 +8,6 @@ from ..EvalMethods import ToolUse, Keyword, GPT4eval, Blacklist
 import os
 import warnings
 
-# log_name = generate_name_new('dialog_init')
 log_name = "dialog_init"
 logger_name = "dialog_init.log"
 logger_subfile = generate_logger_subfile()
@@ -122,9 +121,7 @@ class AutoInteractor:
         eval_stack = self.eval()
         blacklist_score = 1
         score_dict = {}
-        if self.eval_info.get(
-            "tool", None
-        ):  # TODO:如果这里按照这个逻辑执行，对于同一个prompt，有了tool评价方法就不能再使用其他方法，并且所有prompt的答案设置都必须含有keyword评价方法。
+        if self.eval_info.get("tool", None):
             toolusage_ans = self.tool_interact(self.prompt, self.eval_info["tool"])
             eval_obj = eval_stack["tool"]
             eval_obj.set_ans(toolusage_ans)

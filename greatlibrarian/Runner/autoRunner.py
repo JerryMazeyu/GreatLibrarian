@@ -23,7 +23,6 @@ class AutoRunner:
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
-        # llm = self.llm
         self.test_llm_name = self.test_llm.get_name()
         self.GPT4_eval_llm_name = self.GPT4_eval_llm.get_name()
         self.llm_intro = self.test_llm.get_intro()
