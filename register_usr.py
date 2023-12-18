@@ -102,7 +102,6 @@ class FinalScore2(FinalScore):
         """
         Used to define the final scoring calculation rules for each testcase.
         The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.
-
         """
         if self.score.get("blacklist") is not None and self.score["blacklist"] == 0.0:
             return 0.0

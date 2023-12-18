@@ -21,50 +21,45 @@
  
 如果需要加入LLM并用其`API Key`进行测试，需要先在`/GreatLibrarian/register_usr.py`中创建一个新的`LLMs`的子类（下文用`new_llm`指代这个新的子类的名称），并用`LLM_base.register_module("name of your LLM")`装饰器装饰，其方法需包括：  
 1. 包括LLM的 `API Key` 以及`name` 等信息的 `__init__` 函数（`self.llm_intro`可以选择设置成该LLM的背景介绍或为空，但是建议设置为LLM的详细背景介绍。）  
-2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其 **鲁棒性** ，以防 **响应故障** 等非工具箱内部原因导致的测试异常中止。**我们要求在API正常响应时返回字符串类型的回答，API异常时返回"API Problem"**。  
-3. 使用该LLM类设置基本信息（`name`,`API Key`等等）作为参数，创建一个`llm_cfg`    
-4. 使用创建的`llm_cfg`作为参数，用LLM_base.build（）创建一个LLM的实例  
-5.  以下是一个例子，该范例也在`register_usr.py`文件中，可以用于用户新增LLM类时的参考，请注意，**务必使用范例中的装饰器，参数为LLM的名称，类型是字符串；并且该类必须继承抽象类LLMs**。   
+2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其 **鲁棒性** ，以防 **响应故障** 等非工具箱内部原因导致的测试异常中止。**我们要求在API正常响应时返回字符串类型的回答，API异常时返回"API Problem"**。   
+3. 返回`llm_intro`的函数 `get_intro(self)`。  
+4. 返回`name`的函数`get_name(self)`。    
+
+创建完满足以上要求的`LLM`类后：  
+1. 使用该LLM类设置基本信息（`name`,`API Key`等等）作为参数，创建一个`llm_cfg`。     
+2. 使用创建的`llm_cfg`作为参数，用`LLM_base.build（）`创建一个`LLM`的实例。   
+以下是一个例子，该范例也在`register_usr.py`文件中，可以用于用户新增LLM类时的参考，请注意，**务必使用范例中的装饰器，参数为LLM的名称，类型是字符串；并且该类必须继承抽象类LLMs**。   
   
 
-        from greatlibrarian.Configs import ExampleConfig
-        from greatlibrarian.Utils import Registry
-        from greatlibrarian.Core import LLMs,FinalScore  
-        import dashscope
+    from greatlibrarian.Configs import ExampleConfig
+    from greatlibrarian.Utils import Registry
+    from greatlibrarian.Core import LLMs,FinalScore  
+    import dashscope
   
-        @LLM_base.register_module("name of your LLM")
-        class new_llm(LLMs):
-            def __init__(self,apikey,name,llm_intro) -> None:
-                self.apikey = apikey
-                self.name = name
-                self.llm_intro = llm_intro
-    
-            def get_intro(self) -> str:
-                return self.llm_intro
-    
-            def get_name(self) -> str:
-                return self.name
-    
-            def __call__(self, prompt: str) -> str:
-                dashscope.api_key = self.apikey
-                response = dashscope.Generation.call(
-                model = dashscope.Generation.Models.qwen_turbo,
-                prompt = prompt
-                )
+    @LLM_base.register_module("qwen_turbo")
+    class new_llm(LLMs):
+        def __init__(self, apikey, name, llm_intro) -> None:
+            self.apikey = apikey
+            self.name = name
+            self.llm_intro = llm_intro
 
-                if response:
-                    if response['output']:
-                        if response['output']['text']:
-                           return(response['output']['text'])
-                return('API Problem')
+        def get_intro(self) -> str:
+            return self.llm_intro
 
-        llm_cfg1 = dict(
-            type="name of your LLM",
-            apikey="your apikey",
-            name="qwen_turbo",
-            llm_intro="introduction of your LLM",
-        )
-        qw = LLM_base.build(llm_cfg1)
+        def get_name(self) -> str:
+            return self.name
+
+        def __call__(self, prompt: str) -> str:
+            dashscope.api_key = self.apikey
+            response = dashscope.Generation.call(
+                model=dashscope.Generation.Models.qwen_turbo, prompt=prompt
+            )
+
+            if response:
+                if response["output"]:
+                    if response["output"]["text"]:
+                        return response["output"]["text"]
+            return "API Problem"
     
 
 #### 测试用例配置  
@@ -79,7 +74,7 @@
     "prompts": [
         "我国最早发展高新技术产业的地区是_____。",
         "我国位置最北、纬度最高的省级行政区：",
-        "我国面积最大的省级行政区： ",
+        "我国面积最大的省级行政区：",
         "邻省最多的省级行政区：",
         "我国面积最大的平原： "],
     "evaluation": {
@@ -115,7 +110,7 @@
 
 在使用 `evaluation` 字典评分的过程中，使用字典中的每个方法打分后，用户可以选用一个分数结算方法 `FinalScore` ，用于根据所有评分方法的打分给该条测试用例确定一个最终得分。  
 
-目前工具箱中有一个默认的 `FinalScore` 方法，如果用户使用该默认方法，则不需要对配置文件`register_usr.py`作出任何改动   
+目前工具箱中有一个默认的`FinalScore`方法`FinalScore1`，如果用户使用该默认方法，则不需要对配置文件`register_usr.py`作出任何改动   
 
 如果用户需要自定义分数结算方法，需要在`register_usr.py`中创建一个新的`FinalScore`的子类，类中包含三种方法，其中 `__init__` 和 `final_score_info` 为 **固定配置** ，无需修改，用户需要自己定义。用户需要定义 `get_final_score` 方法，该方法利用 `self.score` 来计算 `final score` 并返回一个浮点数作为该条测试用例的最终得分。其中 `self.score` 是一个字典，字典内容格式如下所示： `{'keywords':0.5,'blacklist':1,'GPT4eval':1}` 。该字典的 **key为评分方法的字符串** ， **value为该方法对应的得分**。  
   
@@ -133,7 +128,6 @@
             """
             Used to define the final scoring calculation rules for each testcase.
             The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.
-
             """
             if self.score.get("blacklist") is not None and self.score["blacklist"] == 0.0:
                 return 0.0
@@ -180,6 +174,7 @@
   
   
 `ExampleConfig`是工具箱中定义用于确定本次测试所有配置的类，其定义如下：  
+
     class ExampleConfig():
         """ExampleConfig abstract class"""
 
@@ -195,7 +190,7 @@
   
     config = ExampleConfig(chat, qw)  
   
-这里的chat和qw都是配置好的LLM，在本示例中chat用作被测试的LLM，qw用于做GPT4_eval的LLM。这里选择FinalScore1，是工具箱默认使用的FinalScore子类，可省略。若需要选用用户自定义的FinalScore2，可以使用以下定义：  
+这里的`chat`和`qw`都是配置好的`LLM`，在本示例中`chat`用作被测试的`LLM`，`qw`用于做`GPT4_eval`的`LLM`。这里选择`FinalScore1`，是工具箱默认使用的`FinalScore`子类，可省略。若需要选用用户自定义的`FinalScore2`，可以使用以下定义：  
   
     config = ExampleConfig(chat, qw, FinalScore2)  
 
@@ -401,7 +396,7 @@ Windows (Powershell)：
                     return "API Problem"
 
 
-        class FinalScore1(FinalScore):
+        class FinalScore2(FinalScore):
             def __init__(self, score_dict, field, threadnum) -> None:
                 self.score = score_dict
                 self.field = field
@@ -446,7 +441,7 @@ Windows (Powershell)：
             llm_intro="intro1",
         )
         qw = LLM_base.build(llm_cfg1)
-        config1 = ExampleConfig(qw, qw, FinalScore1)
+        config1 = ExampleConfig(qw, qw, FinalScore2)
 
         llm_cfg2 = dict(
             type="wenxin",
@@ -456,7 +451,7 @@ Windows (Powershell)：
             llm_intro="intro2",
         )
         wx = LLM_base.build(llm_cfg2)
-        config2 = ExampleConfig(wx, qw, FinalScore1)
+        config2 = ExampleConfig(wx, qw)
 
         llm_cfg3 = dict(
             type="chatglm",
@@ -465,7 +460,7 @@ Windows (Powershell)：
             llm_intro="ChatGLMpro 是一款基于人工智能的聊天机器人，它基于清华大学 KEG 实验室与智谱 AI 于 2023 年联合训练的语言模型 GLM 开发而成。\n\nChatGLMpro 具有强大的自然语言处理能力和丰富的知识库，能够理解和回应各种类型的问题和指令，包括但不限于文本生成、问答、闲聊、翻译、推荐等领域。\n\n相比于其他聊天机器人，ChatGLMpro 具有以下优势：\n\n高性能的语言模型：ChatGLMpro 基于 GLM 模型，拥有超过 1300 亿参数，能够高效地处理和生成自然语言文本。\n\n丰富的知识库：ChatGLMpro 拥有涵盖多个领域的知识库，包括科技、历史、文化、娱乐等方面，能够回应各种类型的问题。\n\n强大的问答能力：ChatGLMpro 具有出色的问答能力，能够理解用户的问题并给出准确的回答。\n\n个性化交互：ChatGLMpro 能够根据用户的语气和兴趣进行个性化交互，让用户感受到更加自然的对话体验。\n\n开放的接口：ChatGLMpro 还提供了开放的接口，方便其他应用程序和企业将其集成到自己的系统中。\n\n总的来说，ChatGLMpro 是一款高性能、智能化、多功能的聊天机器人，能够为企业和个人提供高效的智能化服务。总的来说，通义千问是一个智能、灵活、友好的AI助手，可以帮助用户解决各种问题和需求。\n\n",
         )
         chat = LLM_base.build(llm_cfg3)
-        config3 = ExampleConfig(chat, qw, FinalScore1)
+        config3 = ExampleConfig(chat, qw)
 
         config = config3
   
@@ -473,5 +468,6 @@ Windows (Powershell)：
   
 **注意事项：**  
 1.`from greatlibrarian.Core import LLMs, FinalScore`、`from greatlibrarian.Configs import ExampleConfig`、`from greatlibrarian.Utils import Registry`是配置文件中不可缺少的引用。其他引用用户可以根据自身的需求增加。    
-2. `LLM_base = Registry("LLMs")`以及定义LLM类前的`@LLM_base.register_module("qwen_turbo")`为必要配置，用于完成用户定义的LLM的注册。  
+2. `LLM_base = Registry("LLMs")`以及定义`LLM`类前的`@LLM_base.register_module("qwen_turbo")`为必要配置，用于完成用户定义的LLM的注册。  
 3. 定义本次测试的`config`时注意前文中展示的`ExampleConfig`的定义以及参数的默认值。
+4. 对于`FinalScore`方法的选择，若需要使用默认的`FinalScore1`，在`config`的定义中可以省略`FinalScore`（默认值为`FinalScore1`），若需要自行定义，可以参考示例中的`FinalScore2`和`config1`的定义。
