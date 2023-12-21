@@ -18,6 +18,7 @@ class AutoRunner:
     def __init__(self, cfg, path, project_name) -> None:
         self.path = path
         self.cfg = cfg
+        self.logger_path = ''
         self.testproject_num = 0
         self.project_name = project_name
         load_from_cfg(self, cfg)
@@ -73,8 +74,7 @@ class AutoRunner:
                     interactor = interactor_cls(testcase, methodnum, threadnum)
                     if interactor is not None:
                         interactor.run()
-            global logger_path
-            logger_path = interactor.get_logger_path()
+            self.logger_path = interactor.get_logger_path()
 
         method_num = self.selectmethod()
         threadnum = 1
@@ -106,8 +106,8 @@ class AutoRunner:
                     f"目前的进度为：{completed_futures_count}/{len(futures)}"
                 )
 
-        self.mk_clean_log(logger_path)
-        self.analyse(logger_path)
+        self.mk_clean_log(self.logger_path)
+        self.analyse(self.logger_path)
         record_project_info(
             self.project_name,
             self.test_llm_name,
@@ -116,7 +116,7 @@ class AutoRunner:
             self.testproject_num,
         )
 
-    def analyse(self, logger_path) -> None:
+    def analyse(self,logger_path) -> None:
         """
         The analysis module controls the function,
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation

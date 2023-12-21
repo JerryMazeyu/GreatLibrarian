@@ -100,7 +100,7 @@ class Analyse:
     def report(self, plotinfo, log_path, llm_intro) -> None:
         """
         log_path: The path of the dialog_init.log
-        logger_path: A global variable, the path to the analyse.log
+        logger_path: the path to the analyse.log
         """
         field = plotinfo[0]
         score_get = plotinfo[1]

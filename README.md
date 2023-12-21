@@ -27,39 +27,39 @@
 
 创建完满足以上要求的`LLM`类后：  
 1. 使用该LLM类设置基本信息（`name`,`API Key`等等）作为参数，创建一个`llm_cfg`。     
-2. 使用创建的`llm_cfg`作为参数，用`LLM_base.build（）`创建一个`LLM`的实例。   
+2. 使用创建的`llm_cfg`作为参数，用`LLM_base.build()`创建一个`LLM`的实例。   
 以下是一个例子，该范例也在`register_usr.py`文件中，可以用于用户新增LLM类时的参考，请注意，**务必使用范例中的装饰器，参数为LLM的名称，类型是字符串；并且该类必须继承抽象类LLMs**。   
   
-
-    from greatlibrarian.Configs import ExampleConfig
-    from greatlibrarian.Utils import Registry
-    from greatlibrarian.Core import LLMs,FinalScore  
-    import dashscope
+    
+        from greatlibrarian.Configs import ExampleConfig
+        from greatlibrarian.Utils import Registry
+        from greatlibrarian.Core import LLMs,FinalScore  
+        import dashscope
   
-    @LLM_base.register_module("qwen_turbo")
-    class new_llm(LLMs):
-        def __init__(self, apikey, name, llm_intro) -> None:
-            self.apikey = apikey
-            self.name = name
-            self.llm_intro = llm_intro
+        @LLM_base.register_module("qwen_turbo")
+        class new_llm(LLMs):
+            def __init__(self, apikey, name, llm_intro) -> None:
+                self.apikey = apikey
+                self.name = name
+                self.llm_intro = llm_intro
 
-        def get_intro(self) -> str:
-            return self.llm_intro
+            def get_intro(self) -> str:
+                return self.llm_intro
+    
+            def get_name(self) -> str:
+                return self.name
 
-        def get_name(self) -> str:
-            return self.name
+            def __call__(self, prompt: str) -> str:
+                dashscope.api_key = self.apikey
+                response = dashscope.Generation.call(
+                    model=dashscope.Generation.Models.qwen_turbo, prompt=prompt
+                )
 
-        def __call__(self, prompt: str) -> str:
-            dashscope.api_key = self.apikey
-            response = dashscope.Generation.call(
-                model=dashscope.Generation.Models.qwen_turbo, prompt=prompt
-            )
-
-            if response:
-                if response["output"]:
-                    if response["output"]["text"]:
-                        return response["output"]["text"]
-            return "API Problem"
+                if response:
+                    if response["output"]:
+                        if response["output"]["text"]:
+                            return response["output"]["text"]
+                return "API Problem"
     
 
 #### 测试用例配置  
@@ -114,51 +114,51 @@
 
 如果用户需要自定义分数结算方法，需要在`register_usr.py`中创建一个新的`FinalScore`的子类，类中包含三种方法，其中 `__init__` 和 `final_score_info` 为 **固定配置** ，无需修改，用户需要自己定义。用户需要定义 `get_final_score` 方法，该方法利用 `self.score` 来计算 `final score` 并返回一个浮点数作为该条测试用例的最终得分。其中 `self.score` 是一个字典，字典内容格式如下所示： `{'keywords':0.5,'blacklist':1,'GPT4eval':1}` 。该字典的 **key为评分方法的字符串** ， **value为该方法对应的得分**。  
   
-    from greatlibrarian.Core import FinalScore
-    from greatlibrarian.Configs import ExampleConfig
-    from greatlibrarian.Utils import Registry
+        from greatlibrarian.Core import FinalScore
+        from greatlibrarian.Configs import ExampleConfig
+        from greatlibrarian.Utils import Registry
 
-    class FinalScore2(FinalScore):
-        def __init__(self, score_dict, field, threadnum) -> None:
-            self.score = score_dict
-            self.field = field
-            self.threadnum = threadnum
+        class FinalScore2(FinalScore):
+            def __init__(self, score_dict, field, threadnum) -> None:
+                self.score = score_dict
+                self.field = field
+                self.threadnum = threadnum
 
-        def get_final_score(self) -> float:
-            """
-            Used to define the final scoring calculation rules for each testcase.
-            The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.
-            """
-            if self.score.get("blacklist") is not None and self.score["blacklist"] == 0.0:
-                return 0.0
-            if (
-                self.score.get("keywords") is not None
-                and self.score.get("GPT4_eval") is not None
-            ):
-                if abs(self.score["keywords"] - self.score["GPT4_eval"]) <= 0.5:
-                    return float(
-                        "%.3f" % ((self.score["keywords"] + self.score["GPT4_eval"]) / 2)
-                    )
-                else:
-                    return "Human Evaluation"
-            if self.score.get("keywords") is not None:
-                return self.score["keywords"]
-            if self.score.get("GPT4_eval") is not None:
-                return self.score["GPT4_eval"]
+            def get_final_score(self) -> float:
+                """
+                Used to define the final scoring calculation rules for each testcase.
+                The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.
+                """
+                if self.score.get("blacklist") is not None and self.score["blacklist"] == 0.0:
+                    return 0.0
+                if (
+                    self.score.get("keywords") is not None
+                    and self.score.get("GPT4_eval") is not None
+                ):
+                    if abs(self.score["keywords"] - self.score["GPT4_eval"]) <= 0.5:
+                        return float(
+                            "%.3f" % ((self.score["keywords"] + self.score["GPT4_eval"]) / 2)
+                        )
+                    else:
+                        return "Human Evaluation"
+                if self.score.get("keywords") is not None:
+                    return self.score["keywords"]
+                if self.score.get("GPT4_eval") is not None:
+                    return self.score["GPT4_eval"]
 
-        def final_score_info(self) -> str:
-            return (
-                self.get_final_score(),
-                f"The final score of this testcase is {self.get_final_score()}, in {self.field} field."
-                + f"from thread {self.threadnum}",
-                self.get_final_score(),
-            )
+            def final_score_info(self) -> str:
+                return (
+                    self.get_final_score(),
+                    f"The final score of this testcase is {self.get_final_score()}, in {self.field} field."
+                    + f"from thread {self.threadnum}",
+                    self.get_final_score(),
+                )
 
   
 
 工具箱还配置了每一种评价方法内部的（`keywords、blacklist、GPT4eval`）的 **不同评分细则** 。  
 
-对于一条测试用例（prompt）以及同样的答案（`evaluation`字典）来说，可以因为`evaluation`字典中每个评分方法的不同 **评分细则** 而获得不同的得分。
+对于一条测试用例（`prompt`）以及同样的答案（`evaluation`字典）来说，可以因为`evaluation`字典中每个评分方法的不同 **评分细则** 而获得不同的得分。
 
 比如：对于一个回答“是的，**中国**是一个和谐富强的国家。”，答案中的`keywords`设置为：['中国','亚洲']，此时工具箱中对于`keywords`这个评价方法有两种评分细则，分别如下：   
 
@@ -170,7 +170,7 @@
 在工具箱中，目前每种 **评价方法** 都至少有一种 **评分细则** 。想要使用这些评分细则，用户只需要在工具箱 **开始自动化测评前** 根据提示输入评分细则的序号，即可完成每种评价方法对应的评分细则的选用。  
   
   
-#### config定义  
+####config定义  
   
   
 `ExampleConfig`是工具箱中定义用于确定本次测试所有配置的类，其定义如下：  
@@ -200,7 +200,7 @@
    
 做好所有测前配置后，工具箱可以开始进行自动化的测评。测评的过程主要包括三个工作： 
  
-1. **自动的与当前测试的LLM进行交互**。工具箱会将所有需要用于测试的`json`文件中的prompt通过`API Key`发送给LLM，然后接收并记录LLM的回应。在本工具箱中，此过程做了并行化处理，提高了交互的效率。
+1. **自动的与当前测试的LLM进行交互**。工具箱会将所有需要用于测试的`json`文件中的`prompts`通过`API Key`发送给LLM，然后接收并记录LLM的回应。在本工具箱中，此过程做了并行化处理，提高了交互的效率。
 2. **根据`json`文件中提供的`evaluation`进行评分**。对于每一条测试用例，工具箱会首先使用`evaluation`中的所有评价方法评分，然后根据用户选择的`FinalScore`方法进行最终分数的评判。
 3. **记录交互日志**。对于每一条测试用例，工具箱都会记录其交互的记录，记录的具体内容如下：  
 
@@ -211,7 +211,7 @@
 >2023-11-10 16:03:22 - INFO - The model gets 1.0 points in this testcase by keywords method, in common_knowledge field.from thread 2  
 >2023-11-10 16:03:22 - INFO - The final score of this testcase is 1.0, in common_knowledge field.from thread 2   
 
-日志中的**To LLM:**后记录的是本次对话所使用的**问题（prompt）** ；**To User:**后记录的是LLM对于该条问题（prompt）的**回答**；  **keyword:D**指的是该回答包含了 **keywords**评价方法中的 **关键字“D”**；最后两行内容是**本条测试用例的得分信息以及问题的领域**。  
+日志中的**To LLM:**后记录的是本次对话所使用的**问题（`prompt`）** ；**To User:**后记录的是LLM对于该条问题（`prompt`）的**回答**；  **keyword:D**指的是该回答包含了 **keywords**评价方法中的 **关键字“D”**；最后两行内容是**本条测试用例的得分信息以及问题的领域**。  
   
 **由于并行会导致日志记录顺序的混乱，我们在工具箱中选择先生成初始日志`dialog_init.log`，然后根据线程号来整理日志，生成一个有序且只包含有用信息（问题、答案、评分信息及问题领域、评分依据等）的正式日志`dialog.log`。上述日志段落中，每句话结尾的“from thread 2”是为了方便整理日志所添加，正式日志`dialog.log`中不会包含该信息。**  
   
@@ -406,7 +406,6 @@ Windows (Powershell)：
                 """
                 Used to define the final scoring calculation rules for each testcase.
                 The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.
-
                 """
                 if self.score.get("blacklist") is not None and self.score["blacklist"] == 0.0:
                     return 0.0
