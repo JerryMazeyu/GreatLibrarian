@@ -7,6 +7,7 @@ import textwrap
 from matplotlib import rcParams
 import warnings
 from typing import Tuple, List, Union
+import re
 
 
 # log_name = generate_name_new('analyse')
@@ -124,7 +125,7 @@ class Analyse:
 
         plt.rcParams["font.size"] = 18
 
-        pdf_name = "report.pdf"
+        pdf_name = self.generate_new_name(report_path, "report")
         pdf_file_path = os.path.join(report_path, pdf_name)
 
         pdf_pages = PdfPages(pdf_file_path)
@@ -409,3 +410,14 @@ class Analyse:
             intro += "\n\n本次对该大语言模型的测试涉及多个领域的问题，测试的结果和分析如下文所示。\n\n"
             intro += example_txt
         return intro
+
+    def generate_new_name(self, folder_path, base_name):
+        pdf_files = [f for f in os.listdir(folder_path) if f.endswith(".pdf")]
+        version_numbers = [
+            int(re.search(rf"{base_name}-v(\d+).pdf", f).group(1))
+            for f in pdf_files
+            if re.match(rf"{base_name}-v\d+.pdf", f)
+        ]
+        max_version = max(version_numbers) if version_numbers else 0
+        new_name = f"{base_name}-v{max_version + 1}.pdf"
+        return new_name
