@@ -1,4 +1,3 @@
-from ..Utils import add_logger_name_cls, generate_logger_subfile
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import os
@@ -9,23 +8,26 @@ from matplotlib import rcParams
 import warnings
 from typing import Tuple, List, Union
 
+
 # log_name = generate_name_new('analyse')
-log_name = "analyse"
-logger_name = "analyse.log"
-logger_subfile = generate_logger_subfile()
-add_logger_to_class = add_logger_name_cls(
-    log_name, os.path.join("Logs", logger_subfile)
-)
-logger_path = os.path.join(os.path.join("Logs", logger_subfile))
+# log_name = "analyse"
+# logger_name = "analyse.log"
+# if Test_ID == '':
+#     logger_subfile = generate_logger_subfile()
+# else:
+#     logger_subfile = Test_ID
+# add_logger_to_class = add_logger_name_cls(
+#     log_name, os.path.join("Logs", logger_subfile)
+# )
+# logger_path = os.path.join(os.path.join("Logs", logger_subfile))
 
 
-@add_logger_to_class
+# @add_logger_to_class
 class Analyse:
     """A class to do the analysis after the interaction."""
 
     def __init__(self, score_dict) -> None:
         self.score_dict = score_dict
-        self.logger_path = logger_path
 
     def analyse(
         self,
@@ -97,7 +99,7 @@ class Analyse:
         print(conclude_info)
         return (get_score_info, conclude_info, plotinfo)
 
-    def report(self, plotinfo, log_path, llm_intro) -> None:
+    def report(self, plotinfo, llm_intro, log_path, report_path) -> None:
         """
         log_path: The path of the dialog_init.log
         logger_path: the path to the analyse.log
@@ -123,7 +125,7 @@ class Analyse:
         plt.rcParams["font.size"] = 18
 
         pdf_name = "report.pdf"
-        pdf_file_path = os.path.join(logger_path, pdf_name)
+        pdf_file_path = os.path.join(report_path, pdf_name)
 
         pdf_pages = PdfPages(pdf_file_path)
 

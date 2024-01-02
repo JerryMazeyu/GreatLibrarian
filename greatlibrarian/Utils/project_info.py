@@ -2,15 +2,26 @@ from ..Utils import generate_logger_subfile
 import os
 import json
 
-json_name = "project_info"
-logger_subfile = generate_logger_subfile()
-file_path = os.path.join("Logs", logger_subfile)
-json_path = os.path.join(file_path, f"{json_name}.json")
+
+# json_name = "project_info"
+# if Test_ID == '':
+#     logger_subfile = generate_logger_subfile()
+# else:
+#     logger_subfile = Test_ID
+# file_path = os.path.join("Logs", logger_subfile)
+# json_path = os.path.join(file_path, f"{json_name}.json")
 
 
 def record_project_info(
-    project_name, test_llm_name, GPT4_eval_llm_name, testcase_path, testproject_num
+    project_name,
+    test_llm_name,
+    GPT4_eval_llm_name,
+    testcase_path,
+    testproject_num,
+    Test_name,
+    file_path,
 ) -> None:
+    json_path = os.path.join(file_path, "project_info.json")
     if not os.path.exists(json_path):
         os.makedirs(os.path.dirname(json_path), exist_ok=True)
 
@@ -20,6 +31,7 @@ def record_project_info(
         "GPT4_eval_llm_name": GPT4_eval_llm_name,
         "testcase_path": testcase_path,
         "testproject_num": testproject_num,
+        "Test_name": Test_name,
     }
 
     with open(json_path, "w") as json_file:

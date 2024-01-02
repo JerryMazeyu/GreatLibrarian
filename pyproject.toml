@@ -20,6 +20,7 @@ click = "^8.1.7"
 
 [tool.poetry.scripts]
 gltest = "greatlibrarian.run:main"
+glupdate = "greatlibrarian.run:update"
 
 [build-system]
 requires = ["poetry-core"]

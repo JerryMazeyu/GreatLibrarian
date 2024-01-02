@@ -5,7 +5,9 @@ import datetime
 import contextlib
 import functools
 import inspect
-from typing import Callable, Type
+from typing import Callable
+import inspect
+from functools import partial
 
 
 def generate_name() -> str:
@@ -492,7 +494,38 @@ def add_logger(logger_name, logger_file) -> Callable:
     return decorate
 
 
-def add_logger_name_cls(logger_name, logger_file) -> Callable[[Type], Type]:
+def apply_decorator_to_all_methods(decorator, cls):
+    """
+    Apply a given decorator to all methods of a class.
+
+    Parameters:
+    decorator: The decorator to be applied.
+    cls: The class to which the decorator will be applied.
+    """
+    for attr_name, attr_value in inspect.getmembers(cls):
+        if inspect.isfunction(attr_value):
+            decorated_func = apply_decorator_to_func(
+                decorater=decorator, func=attr_value
+            )
+            setattr(cls, attr_name, decorated_func)
+    return cls
+
+
+#     return add_logger_to_class1
+
+
+def apply_decorator_to_func(decorater, func) -> Callable:
+    """
+    Apply a given decorator to a function.
+
+    Parameters:
+    decorator: The decorator to be applied.
+    cls: The function to which the decorator will be applied.
+    """
+    decorated_function = decorater(func)
+    return decorated_function
+
+    # def add_logger_name_cls(logger_name, logger_file) -> Callable[[Type], Type]:
     def add_logger_to_class(cls):
         """
         A decorator to add logging functionality to all methods of a class.
@@ -532,3 +565,7 @@ def add_logger_name_cls(logger_name, logger_file) -> Callable[[Type], Type]:
         return cls
 
     return add_logger_to_class
+
+
+def setup(logger_name, logger_file) -> Callable:
+    return partial(add_logger, logger_name, logger_file)
