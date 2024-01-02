@@ -7,7 +7,15 @@ import concurrent.futures
 from tqdm import tqdm
 from ..EvalMethods import ToolUse, Keyword, GPT4eval, Blacklist
 import threading
-from ..Utils import clean_log_dialog, to_int, record_project_info, record_process
+from ..Utils import (
+    clean_log_dialog,
+    to_int,
+    record_project_info,
+    record_process,
+    setup,
+    apply_decorator_to_func,
+    generate_logger_subfile,
+)
 from ..Analyser import Analyse, Getinfo
 from ..FinalScore import FinalScore1
 
@@ -15,12 +23,15 @@ from ..FinalScore import FinalScore1
 class AutoRunner:
     """A class responsible for orchestrating the overall program operation"""
 
-    def __init__(self, cfg, path, project_name) -> None:
+    def __init__(self, cfg, path, project_name, test_id, test_name) -> None:
         self.path = path
         self.cfg = cfg
-        self.logger_path = ''
+        self.logger_path = ""
+        self.log_path = ""
         self.testproject_num = 0
         self.project_name = project_name
+        self.Test_name = test_name
+        self.test_id = test_id
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
@@ -62,16 +73,31 @@ class AutoRunner:
                 jsonobj = json.load(f)
                 self.testprojects.append(TestProject(jsonobj))
 
+    def set_log_file(self):
+        if self.test_id == "":
+            self.log_path = os.path.join("Logs", generate_logger_subfile())
+        else:
+            self.log_path = os.path.join("Logs", self.test_id)
+
     def run(self) -> None:
         """
         A function enabling parallel execution for each test project.
         """
+        self.set_log_file()
         lock = threading.Lock()
 
         def run_interactor(testproj, interactor_cls, cfg, methodnum, threadnum):
             for testcase in testproj.get_cases(cfg):
                 with lock:
-                    interactor = interactor_cls(testcase, methodnum, threadnum)
+                    interactor = interactor_cls(
+                        testcase, methodnum, threadnum, self.log_path
+                    )
+                    dec = setup(logger_name="dialog_init", logger_file=self.log_path)
+                    # interactor = apply_decorator_to_all_methods(dec(), interactor)
+                    interactor.run = apply_decorator_to_func(dec(), interactor.run)
+                    interactor.base_interact = apply_decorator_to_func(
+                        dec(), interactor.base_interact
+                    )
                     if interactor is not None:
                         interactor.run()
             self.logger_path = interactor.get_logger_path()
@@ -95,7 +121,9 @@ class AutoRunner:
                 futures.append(future)
 
             completed_futures_count = 0
-            record_process(f"目前的进度为：{completed_futures_count}/{len(futures)}")
+            record_process(
+                f"目前的进度为：{completed_futures_count}/{len(futures)}", self.log_path
+            )
 
             for future in tqdm(
                 concurrent.futures.as_completed(futures), total=len(futures)
@@ -103,30 +131,42 @@ class AutoRunner:
                 result = future.result()
                 completed_futures_count += 1
                 record_process(
-                    f"目前的进度为：{completed_futures_count}/{len(futures)}"
+                    f"目前的进度为：{completed_futures_count}/{len(futures)}",
+                    self.log_path,
                 )
-
-        self.mk_clean_log(self.logger_path)
-        self.analyse(self.logger_path)
+        dec = setup(logger_name="dialog", logger_file=self.log_path)
+        mk_clean_log = apply_decorator_to_func(dec(), self.mk_clean_log)
+        mk_clean_log(os.path.join(self.log_path, "dialog_init.log"))
+        self.analyse(os.path.join(self.log_path, "dialog_init.log"))
         record_project_info(
             self.project_name,
             self.test_llm_name,
             self.GPT4_eval_llm_name,
             self.path,
             self.testproject_num,
+            self.Test_name,
+            self.log_path,
         )
 
-    def analyse(self,logger_path) -> None:
+    def analyse(self, logger_path) -> None:
         """
         The analysis module controls the function,
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation
         """
-
-        score_dict = Getinfo(logger_path).get_eval_result()
-        print(score_dict)
+        dec = setup(logger_name="analyse", logger_file=self.log_path)
+        score_dict = Getinfo(
+            os.path.join(self.log_path, "dialog_init.log")
+        ).get_eval_result()
         analyse = Analyse(score_dict)
+        analyse.analyse = apply_decorator_to_func(dec(), analyse.analyse)
+        # analyse = apply_decorator_to_all_methods(dec(), analyse)
         mean_score_info, sum_info, plotinfo = analyse.analyse()
-        analyse.report(plotinfo, logger_path, self.llm_intro)
+        analyse.report(
+            plotinfo,
+            self.llm_intro,
+            os.path.join(self.log_path, "dialog_init.log"),
+            self.log_path,
+        )
 
     def selectmethod(self) -> list[int]:
         """

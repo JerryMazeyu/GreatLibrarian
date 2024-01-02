@@ -1,32 +1,23 @@
 from ..Utils import (
-    add_logger_name_cls,
     load_from_cfg,
-    generate_logger_subfile,
     human_evaluation,
+    setup,
+    apply_decorator_to_func,
 )
 from ..EvalMethods import ToolUse, Keyword, GPT4eval, Blacklist
-import os
 import warnings
 
-log_name = "dialog_init"
-logger_name = "dialog_init.log"
-logger_subfile = generate_logger_subfile()
-add_logger_to_class = add_logger_name_cls(
-    log_name, os.path.join("Logs", logger_subfile)
-)
-logger_path = os.path.join(os.path.join("Logs", logger_subfile), logger_name)
 
-
-@add_logger_to_class
 class AutoInteractor:
     """A class to keep the interaction between the LLM and GreatLibrarian"""
 
-    def __init__(self, testcase, methodnum, threadnum) -> None:
+    def __init__(self, testcase, methodnum, threadnum, logger_path="") -> None:
         load_from_cfg(self, testcase)
         # self.recoders = []
         self.methodnum = methodnum
         self.threadnum = threadnum
         self.logger_path = logger_path
+        self.human_evaluation = human_evaluation
 
     def eval(self) -> dict:
         """
@@ -173,7 +164,11 @@ class AutoInteractor:
                 "field": self.field,
                 "threadnum": self.threadnum,
             }
-            human_evaluation(human_eval)
+            dec = setup(logger_name="human_evaluation", logger_file=self.logger_path)
+            self.human_evaluation = apply_decorator_to_func(
+                dec(), self.human_evaluation
+            )
+            self.human_evaluation(human_eval)
         if final_score == 0:
             if "blacklist" in self.eval_info:
                 print(
