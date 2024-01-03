@@ -19,7 +19,7 @@
   
 #### LLM配置  
  
-如果需要加入LLM并用其`API Key`进行测试，需要先在`/GreatLibrarian/register_usr.py`中创建一个新的`LLMs`的子类（下文用`new_llm`指代这个新的子类的名称），并用`LLM_base.register_module("name of your LLM")`装饰器装饰，其方法需包括：  
+如果需要加入LLM并用其`API Key`进行测试，需要先在`/GreatLibrarian/register_usr.py`中创建一个新的`LLMs`的子类（下文用`New_LLM`指代这个新的子类的名称），并用`LLM_base.register_module("name of your LLM")`装饰器装饰，其方法需包括：  
 1. 包括LLM的 `API Key` 以及`name` 等信息的 `__init__` 函数（`self.llm_intro`可以选择设置成该LLM的背景介绍或为空，但是建议设置为LLM的详细背景介绍）  
 2. 输入为字符串格式的`prompt`，输出为字符串格式的该LLM的对于该`prompt`的回答的 `__call__` 函数。在定义该 `call` 函数时，请尽量保证其 **鲁棒性** ，以防 **响应故障** 等非工具箱内部原因导致的测试异常中止。**我们要求在API正常响应时返回字符串类型的回答，API异常时返回"API Problem"**。   
 3. 返回`llm_intro`的函数 `get_intro(self)`。  
@@ -37,7 +37,7 @@
         import dashscope
   
         @LLM_base.register_module("qwen_turbo")
-        class New_llm(LLMs):
+        class New_LLM(LLMs):
             def __init__(self, apikey, name, llm_intro) -> None:
                 self.apikey = apikey
                 self.name = name
@@ -326,7 +326,7 @@ Windows (Powershell)：
 
 
         @LLM_base.register_module("qwen_turbo")
-        class New_llm1(LLMs):
+        class New_LLM1(LLMs):
             def __init__(self, apikey, name, llm_intro) -> None:
                 self.apikey = apikey
                 self.name = name
@@ -352,7 +352,7 @@ Windows (Powershell)：
 
 
         @LLM_base.register_module("wenxin")
-        class New_llm2(LLMs):
+        class New_LLM2(LLMs):
             def __init__(self, ak, sk, name, llm_intro) -> None:
                 self.ak = ak
                 self.sk = sk
@@ -380,7 +380,7 @@ Windows (Powershell)：
 
 
         @LLM_base.register_module("chatglm")
-        class New_llm3(LLMs):
+        class New_LLM3(LLMs):
             def __init__(self, apikey, name, llm_intro) -> None:
                 self.apikey = apikey
                 self.name = name

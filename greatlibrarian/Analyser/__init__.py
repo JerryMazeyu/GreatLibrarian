@@ -1,2 +1,2 @@
-from .getInfo import Getinfo
+from .getInfo import GetInfo
 from .analyse import Analyse

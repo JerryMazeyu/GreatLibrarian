@@ -16,7 +16,7 @@ from ..Utils import (
     apply_decorator_to_func,
     generate_logger_subfile,
 )
-from ..Analyser import Analyse, Getinfo
+from ..Analyser import Analyse, GetInfo
 from ..FinalScore import FinalScore1
 
 
@@ -154,7 +154,7 @@ class AutoRunner:
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation
         """
         dec = setup(logger_name="analyse", logger_file=self.log_path)
-        score_dict = Getinfo(
+        score_dict = GetInfo(
             os.path.join(self.log_path, "dialog_init.log")
         ).get_eval_result()
         analyse = Analyse(score_dict)

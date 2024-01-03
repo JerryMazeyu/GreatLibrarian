@@ -2,7 +2,7 @@ from cryptography.fernet import Fernet
 from typing import Tuple
 
 
-class log_encrypt:
+class Log_Encrypt:
     """A class to encrypt and decrypt the logs."""
 
     def __init__(self, logpath) -> None:
