@@ -42,7 +42,7 @@ def main(testcase_path, config_path, project_name, test_id, test_name) -> None:
 )
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
 def update(config_path, test_id) -> None:
-    if os.path.exists(os.path.join('Logs', test_id)):
+    if os.path.exists(os.path.join("Logs", test_id)):
         spec = importlib.util.spec_from_file_location("conf", config_path)
         conf_module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(conf_module)
@@ -50,7 +50,7 @@ def update(config_path, test_id) -> None:
         runner = UpdateRunner(config, test_id)
         runner.run()
     else:
-        error_message = 'Files not Found! Please use gltest before glupdate.'
+        error_message = "Files not Found! Please use gltest before glupdate."
         raise Warning(error_message)
 
 

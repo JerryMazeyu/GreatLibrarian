@@ -8,7 +8,7 @@ from ..Utils import (
     setup,
     apply_decorator_to_func,
 )
-from ..Analyser import Analyse, Getinfo
+from ..Analyser import Analyse, GetInfo
 
 
 class UpdateRunner:
@@ -56,12 +56,9 @@ class UpdateRunner:
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation
         """
         dec = setup(logger_name="analyse", logger_file=self.log_dir)
-        score_dict = Getinfo(
-            os.path.join(self.log_dir, "dialog_init.log")
-        ).get_eval_result()
         analyse = Analyse(score_dict)
         analyse.analyse = apply_decorator_to_func(dec(), analyse.analyse)
-        score_dict = Getinfo(logger_path).get_eval_result()
+        score_dict = GetInfo(logger_path).get_eval_result()
         mean_score_info, sum_info, plotinfo = analyse.analyse()
         analyse.report(
             plotinfo, self.llm_intro, logger_path, os.path.join("Logs", self.Test_ID)

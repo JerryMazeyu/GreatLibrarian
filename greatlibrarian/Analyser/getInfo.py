@@ -4,7 +4,7 @@ import warnings
 from typing import Tuple, Union, Dict, List
 
 
-class Getinfo:
+class GetInfo:
     """A class to extract information from dialog."""
 
     def __init__(
