@@ -8,6 +8,7 @@ import inspect
 from typing import Callable
 import inspect
 from functools import partial
+import time
 
 
 def generate_name() -> str:
@@ -344,23 +345,23 @@ def generate_logger_subfile() -> str:
     subfilename = "Test" + subfilenum
     logger_file = os.path.join("Logs", subfilename)
 
-    analyse_exist = os.path.exists(os.path.join(logger_file, "analyse.log"))
-    dialog_exist = os.path.exists(os.path.join(logger_file, "dialog.log"))
-    dialog_init_exist = os.path.exists(os.path.join(logger_file, "dialog_init.log"))
+    # analyse_exist = os.path.exists(os.path.join(logger_file, "analyse.log"))
+    # dialog_exist = os.path.exists(os.path.join(logger_file, "dialog.log"))
+    # dialog_init_exist = os.path.exists(os.path.join(logger_file, "dialog_init.log"))
 
     while (
         os.path.exists(logger_file)
-        and analyse_exist
-        and dialog_exist
-        and dialog_init_exist
+        # and analyse_exist
+        # and dialog_exist
+        # and dialog_init_exist
     ):
         subfilenum = str(int(subfilenum) + 1)
         subfilename = "Test" + subfilenum
         logger_file = os.path.join("Logs", subfilename)
 
-        analyse_exist = os.path.exists(os.path.join(logger_file, "analyse.log"))
-        dialog_exist = os.path.exists(os.path.join(logger_file, "dialog.log"))
-        dialog_init_exist = os.path.exists(os.path.join(logger_file, "dialog_init.log"))
+        # analyse_exist = os.path.exists(os.path.join(logger_file, "analyse.log"))
+        # dialog_exist = os.path.exists(os.path.join(logger_file, "dialog.log"))
+        # dialog_init_exist = os.path.exists(os.path.join(logger_file, "dialog_init.log"))
 
     return subfilename
 
@@ -476,7 +477,7 @@ def add_logger(logger_name, logger_file) -> Callable:
         logger_name = generate_name()
     if not logger_file:
         logger_file = "Logs"
-
+    time.sleep(2)
     if not os.path.exists(logger_file):
         os.makedirs(logger_file)
 

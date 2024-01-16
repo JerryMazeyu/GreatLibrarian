@@ -4,7 +4,7 @@ from ..Utils import (
     setup,
     apply_decorator_to_func,
 )
-from ..EvalMethods import ToolUse, Keyword, GPT4eval, Blacklist
+from ..EvalMethods import ToolUse, Keyword, LLMEval, Blacklist
 import warnings
 
 
@@ -29,7 +29,7 @@ class AutoInteractor:
             "tool": ToolUse,
             "keywords": Keyword,
             "blacklist": Blacklist,
-            "GPT4eval": GPT4eval,
+            "LLMEval": LLMEval,
         }
         eval_stack = {}
         for key in eval_dict.keys():
@@ -68,6 +68,43 @@ class AutoInteractor:
                 ans_list.append("default_value")
 
         return ans_list
+
+    # def base_interact(self, prompt) -> list:
+    #     """
+    #     A function to create the interaction between the LLM and the user.
+    #     It will record the dialogue in the log file and the answers to prompts sent to LLM from the LLM will be saved in a list called ans_list.
+    #     In this method, the dialogue mainly contains the propmts that the user sends to LLM, and the response from the LLM.
+    #     """
+    #     # recoder = Recoder()
+    #     # recoder.ind = ind
+    #     print(f"---------- New Epoch ---------- from thread {self.threadnum}")
+    #     ans_list = []
+    #     for ind, pr in enumerate(prompt):
+    #         # recoder.dialoge[ind] = ''
+    #         i = 0
+    #         history = []
+    #         while i < 3:
+
+    #             print(f"To LLM:\t {pr} from thread {self.threadnum}")
+    #             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
+    #             ans = self.test_llm(pr,history)
+    #             print(history)
+    #             dict = {'user': pr,
+    #                 'bot': ans}
+    #             history.append(dict)
+    #             # ans = "Yes"
+    #             print(f"To User:\t {ans} from thread {self.threadnum}")
+    #             i += 1
+
+    #             try:
+    #                 ans_list.append(ans.lower())
+    #             except Exception as e:
+    #                 warning_message = f"Warning: An API exception occurred - {e}"
+    #                 warnings.warn(warning_message, RuntimeWarning)
+    #                 ans_list.append("default_value")
+
+    #     return ans_list
+
 
         # recoder.dialoge[ind] += f"To User:\t {ans}"
         # self.recoders.append(recoder)
@@ -141,16 +178,16 @@ class AutoInteractor:
                 print(keywords_eval_info + f"from thread {self.threadnum}")
                 score_dict["keywords"] = keywords_score
 
-            if blacklist_score != 0 and self.eval_info.get("GPT4eval", None):
-                eval_obj = eval_stack["GPT4eval"]
-                eval_obj.set_llm(self.GPT4_eval_llm)
+            if blacklist_score != 0 and self.eval_info.get("LLMEval", None):
+                eval_obj = eval_stack["LLMEval"]
+                eval_obj.set_llm(self.LLM_eval_llm)
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
                 eval_obj.set_prompt(self.prompt)
                 eval_obj.set_threadnum(self.threadnum)
-                GPT4_eval_score, GPT4_eval_info = eval_obj.score(self.methodnum[3])
-                print(GPT4_eval_info + f"from thread {self.threadnum}")
-                score_dict["GPT4_eval"] = GPT4_eval_score
+                LLM_eval_score, LLM_eval_info = eval_obj.score(self.methodnum[3])
+                print(LLM_eval_info + f"from thread {self.threadnum}")
+                score_dict["LLM_eval"] = LLM_eval_score
         final_score_obj = self.finalscore(score_dict, self.field, self.threadnum)
         human_judge, final_score_info, final_score = final_score_obj.final_score_info()
 

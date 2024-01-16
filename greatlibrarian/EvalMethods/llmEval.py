@@ -4,13 +4,13 @@ import re
 from typing import Tuple
 
 
-class GPT4eval(EvalMethods):
+class LLMEval(EvalMethods):
     """Blacklist evaluation"""
 
     def __init__(self, prompt, ans, evalinfo, field, threadnum) -> None:
         super().__init__(prompt, ans, evalinfo, field, threadnum)
-        if not self.evalinfo.get("GPT4eval", None):
-            warnings.warn("There is no GPT4eval.", RuntimeWarning)
+        if not self.evalinfo.get("LLMEval", None):
+            warnings.warn("There is no LLMEval.", RuntimeWarning)
         self.methodtotal = 1
         self.field = field
 
@@ -49,14 +49,14 @@ class GPT4eval(EvalMethods):
 
     def score(self, method_num) -> Tuple[float, str]:
         """
-        A method for choosing one of the methods in GPT4eval to score the model.
+        A method for choosing one of the methods in LLMEval to score the model.
         Given a number n and the method will choose the nth eval_method to score the model and print the score. (the number n starts from 1)
-        The function will return a string like 'The model gets ***{score}*** points in this testcase by GPT4eval method.'
+        The function will return a string like 'The model gets ***{score}*** points in this testcase by LLMEval method.'
         """
         eval_dict = {1: self.eval1}
         eval_method = eval_dict[method_num]
         score = eval_method()
-        score_info = f"The model gets {score} points in this testcase by GPT4eval method, in {self.field} field."
+        score_info = f"The model gets {score} points in this testcase by LLMEval method, in {self.field} field."
         return (score, score_info)
 
     def showmethod(self) -> None:
@@ -65,9 +65,9 @@ class GPT4eval(EvalMethods):
         """
         method_pattern = re.compile(r"^eval\d+$")
         methods = [
-            getattr(GPT4eval, method_name)
-            for method_name in dir(GPT4eval)
-            if callable(getattr(GPT4eval, method_name))
+            getattr(LLMEval, method_name)
+            for method_name in dir(LLMEval)
+            if callable(getattr(LLMEval, method_name))
             and method_pattern.match(method_name)
         ]
         methods.sort(key=lambda x: x.__name__)
