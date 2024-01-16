@@ -21,14 +21,14 @@ class UpdateRunner:
         load_from_cfg(self, cfg)
         self._check()
         self.test_llm_name = self.test_llm.get_name()
-        self.GPT4_eval_llm_name = self.GPT4_eval_llm.get_name()
+        self.LLM_eval_llm_name = self.LLM_eval_llm.get_name()
         self.llm_intro = self.test_llm.get_intro()
 
     def _check(self) -> None:
         if not hasattr(self, "test_llm"):
             raise ValueError("There is no test_llm in the configure file.")
-        if not hasattr(self, "GPT4_eval_llm"):
-            raise ValueError("There is no GPT4_eval_llm in the configure file.")
+        if not hasattr(self, "LLM_eval_llm"):
+            raise ValueError("There is no LLM_eval_llm in the configure file.")
         if not hasattr(self, "Test_ID"):
             raise ValueError("There is no Test_ID in the configure file.")
 

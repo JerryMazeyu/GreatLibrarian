@@ -1,4 +1,4 @@
 from .keyword import Keyword
 from .toolUsage import ToolUse
-from .gpt4Eval import GPT4eval
+from .llmEval import LLMEval
 from .blacklist import Blacklist

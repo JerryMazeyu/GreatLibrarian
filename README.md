@@ -79,7 +79,7 @@
         "我国面积最大的平原： "],
     "evaluation": {
             "0": [{"keywords":[["中关村"]],"blacklist":[["硅谷"]]}],
-            "1": [{"keywords":[["黑龙江省"]],"GPT4eval":[["True"]]}],
+            "1": [{"keywords":[["黑龙江省"]],"LLMEval":[["True"]]}],
             "2": [{"keywords":[["新疆维吾尔自治区"]]}],
             "3": [{"keywords":[["内蒙古自治区", "陕西省"]]}],
             "4": [{"keywords":[["东北平原"]]}]
@@ -94,10 +94,10 @@
 
 `prompt`列表用于存储当前测试用例组的所有测试用例，每一个测试用例为字符串格式。在进行自动化测试的过程中，这些测试用例会作为问题提供给当前被测试的LLM。  
 
-`evaluation`字典用于存储当前测试用例组的答案，字典的key从"0"开始，分别对应第1、2、3...条测试用例的答案，其中每一条测试用例的答案是一个列表，由于**当前工具箱仅用于测试单轮对话** ，所以这里的列表长度始终为1。列表的内部元素是一个字典，字典的key是评分方法，目前包括`keywords`、`blacklist`和`GPT4eval`三种，分别对应着三种不同的评分方法，字典的key对应的value是当前测试用例的该评分方法的 **关键字**。   
+`evaluation`字典用于存储当前测试用例组的答案，字典的key从"0"开始，分别对应第1、2、3...条测试用例的答案，其中每一条测试用例的答案是一个列表，由于**当前工具箱仅用于测试单轮对话** ，所以这里的列表长度始终为1。列表的内部元素是一个字典，字典的key是评分方法，目前包括`keywords`、`blacklist`和`LLMEval`三种，分别对应着三种不同的评分方法，字典的key对应的value是当前测试用例的该评分方法的 **关键字**。   
 1. `keywords`：根据LLM的回答是否含有字典里`"keywords"`对应的列表中给出的 **关键字** 评分。  
 2. `blacklist`：根据LLM的回答是否含有字典里`"blacklist"`对应的列表中给出的 **黑名单字符串** 评分。  
-3. `GPT4eval`：让 **GPT4** 对该LLM对于该条测试用例的回答打分， `"GPT4eval"`对应的value始终为示范中的`[[True]]`。  
+3. `LLMEval`：让 **GPT4** 对该LLM对于该条测试用例的回答打分， `"LLMEval"`对应的value始终为示范中的`[[True]]`。  
 
 以上方法如果出现在字典中，该条测试用例就会用该方法进行打分，对于所有的评分方法，每一条测试用例的 **分数范围** 都为 **0-1** 。  
   
@@ -112,7 +112,7 @@
 
 目前工具箱中有一个默认的`FinalScore`方法`FinalScore1`，如果用户使用该默认方法，则不需要对配置文件`register_usr.py`作出任何改动   
 
-如果用户需要自定义分数结算方法，需要在`register_usr.py`中创建一个新的`FinalScore`的子类，类中包含三种方法，其中 `__init__` 和 `final_score_info` 为 **固定配置** ，无需修改，用户需要自己定义。用户需要定义 `get_final_score` 方法，该方法利用 `self.score` 来计算 `final score` 并返回一个浮点数作为该条测试用例的最终得分。其中 `self.score` 是一个字典，字典内容格式如下所示： `{'keywords':0.5,'blacklist':1,'GPT4eval':1}` 。该字典的 **key为评分方法的字符串** ， **value为该方法对应的得分**。  
+如果用户需要自定义分数结算方法，需要在`register_usr.py`中创建一个新的`FinalScore`的子类，类中包含三种方法，其中 `__init__` 和 `final_score_info` 为 **固定配置** ，无需修改，用户需要自己定义。用户需要定义 `get_final_score` 方法，该方法利用 `self.score` 来计算 `final score` 并返回一个浮点数作为该条测试用例的最终得分。其中 `self.score` 是一个字典，字典内容格式如下所示： `{'keywords':0.5,'blacklist':1,'LLMEval':1}` 。该字典的 **key为评分方法的字符串** ， **value为该方法对应的得分**。  
   
         from greatlibrarian.Core import FinalScore
         from greatlibrarian.Configs import ExampleConfig
@@ -133,18 +133,18 @@
                     return 0.0
                 if (
                     self.score.get("keywords") is not None
-                    and self.score.get("GPT4_eval") is not None
+                    and self.score.get("LLM_eval") is not None
                 ):
-                    if abs(self.score["keywords"] - self.score["GPT4_eval"]) <= 0.5:
+                    if abs(self.score["keywords"] - self.score["LLM_eval"]) <= 0.5:
                         return float(
-                            "%.3f" % ((self.score["keywords"] + self.score["GPT4_eval"]) / 2)
+                            "%.3f" % ((self.score["keywords"] + self.score["LLM_eval"]) / 2)
                         )
                     else:
                         return "Human Evaluation"
                 if self.score.get("keywords") is not None:
                     return self.score["keywords"]
-                if self.score.get("GPT4_eval") is not None:
-                    return self.score["GPT4_eval"]
+                if self.score.get("LLM_eval") is not None:
+                    return self.score["LLM_eval"]
 
             def final_score_info(self) -> str:
                 return (
@@ -156,7 +156,7 @@
 
   
 
-工具箱还配置了每一种评价方法内部的（`keywords、blacklist、GPT4eval`）的 **不同评分细则** 。  
+工具箱还配置了每一种评价方法内部的（`keywords、blacklist、LLMEval`）的 **不同评分细则** 。  
 
 对于一条测试用例（`prompt`）以及同样的答案（`evaluation`字典）来说，可以因为`evaluation`字典中每个评分方法的不同 **评分细则** 而获得不同的得分。
 
@@ -179,18 +179,18 @@
         """ExampleConfig abstract class"""
 
         def __init__(
-            self, test_llm, GPT4_eval_llm, finalscore=FinalScore1, interactor=AutoInteractor
+            self, test_llm, LLM_eval_llm, finalscore=FinalScore1, interactor=AutoInteractor
         ) -> None:
             self.test_llm = test_llm
-            self.GPT4_eval_llm = GPT4_eval_llm
+            self.LLM_eval_llm = LLM_eval_llm
             self.finalscore = finalscore
             self.interactor = interactor  
 
-配置好`LLM`与`FinalScore`后，需要定义用于本次测试的整体的`config`，`config`需要包含本次测试选择的`Finalscore`、用于测评的`LLM`以及用于做`GPT4_eval`的`LLM`（即用于给测试用例和其对应的测试`LLM`的回答打分的`LLM`）。代码如下：
+配置好`LLM`与`FinalScore`后，需要定义用于本次测试的整体的`config`，`config`需要包含本次测试选择的`Finalscore`、用于测评的`LLM`以及用于做`LLM_eval`的`LLM`（即用于给测试用例和其对应的测试`LLM`的回答打分的`LLM`）。代码如下：
   
     config = ExampleConfig(chat, qw)  
   
-这里的`chat`和`qw`都是配置好的`LLM`，在本示例中`chat`用作被测试的`LLM`，`qw`用于做`GPT4_eval`的`LLM`。这里选择`FinalScore1`，是工具箱默认使用的`FinalScore`子类，可省略。若需要选用用户自定义的`FinalScore2`，可以使用以下定义：  
+这里的`chat`和`qw`都是配置好的`LLM`，在本示例中`chat`用作被测试的`LLM`，`qw`用于做`LLM_eval`的`LLM`。这里选择`FinalScore1`，是工具箱默认使用的`FinalScore`子类，可省略。若需要选用用户自定义的`FinalScore2`，可以使用以下定义：  
   
     config = ExampleConfig(chat, qw, FinalScore2)  
 
@@ -227,15 +227,15 @@
   
 ### 评分规则  
   
-评分规则的配置在**前文介绍-评分规则配置**中已经阐述，这里主要介绍当前`GPT4eval`方法以及工具箱内默认使用的评价方法和评分细则。  
+评分规则的配置在**前文介绍-评分规则配置**中已经阐述，这里主要介绍当前`LLMEval`方法以及工具箱内默认使用的评价方法和评分细则。  
   
 1. `keywords`：主要使用`eval1`方法，具体的评分细则为： **当LLM的回答包含`keywords`列表中至少一个关键字时，LLM在本条测试用例中获得1分，否则获得0分**。
 2. `blacklist`：主要使用`eval1`方法，具体的评分细则为：**当LLM的回答包含`blacklist`列表中的任何一个黑名单字符串时，LLM在本条测试用例中获得0分，否则获得1分**。
-3. `GPT4eval`：主要使用`eval1`方法，由于需要调用另一个LLM对当前测试用例进行评分，所以同样需要调用`API Key`。由于目前我们没有GPT4的`API Key`，所以暂时用了其他LLM进行替代。  
+3. `LLMEval`：主要使用`eval1`方法，由于需要调用另一个LLM对当前测试用例进行评分，所以同样需要调用`API Key`。由于目前我们没有GPT4的`API Key`，所以暂时用了其他LLM进行替代。  
 4. `FinalScore`：主要使用`FinalScore1`，具体的评分细则为：  
 ①首先判断`blacklist`评分是否为0，若为0则最终得分直接为0；  
-②然后判断`keywords`评分，若无`GPT4eval`则最终得分等于`keywords`评分；  
-③若有`GPT4eval`，则计算`keywords`评分与`GPT4eval`评分的差，若差的绝对值大于0.5则输出"Human Evaluation"，将该条测试用例记录进`human_evaluation.log`中，用于后续进行人工测评；若差的绝对值小于0.5，则取两者的均值作为最终得分。  
+②然后判断`keywords`评分，若无`LLMEval`则最终得分等于`keywords`评分；  
+③若有`LLMEval`，则计算`keywords`评分与`LLMEval`评分的差，若差的绝对值大于0.5则输出"Human Evaluation"，将该条测试用例记录进`human_evaluation.log`中，用于后续进行人工测评；若差的绝对值小于0.5，则取两者的均值作为最终得分。  
   
 *****  
 
@@ -422,18 +422,18 @@ Windows (Powershell)：
                     return 0.0
                 if (
                     self.score.get("keywords") is not None
-                    and self.score.get("GPT4_eval") is not None
+                    and self.score.get("LLM_eval") is not None
                 ):
-                    if abs(self.score["keywords"] - self.score["GPT4_eval"]) <= 0.5:
+                    if abs(self.score["keywords"] - self.score["LLM_eval"]) <= 0.5:
                         return float(
-                            "%.3f" % ((self.score["keywords"] + self.score["GPT4_eval"]) / 2)
+                            "%.3f" % ((self.score["keywords"] + self.score["LLM_eval"]) / 2)
                         )
                     else:
                         return "Human Evaluation"
                 if self.score.get("keywords") is not None:
                     return self.score["keywords"]
-                if self.score.get("GPT4_eval") is not None:
-                    return self.score["GPT4_eval"]
+                if self.score.get("LLM_eval") is not None:
+                    return self.score["LLM_eval"]
 
             def final_score_info(self) -> str:
                 return (

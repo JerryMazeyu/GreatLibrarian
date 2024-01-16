@@ -15,7 +15,7 @@ import json
 def record_project_info(
     project_name,
     test_llm_name,
-    GPT4_eval_llm_name,
+    LLM_eval_llm_name,
     testcase_path,
     testproject_num,
     Test_name,
@@ -28,7 +28,7 @@ def record_project_info(
     data = {
         "project_name": project_name,
         "llm_name": test_llm_name,
-        "GPT4_eval_llm_name": GPT4_eval_llm_name,
+        "LLM_eval_llm_name": LLM_eval_llm_name,
         "testcase_path": testcase_path,
         "testproject_num": testproject_num,
         "Test_name": Test_name,

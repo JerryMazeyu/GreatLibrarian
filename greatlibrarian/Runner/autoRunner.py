@@ -5,7 +5,7 @@ import os
 import json
 import concurrent.futures
 from tqdm import tqdm
-from ..EvalMethods import ToolUse, Keyword, GPT4eval, Blacklist
+from ..EvalMethods import ToolUse, Keyword, LLMEval, Blacklist
 import threading
 from ..Utils import (
     clean_log_dialog,
@@ -36,7 +36,7 @@ class AutoRunner:
         self._check()
         self.load_json()
         self.test_llm_name = self.test_llm.get_name()
-        self.GPT4_eval_llm_name = self.GPT4_eval_llm.get_name()
+        self.LLM_eval_llm_name = self.LLM_eval_llm.get_name()
         self.llm_intro = self.test_llm.get_intro()
 
     def _check(self) -> None:
@@ -44,8 +44,8 @@ class AutoRunner:
             raise ValueError("There is no test_llm in the configure file.")
         # if not hasattr(self, 'json_paths'):
         #     raise ValueError("There is no json_paths in the configure file.")
-        if not hasattr(self, "GPT4_eval_llm"):
-            raise ValueError("There is no GPT4_eval_llm in the configure file.")
+        if not hasattr(self, "LLM_eval_llm"):
+            raise ValueError("There is no LLM_eval_llm in the configure file.")
         if not hasattr(self, "interactor"):
             print("Find no interactor, default as auto interactor.")
             self.interactor_cls = AutoInteractor
@@ -141,7 +141,7 @@ class AutoRunner:
         record_project_info(
             self.project_name,
             self.test_llm_name,
-            self.GPT4_eval_llm_name,
+            self.LLM_eval_llm_name,
             self.path,
             self.testproject_num,
             self.Test_name,
@@ -179,7 +179,7 @@ class AutoRunner:
             "tool": ToolUse,
             "keywords": Keyword,
             "blacklist": Blacklist,
-            "GPT4eval": GPT4eval,
+            "LLMEval": LLMEval,
         }
         methodnum = []
         for key in eval_dict:

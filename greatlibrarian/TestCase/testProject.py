@@ -129,7 +129,7 @@ class TestProject:
                 }
                 if baseconf:
                     cfg["test_llm"] = getattr(baseconf, "test_llm", None)
-                    cfg["GPT4_eval_llm"] = getattr(baseconf, "GPT4_eval_llm", None)
+                    cfg["LLM_eval_llm"] = getattr(baseconf, "LLM_eval_llm", None)
                     cfg["register_agents"] = getattr(baseconf, "register_agents", None)
                     cfg["finalscore"] = getattr(baseconf, "finalscore", None)
                     if not cfg["register_agents"]:

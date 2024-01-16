@@ -23,10 +23,10 @@ class register:
 
     def __init__(self, conf) -> None:
         self.test_llm = conf.test_llm
-        self.GPT4_eval_llm = conf.GPT4_eval_llm
+        self.LLM_eval_llm = conf.LLM_eval_llm
 
     def checkllm(self) -> bool:
-        testobj1, testobj2 = self.test_llm, self.GPT4_eval_llm
+        testobj1, testobj2 = self.test_llm, self.LLM_eval_llm
         test1, test2 = Test(testobj1), Test(testobj2)
         mock_post = MagicMock()
         api_response1, api_response2 = (
@@ -40,5 +40,5 @@ class register:
             if not api_response1:
                 print("Test llm API response type is wrong")
             if not api_response2:
-                print("GPT4_eval llm API response type is wrong")
+                print("LLM_eval llm API response type is wrong")
             return False
