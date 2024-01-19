@@ -1,6 +1,7 @@
 import re
 from typing import Dict, List
 
+
 def clean_log_dialog(log_file) -> None:
     """Organize disordered logs in the order of line numbers to create properly ordered logs."""
     thread_messages = info_extract(log_file)
