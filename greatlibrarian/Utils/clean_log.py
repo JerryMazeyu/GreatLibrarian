@@ -9,7 +9,9 @@ def clean_log_dialog(log_file) -> None:
     for i in range(1, len(thread_messages) + 1):
         messages = thread_messages[str(i)]
         for message in messages:
-            print(message)
+            # Check if the message contains the specified patterns
+            if "Mistaken case:prompt:" not in message and "Example case:prompt:" not in message:
+                print(message)
         print()
 
 

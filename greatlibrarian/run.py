@@ -8,7 +8,7 @@ import os
 @click.command()
 @click.option(
     "--testcase_path",
-    default=r"C:\Users\ASUS\GreatLibrarian\Open-LLMEval\C-eval-reasoning",
+    default=r"C:\Users\ASUS\GreatLibrarian\Open-LLMEval\C-eval-specialized_knowledge",
     help="testcase的json文件所存放的文件夹路径",
 )
 @click.option(
@@ -37,7 +37,7 @@ def main(testcase_path, config_path, project_name, test_id, test_name) -> None:
 @click.command()
 @click.option(
     "--config_path",
-    default="/home/ubuntu/LLMs/czy/register_usr.py",
+    default=r"C:\Users\ASUS\GreatLibrarian\register_usr.py",
     help="配置文件的绝对路径",
 )
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
