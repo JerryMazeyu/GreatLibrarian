@@ -105,9 +105,8 @@ class AutoInteractor:
 
     #     return ans_list
 
-
-        # recoder.dialoge[ind] += f"To User:\t {ans}"
-        # self.recoders.append(recoder)
+    # recoder.dialoge[ind] += f"To User:\t {ans}"
+    # self.recoders.append(recoder)
 
     def tool_interact(self, prompt, tools: list) -> list:
         """
@@ -200,7 +199,7 @@ class AutoInteractor:
                 "ans": keywords_ans,
                 "field": self.field,
                 "threadnum": self.threadnum,
-                "eval_info": self.eval_info
+                "eval_info": self.eval_info,
             }
             dec = setup(logger_name="human_evaluation", logger_file=self.logger_path)
             self.human_evaluation = apply_decorator_to_func(
