@@ -107,6 +107,8 @@ class AutoInteractor:
 
     # recoder.dialoge[ind] += f"To User:\t {ans}"
     # self.recoders.append(recoder)
+    # recoder.dialoge[ind] += f"To User:\t {ans}"
+    # self.recoders.append(recoder)
 
     def tool_interact(self, prompt, tools: list) -> list:
         """
@@ -206,19 +208,17 @@ class AutoInteractor:
                 dec(), self.human_evaluation
             )
             self.human_evaluation(human_eval)
-        if final_score != 'Human Evaluation':
-            if float(final_score) <= 0.5:
-                if "blacklist" in self.eval_info:
-                    print(
-                        f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]},blacklist:{self.eval_info["blacklist"][0]}'
-                    )
-                else:
-                    print(
-                        f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]}'
-                    )
-
-            if float(final_score) > 0.5 and final_score != "Human Evaluation":
+        if final_score == 0:
+            if "blacklist" in self.eval_info:
                 print(
-                    f"Example case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}"
+                    f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]},blacklist:{self.eval_info["blacklist"][0]}'
+                )
+            else:
+                print(
+                    f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]}'
                 )
 
+        if final_score != 0 and final_score != "Human Evaluation":
+            print(
+                f"Example case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}"
+            )
