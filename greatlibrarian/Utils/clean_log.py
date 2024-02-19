@@ -1,7 +1,5 @@
 import re
-import os
 from typing import Dict, List
-
 
 def clean_log_dialog(log_file) -> None:
     """Organize disordered logs in the order of line numbers to create properly ordered logs."""
@@ -20,8 +18,8 @@ def info_extract(log) -> Dict[str, List[str]]:
         log_messages = file.readlines()
 
     thread_messages = {}
-
     current_thread = None
+    multi_line_message = ""
 
     for message in log_messages:
         match = re.search(pattern, message)
@@ -29,7 +27,16 @@ def info_extract(log) -> Dict[str, List[str]]:
             current_thread = match.group(1)
             if current_thread not in thread_messages:
                 thread_messages[current_thread] = []
-        if current_thread and match:
-            clean_message = re.sub(pattern, "", message).strip()
-            thread_messages[current_thread].append(clean_message)
+
+            if multi_line_message:
+                thread_messages[current_thread].append(multi_line_message.strip())
+                multi_line_message = ""
+
+        if current_thread:
+            if current_thread and not match:
+                multi_line_message += message
+            else:
+                clean_message = re.sub(pattern, "", message).strip()
+                thread_messages[current_thread].append(clean_message)
+
     return thread_messages

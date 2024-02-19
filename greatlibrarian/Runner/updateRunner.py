@@ -55,10 +55,10 @@ class UpdateRunner:
         The analysis module controls the function,
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation
         """
+        score_dict = GetInfo(logger_path).get_eval_result()
         dec = setup(logger_name="analyse", logger_file=self.log_dir)
         analyse = Analyse(score_dict)
         analyse.analyse = apply_decorator_to_func(dec(), analyse.analyse)
-        score_dict = GetInfo(logger_path).get_eval_result()
         mean_score_info, sum_info, plotinfo = analyse.analyse()
         analyse.report(
             plotinfo, self.llm_intro, logger_path, os.path.join("Logs", self.Test_ID)

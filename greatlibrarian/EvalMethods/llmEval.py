@@ -2,6 +2,7 @@ from ..Core import EvalMethods
 import warnings
 import re
 from typing import Tuple
+import warnings
 
 
 class LLMEval(EvalMethods):
@@ -13,6 +14,7 @@ class LLMEval(EvalMethods):
             warnings.warn("There is no LLMEval.", RuntimeWarning)
         self.methodtotal = 1
         self.field = field
+        self.groud_truth = self.evalinfo["keywords"]
 
     def set_llm(self, llm) -> None:
         self.llm = llm
@@ -39,10 +41,15 @@ class LLMEval(EvalMethods):
         Answer: {The answer provided by the evaluated LLM}.
         Please rate this answer: "
         """
-        input = f"Next, I will give you a question and an answer. Please rate this answer on a scale from 0 to 1, with 1 being the highest score and 0 being the lowest score.\n Please provide a score with one decimal place of precision as output, and only output this score, without any other information or punctuation marks. Here is the question and answer information:\nQuestion：{self.prompt};\nAnswer：{self.ans};\nPlease rate this answer:"
+        #input = f"接下来，我将给您一个问题、一个回答以及问题的标准答案。请严格以标准答案为参照，判断给出对于该问题的回答是否正确，然后在0到1的范围内对此回答进行评分，其中1表示最高分，0表示最低分。请以一位小数的精度提供评分，若您认为回答正确则分数大于0.5，错误则小于等于0.5。只输出评分，不包含任何其他信息或标点符号。以下是问题和答案的信息：问题：{self.prompt};回答：{self.ans};标准答案：{self.groud_truth}。请严格参照标准答案对针对该问题的回答进行评分："
+        input = f"接下来，我将给您一个问题、一个回答以及问题的标准答案。请根据问题、回答以及标准答案在0到1的范围内对此回答进行评分，其中1表示最高分，0表示最低分。请以一位小数的精度提供评分，若您认为回答正确则分数大于0.5，错误则小于等于0.5。只输出评分，不包含任何其他信息或标点符号。以下是问题、回答以及标准答案的信息：问题：{self.prompt};回答：{self.ans};标准答案：{self.groud_truth}。请对此回答进行评分："
         output = self.llm(input)
         float_pattern = r"[-+]?\d*\.\d+"
-        match = re.search(float_pattern, output)
+        try:
+            match = re.search(float_pattern, output)
+        except Exception as e:
+            warning_message = f"Warning: An re exception occurred - {e}"
+            warnings.warn(warning_message, RuntimeWarning)
         if match:
             score = float(match.group())
         return score
