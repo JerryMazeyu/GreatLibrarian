@@ -8,7 +8,7 @@ import os
 @click.command()
 @click.option(
     "--testcase_path",
-    default=r"E:\GL实验\GL\Open-rule\C-eval-common",
+    default=r"E:\GL实验\GL\Test",
     help="testcase的json文件所存放的文件夹路径",
 )
 @click.option(
