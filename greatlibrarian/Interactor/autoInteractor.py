@@ -177,7 +177,7 @@ class AutoInteractor:
                     print(
                         f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]}'
                     )
-            if float(final_score) >= 0.25:
+            if float(final_score) > 0.25:
                 print(
                     f"Example case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}"
                 )

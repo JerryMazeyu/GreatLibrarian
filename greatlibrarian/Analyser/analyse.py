@@ -198,6 +198,7 @@ class Analyse:
             + f"\n\n在所有测试用例中:\n"
             + testcasenum_info
             + score_info
+            +"\n"
             + time_info
         )
 
