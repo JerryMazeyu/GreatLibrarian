@@ -8,6 +8,7 @@ from matplotlib import rcParams
 import warnings
 from typing import Tuple, List, Union
 import re
+from datetime import datetime
 
 
 # log_name = generate_name_new('analyse')
@@ -188,12 +189,16 @@ class Analyse:
         for i in range(len(filtered_score_get)):
             score_info += f'\n在"{field_dict[filtered_fields[i]]}"领域中 ,该大语言模型的得分为: {filtered_score_get[i]}/{filtered_totalscore[i]}。\n'
 
+        time = self.extract_time(log_path)
+        time_per_testcase = round(time/totalnum,3)
+        time_info = f'在本次测试中，LLM的响应时间为：平均每条测试用例{time_per_testcase}秒'
         conclude_info = (
             f"本次测试包括{totalnum}条测试用例.\n\n这些测试用例主要包括"
             + field_info
             + f"\n\n在所有测试用例中:\n"
             + testcasenum_info
             + score_info
+            + time_info
         )
 
         axs[0].text(
@@ -424,3 +429,26 @@ class Analyse:
         max_version = max(version_numbers) if version_numbers else 0
         new_name = f"{base_name}-v{max_version + 1}.pdf"
         return new_name
+    
+
+    def extract_time(self,log_path):
+        with open(log_path, 'r') as file:
+            lines = file.readlines()
+
+        time_pattern = re.compile(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})')
+
+        first_line_match = time_pattern.match(lines[0])
+        last_line_match = time_pattern.match(lines[-1])
+
+        if first_line_match and last_line_match:
+            first_time = datetime.strptime(first_line_match.group(1), '%Y-%m-%d %H:%M:%S')
+            last_time = datetime.strptime(last_line_match.group(1), '%Y-%m-%d %H:%M:%S')
+
+            time_difference = last_time - first_time
+            return time_difference.total_seconds()
+        else:
+            return None
+
+
+
+

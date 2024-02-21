@@ -69,47 +69,6 @@ class AutoInteractor:
 
         return ans_list
 
-    # def base_interact(self, prompt) -> list:
-    #     """
-    #     A function to create the interaction between the LLM and the user.
-    #     It will record the dialogue in the log file and the answers to prompts sent to LLM from the LLM will be saved in a list called ans_list.
-    #     In this method, the dialogue mainly contains the propmts that the user sends to LLM, and the response from the LLM.
-    #     """
-    #     # recoder = Recoder()
-    #     # recoder.ind = ind
-    #     print(f"---------- New Epoch ---------- from thread {self.threadnum}")
-    #     ans_list = []
-    #     for ind, pr in enumerate(prompt):
-    #         # recoder.dialoge[ind] = ''
-    #         i = 0
-    #         history = []
-    #         while i < 3:
-
-    #             print(f"To LLM:\t {pr} from thread {self.threadnum}")
-    #             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-    #             ans = self.test_llm(pr,history)
-    #             print(history)
-    #             dict = {'user': pr,
-    #                 'bot': ans}
-    #             history.append(dict)
-    #             # ans = "Yes"
-    #             print(f"To User:\t {ans} from thread {self.threadnum}")
-    #             i += 1
-
-    #             try:
-    #                 ans_list.append(ans.lower())
-    #             except Exception as e:
-    #                 warning_message = f"Warning: An API exception occurred - {e}"
-    #                 warnings.warn(warning_message, RuntimeWarning)
-    #                 ans_list.append("default_value")
-
-    #     return ans_list
-
-    # recoder.dialoge[ind] += f"To User:\t {ans}"
-    # self.recoders.append(recoder)
-    # recoder.dialoge[ind] += f"To User:\t {ans}"
-    # self.recoders.append(recoder)
-
     def tool_interact(self, prompt, tools: list) -> list:
         """
         A function to create the interaction between the LLM, the user and the tool.
@@ -208,17 +167,17 @@ class AutoInteractor:
                 dec(), self.human_evaluation
             )
             self.human_evaluation(human_eval)
-        if final_score == 0:
-            if "blacklist" in self.eval_info:
+        if final_score != "Human Evaluation":
+            if float(final_score) <= 0.25:
+                if "blacklist" in self.eval_info:
+                    print(
+                        f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]},blacklist:{self.eval_info["blacklist"][0]}'
+                    )
+                else:
+                    print(
+                        f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]}'
+                    )
+            if float(final_score) >= 0.25:
                 print(
-                    f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]},blacklist:{self.eval_info["blacklist"][0]}'
+                    f"Example case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}"
                 )
-            else:
-                print(
-                    f'Mistaken case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]}'
-                )
-
-        if final_score != 0 and final_score != "Human Evaluation":
-            print(
-                f"Example case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}"
-            )
