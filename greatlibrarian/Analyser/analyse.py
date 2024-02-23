@@ -48,26 +48,15 @@ class Analyse:
 
         score = self.score_dict
         score_list = []
-        score_mean = [0] * 10
-        score_get = [0] * 10
-        field_list = [
-            "knowledge_understanding",
-            "coding",
-            "common_knowledge",
-            "reasoning",
-            "multi_language",
-            "specialized_knowledge",
-            "traceability",
-            "outputformatting",
-            "internal_security",
-            "external_security",
-        ]
-        total_score = [0] * 10
+        score_mean = [0] * len(score)
+        score_get = [0] * len(score)
+        field_list = list(score.keys())
+        total_score = [0] * len(score)
 
-        for i in range(10):
+        for i in range(len(score)):
             score_list.append(score[field_list[i]])
 
-        for i in range(10):
+        for i in range(len(score)):
             if score_list[i] == []:
                 score_mean[i] = "Not evaluated in this field"
             else:
@@ -78,22 +67,22 @@ class Analyse:
                 score_get[i] = float("%.3f" % (sum(score_list[i])))
         get_score_info = ""
 
-        for i in range(10):
+        for i in range(len(score)):
             get_score_info += f'\nIn {field_list[i]} field, the LLM gets "{score_get[i]}/{total_score[i]}" scores.\n'
 
         plotinfo = [field_list, score_get, total_score]
 
         mean_score_list = []
-        for score in score_mean:
-            if score != "Not evaluated in this field":
-                if score >= 0.6:
+        for scores in score_mean:
+            if scores != "Not evaluated in this field":
+                if scores >= 0.6:
                     mean_score_list.append("does well in")
                 else:
                     mean_score_list.append("is not good at")
             else:
                 mean_score_list.append("is not evaluated")
         conclude_info = "To conclude:\n"
-        for i in range(10):
+        for i in range(len(score)):
             conclude_info += (
                 f"\nThe model {mean_score_list[i]} in {field_list[i]} field.\n"
             )
@@ -111,18 +100,6 @@ class Analyse:
         total_score = plotinfo[2]
         totalnum = sum(total_score)
 
-        field_dict = {
-            "knowledge_understanding": "语言理解",
-            "coding": "代码",
-            "common_knowledge": "知识与常识",
-            "reasoning": "逻辑推理",
-            "multi_language": "多语言",
-            "specialized_knowledge": "专业知识",
-            "traceability": "可追溯性",
-            "outputformatting": "输出格式化",
-            "internal_security": "内生安全性",
-            "external_security": "外生安全性",
-        }
 
         plt.rcParams["font.size"] = 18
 
@@ -131,20 +108,20 @@ class Analyse:
 
         pdf_pages = PdfPages(pdf_file_path)
 
-        filtered_fields = [
-            fields
-            for fields, total_scores in zip(field, total_score)
-            if total_scores > 0
-        ]
+        # filtered_fields = [
+        #     fields
+        #     for fields, total_scores in zip(field, total_score)
+        #     if total_scores > 0
+        # ]
 
-        filtered_totalscore = [
-            totalscores for totalscores in total_score if totalscores > 0
-        ]
-        filtered_score_get = [
-            score
-            for score, total_scores in zip(score_get, total_score)
-            if total_scores > 0
-        ]
+        # filtered_totalscore = [
+        #     totalscores for totalscores in total_score if totalscores > 0
+        # ]
+        # filtered_score_get = [
+        #     score
+        #     for score, total_scores in zip(score_get, total_score)
+        #     if total_scores > 0
+        # ]
 
         # 1.背景介绍
         fig = plt.figure(figsize=(30, 30))
@@ -174,20 +151,21 @@ class Analyse:
         fig, axs = plt.subplots(1, 2, figsize=(30, 30), gridspec_kw={"wspace": 0.15})
 
         field_info = ""
-        if len(filtered_fields) <= 3:
-            for fields in filtered_fields:
-                field_info += f'"{field_dict[str(fields)]}"'
+        if len(field) <= 3:
+            for fields in field:
+                field_info += f'"{(fields)}"'
+            field_info += '领域'
         else:
             for i in range(3):
-                field_info += f'"{field_dict[str(filtered_fields[i])]}"'
+                field_info += f'"{str(field[i])}"'
             field_info += "等领域。"
 
         testcasenum_info = ""
-        for i in range(len(filtered_fields)):
-            testcasenum_info += f'\n "{field_dict[filtered_fields[i]]}"领域中有{filtered_totalscore[i]}条测试用例。\n'
+        for i in range(len(field)):
+            testcasenum_info += f'\n “{field[i]}”领域中有{total_score[i]}条测试用例。\n'
         score_info = ""
-        for i in range(len(filtered_score_get)):
-            score_info += f'\n在"{field_dict[filtered_fields[i]]}"领域中 ,该大语言模型的得分为: {filtered_score_get[i]}/{filtered_totalscore[i]}。\n'
+        for i in range(len(score_get)):
+            score_info += f'\n在“{field[i]}”领域中 ,该大语言模型的得分为: {score_get[i]}/{total_score[i]}。\n'
 
         time = self.extract_time(log_path)
         time_per_testcase = round(time/totalnum,3)
@@ -198,6 +176,7 @@ class Analyse:
             + f"\n\n在所有测试用例中:\n"
             + testcasenum_info
             + score_info
+            +"\n"
             + time_info
         )
 
@@ -217,15 +196,9 @@ class Analyse:
 
         # 饼状图绘制
 
-        for i in range(len(filtered_fields)):
-            filtered_fields[i] = field_dict[filtered_fields[i]]
-
-        for i in range(len(field)):
-            field[i] = field_dict[field[i]]
-
-        percentages = [num / totalnum for num in filtered_totalscore]
+        percentages = [num / totalnum for num in total_score]
         patches, texts, autotexts = axs[1].pie(
-            percentages, labels=filtered_fields, autopct="%1.1f%%", startangle=140
+            percentages, labels=field, autopct="%1.1f%%", startangle=140
         )
         for autotext in autotexts:
             autotext.set_size(28)
@@ -239,7 +212,7 @@ class Analyse:
         axs[1].set_position([0.0, 1.0, 0.6, 0.6])
 
         legend_labels = [
-            "{}".format(filtered_field) for filtered_field in filtered_fields
+            "{}".format(fields) for fields in field
         ]
         legend = axs[1].legend(
             patches, legend_labels, loc="lower right", bbox_to_anchor=(1.25, 0.10)
@@ -282,28 +255,28 @@ class Analyse:
         if len(mistaken_list) <= 4:
             for mistakens in mistaken_list:
                 if len(mistakens) == 5:
-                    if mistakens[2] in field_dict:
-                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistakens[2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
+                    if mistakens[2]:
+                        mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
                     else:
-                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistakens[2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
+                        mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
-                    if mistakens[2] in field_dict:
-                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistakens[2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
+                    if mistakens[2]:
+                        mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
                     else:
                         mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
                     mistaken_txt += mistaken
         else:
             for i in range(4):
                 if len(mistaken_list[i]) == 5:
-                    if mistaken_list[i][2] in field_dict:
-                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistaken_list[i][2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
+                    if mistaken_list[i][2]:
+                        mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
                     else:
                         mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
-                    if mistaken_list[i][2] in field_dict:
-                        mistaken = f'\n\n对于以下这条属于"{field_dict[mistaken_list[i][2]]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
+                    if mistaken_list[i][2]:
+                        mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
                     else:
                         mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
                     mistaken_txt += mistaken
@@ -348,7 +321,7 @@ class Analyse:
         plt.figure(figsize=(30, 30))
         plt.rcParams["mathtext.fontset"] = "stix"
         matplotlib.rcParams["axes.unicode_minus"] = False
-        bars = plt.bar(filtered_fields, accuracies)
+        bars = plt.bar(field, accuracies)
         plt.xlabel("领域", fontsize=38, fontfamily="SimSun")
         plt.ylabel("得分率", fontsize=38, fontfamily="SimSun")
         plt.title("4.各领域答题得分率", fontsize=32, y=1.15, fontfamily="SimSun")
@@ -398,11 +371,11 @@ class Analyse:
 
         if len(ex_list) <= 3 and len(ex_list) > 0:
             for ex in ex_list:
-                example = f'\n\n对于以下这条属于"{field_dict[ex[2]]}"领域的问题，该大语言模型的回答完全正确。\n\n问题：“{ex[0]}”\n\n回答：“{ex[1]}”\n\n'
+                example = f'\n\n对于以下这条属于"{ex[2]}"领域的问题，该大语言模型的回答完全正确。\n\n问题：“{ex[0]}”\n\n回答：“{ex[1]}”\n\n'
                 example_txt += example
         if len(ex_list) > 3:
             for i in range(3):
-                example = f'\n\n对于以下这条属于"{field_dict[ex_list[i][2]]}"领域的问题，该大语言模型的回答完全正确。\n\n问题：“{ex_list[i][0]}”\n\n回答：“{ex_list[i][1]}”\n\n'
+                example = f'\n\n对于以下这条属于"{ex_list[i][2]}"领域的问题，该大语言模型的回答完全正确。\n\n问题：“{ex_list[i][0]}”\n\n回答：“{ex_list[i][1]}”\n\n'
                 example_txt += example
 
         intro = "这是一个对于场景化大语言模型的自动化测评报告。\n\n由于工具中暂无关于当前大语言模型的背景信息，所以当前页仅展示本次测评中大语言模型答对的数条测试样例。"
