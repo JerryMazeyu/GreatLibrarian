@@ -24,19 +24,7 @@ class GetInfo:
         """
         file_path = self.log_path
         lines = []
-        score_dict = {
-            "knowledge_understanding": [],
-            "coding": [],
-            "common_knowledge": [],
-            "reasoning": [],
-            "multi_language": [],
-            "specialized_knowledge": [],
-            "traceability": [],
-            "outputformatting": [],
-            "internal_security": [],
-            "external_security": [],
-        }
-
+        score_dict = {}
         with open(
             file_path,
             "r",
@@ -47,11 +35,12 @@ class GetInfo:
         for line in lines:
             score, field = self.extract_info(line)
             if field:
-                try:
+                if field in score_dict:
                     score_dict[field].append(score)
-                except Exception as e:
-                    warning_message = f"Warning: Find a field not included in GL! - {e}"
-                    warnings.warn(warning_message, RuntimeWarning)
+                else:
+                    score_dict[field] = []
+                    score_dict[field].append(score)
+
 
         return score_dict
 
@@ -72,3 +61,5 @@ class GetInfo:
             return float(score), field
         else:
             return None, None
+
+
