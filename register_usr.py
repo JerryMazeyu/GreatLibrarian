@@ -89,6 +89,32 @@ class New_LLM3(LLMs):
         else:
             return "API Problem"
 
+import requests
+
+@LLM_base.register_module("chatglm6b")
+class New_LLM4(LLMs):
+    def __init__(self, apikey, name, llm_intro) -> None:
+        self.apikey = apikey
+        self.name = name
+        self.llm_intro = llm_intro
+
+    def get_intro(self) -> str:
+        return self.llm_intro
+
+    def get_name(self) -> str:
+        return self.name
+
+    def __call__(self, prompt: str) -> str:
+        response = requests.post(url="http://127.0.0.1:8000", json={"prompt": prompt, "history": []})
+        try:
+            status = eval(response.content)["status"]
+            if status == 200:
+                return eval(response.content)["response"]
+            else:
+                return "API Problem"
+        except:
+            return "API Problem"
+
 
 class FinalScore2(FinalScore):
     def __init__(self, score_dict, field, threadnum) -> None:
@@ -156,3 +182,15 @@ chat = LLM_base.build(llm_cfg3)
 config3 = ExampleConfig(chat, qw)
 
 config = config3
+
+
+llm_cfg4 = dict(
+    type="chatglm6b",
+    apikey="123",
+    name="chatglm_6b",
+    llm_intro="ChatGLMpro 是一款基于人工智能的聊天机器人，它基于清华大学 KEG 实验室与智谱 AI 于 2023 年联合训练的语言模型 GLM 开发而成。\n\nChatGLMpro 具有强大的自然语言处理能力和丰富的知识库，能够理解和回应各种类型的问题和指令，包括但不限于文本生成、问答、闲聊、翻译、推荐等领域。\n\n相比于其他聊天机器人，ChatGLMpro 具有以下优势：\n\n高性能的语言模型：ChatGLMpro 基于 GLM 模型，拥有超过 1300 亿参数，能够高效地处理和生成自然语言文本。\n\n丰富的知识库：ChatGLMpro 拥有涵盖多个领域的知识库，包括科技、历史、文化、娱乐等方面，能够回应各种类型的问题。\n\n强大的问答能力：ChatGLMpro 具有出色的问答能力，能够理解用户的问题并给出准确的回答。\n\n个性化交互：ChatGLMpro 能够根据用户的语气和兴趣进行个性化交互，让用户感受到更加自然的对话体验。\n\n开放的接口：ChatGLMpro 还提供了开放的接口，方便其他应用程序和企业将其集成到自己的系统中。\n\n总的来说，ChatGLMpro 是一款高性能、智能化、多功能的聊天机器人，能够为企业和个人提供高效的智能化服务。总的来说，通义千问是一个智能、灵活、友好的AI助手，可以帮助用户解决各种问题和需求。\n\n",
+)
+chat6b = LLM_base.build(llm_cfg4)
+config4 = ExampleConfig(chat6b, chat6b)
+
+config = config4
