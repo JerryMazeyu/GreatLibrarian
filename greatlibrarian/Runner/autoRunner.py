@@ -175,40 +175,42 @@ class AutoRunner:
         For example, if the evalstack is like: {"tools":ToolUse,"keywords":Keyword,"blacklist":Blacklist},and the return of the method is [1,2,1,0].
         That means the user chooses method1 in toolUse method, method2 in keyword method and method1 in blacklist method.
         """
-        eval_dict = {
-            "tool": ToolUse,
-            "keywords": Keyword,
-            "blacklist": Blacklist,
-            "LLMEval": LLMEval,
-        }
-        methodnum = []
-        for key in eval_dict:
-            eval_cls = eval_dict[key]
-            eval_method = eval_cls(
-                "",
-                "",
-                {
-                    "keywords": ["moonlight", "window", "frost", "ground"],
-                    "tool": [
-                        {"name": "TranslationAPI", "args": "窗前明月光，疑似地上霜。"}
-                    ],
-                },
-                "",
-                "",
-            )
-            print(
-                f"Please choose one of the methods in the {key} evaluation!\nThe methods are shown as below:"
-            )
-            eval_method.showmethod()
-            usr_input = input("Please enter the number of your chosen method:")
-            trans_result = to_int(usr_input)
-            while trans_result is None or trans_result > eval_method.getmethodtotal():
-                print(f"Please input a number from 1 to {eval_method.getmethodtotal()}")
-                usr_input = input("Please enter the number of your chosen method:")
-                trans_result = to_int(usr_input)
+        # eval_dict = {
+        #     "tool": ToolUse,
+        #     "keywords": Keyword,
+        #     "blacklist": Blacklist,
+        #     "LLMEval": LLMEval,
+        # }
+        # methodnum = []
+        # for key in eval_dict:
+        #     eval_cls = eval_dict[key]
+        #     eval_method = eval_cls(
+        #         "",
+        #         "",
+        #         {
+        #             "keywords": ["moonlight", "window", "frost", "ground"],
+        #             "tool": [
+        #                 {"name": "TranslationAPI", "args": "窗前明月光，疑似地上霜。"}
+        #             ],
+        #         },
+        #         "",
+        #         "",
+        #     )
+        #     print(
+        #         f"Please choose one of the methods in the {key} evaluation!\nThe methods are shown as below:"
+        #     )
+        #     eval_method.showmethod()
+        #     usr_input = input("Please enter the number of your chosen method:")
+        #     trans_result = to_int(usr_input)
+        #     while trans_result is None or trans_result > eval_method.getmethodtotal():
+        #         print(f"Please input a number from 1 to {eval_method.getmethodtotal()}")
+        #         usr_input = input("Please enter the number of your chosen method:")
+        #         trans_result = to_int(usr_input)
 
-            methodnum.append(trans_result)
-        return methodnum
+        #     methodnum.append(trans_result)
+        # return methodnum
+        methodnum = [1,1,1,1]
+        return(methodnum)
 
     def mk_clean_log(self, logger_path) -> None:
         clean_log_dialog(logger_path)
