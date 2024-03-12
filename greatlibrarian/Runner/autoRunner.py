@@ -23,7 +23,7 @@ from ..FinalScore import FinalScore1
 class AutoRunner:
     """A class responsible for orchestrating the overall program operation"""
 
-    def __init__(self, cfg, path, project_name, test_id, test_name) -> None:
+    def __init__(self, cfg, path, project_name, test_id, test_name, Logs_path) -> None:
         self.path = path
         self.cfg = cfg
         self.logger_path = ""
@@ -32,6 +32,7 @@ class AutoRunner:
         self.project_name = project_name
         self.Test_name = test_name
         self.test_id = test_id
+        self.Logs_path = Logs_path
         load_from_cfg(self, cfg)
         self._check()
         self.load_json()
@@ -74,10 +75,17 @@ class AutoRunner:
                 self.testprojects.append(TestProject(jsonobj))
 
     def set_log_file(self):
-        if self.test_id == "":
-            self.log_path = os.path.join("Logs", generate_logger_subfile())
+        if self.Logs_path != "":
+            self.Logs_path = os.path.join(self.Logs_path, "Logs")
+            if self.test_id == "":
+                self.log_path = os.path.join(self.Logs_path, generate_logger_subfile(self.Logs_path))
+            else:
+                self.log_path = os.path.join(self.Logs_path, self.test_id)
         else:
-            self.log_path = os.path.join("Logs", self.test_id)
+            if self.test_id == "":
+                self.log_path = os.path.join("Logs", generate_logger_subfile())
+            else:
+                self.log_path = os.path.join("Logs", self.test_id)
 
     def run(self) -> None:
         """

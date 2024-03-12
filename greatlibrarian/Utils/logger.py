@@ -340,10 +340,10 @@ def generate_name_new(type) -> str:
     return f"{type}_{current_time_str}"
 
 
-def generate_logger_subfile() -> str:
+def generate_logger_subfile(Logs_path) -> str:
     subfilenum = "1"
     subfilename = "Test" + subfilenum
-    logger_file = os.path.join("Logs", subfilename)
+    logger_file = os.path.join(Logs_path, subfilename)
 
     # analyse_exist = os.path.exists(os.path.join(logger_file, "analyse.log"))
     # dialog_exist = os.path.exists(os.path.join(logger_file, "dialog.log"))
