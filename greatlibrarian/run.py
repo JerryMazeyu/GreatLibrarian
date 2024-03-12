@@ -19,7 +19,7 @@ import os
 @click.option("--project_name", default="", help="项目名称，默认为空字符串")
 @click.option("--test_name", default="", help="实验名称，默认为空字符串")
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
-@click.option("--logs_path", default="", help="实验ID，默认为空字符串")
+@click.option("--logs_path", default="", help="日志路径")
 def main(testcase_path, config_path, project_name, test_id, test_name, logs_path) -> None:
     spec = importlib.util.spec_from_file_location("conf", config_path)
     conf_module = importlib.util.module_from_spec(spec)
