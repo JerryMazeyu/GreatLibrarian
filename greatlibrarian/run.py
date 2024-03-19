@@ -42,8 +42,10 @@ def main(testcase_path, config_path, project_name, test_id, test_name, logs_path
     help="配置文件的绝对路径",
 )
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
-def update(config_path, test_id) -> None:
-    if os.path.exists(os.path.join("Logs", test_id)):
+@click.option("--logs_path", default="", help="日志路径")
+def update(config_path, test_id, logs_path) -> None:
+    path = os.path.join(logs_path, "Logs")
+    if os.path.exists(os.path.join(path, test_id)):
         spec = importlib.util.spec_from_file_location("conf", config_path)
         conf_module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(conf_module)
