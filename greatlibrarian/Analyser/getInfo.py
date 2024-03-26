@@ -41,7 +41,6 @@ class GetInfo:
                     score_dict[field] = []
                     score_dict[field].append(score)
 
-
         return score_dict
 
     def extract_info(self, line) -> Tuple[Union[float, None], Union[str, None]]:
@@ -61,5 +60,3 @@ class GetInfo:
             return float(score), field
         else:
             return None, None
-
-

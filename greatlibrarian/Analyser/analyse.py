@@ -100,7 +100,6 @@ class Analyse:
         total_score = plotinfo[2]
         totalnum = sum(total_score)
 
-
         plt.rcParams["font.size"] = 18
         plt.rcParams['text.usetex'] = False
 
@@ -108,21 +107,6 @@ class Analyse:
         pdf_file_path = os.path.join(report_path, pdf_name)
 
         pdf_pages = PdfPages(pdf_file_path)
-
-        # filtered_fields = [
-        #     fields
-        #     for fields, total_scores in zip(field, total_score)
-        #     if total_scores > 0
-        # ]
-
-        # filtered_totalscore = [
-        #     totalscores for totalscores in total_score if totalscores > 0
-        # ]
-        # filtered_score_get = [
-        #     score
-        #     for score, total_scores in zip(score_get, total_score)
-        #     if total_scores > 0
-        # ]
 
         # 1.背景介绍
         fig = plt.figure(figsize=(30, 30))
@@ -156,7 +140,7 @@ class Analyse:
         if len(field) <= 3:
             for fields in field:
                 field_info += f'"{(fields)}"'
-            field_info += '领域'
+            field_info += "领域"
         else:
             for i in range(3):
                 field_info += f'"{str(field[i])}"'
@@ -164,21 +148,23 @@ class Analyse:
 
         testcasenum_info = ""
         for i in range(len(field)):
-            testcasenum_info += f'\n “{field[i]}”领域中有{total_score[i]}条测试用例。\n'
+            testcasenum_info += f"\n “{field[i]}”领域中有{total_score[i]}条测试用例。\n"
         score_info = ""
         for i in range(len(score_get)):
-            score_info += f'\n在“{field[i]}”领域中 ,该大语言模型的得分为: {score_get[i]}/{total_score[i]}。\n'
+            score_info += f"\n在“{field[i]}”领域中 ,该大语言模型的得分为: {score_get[i]}/{total_score[i]}。\n"
 
         time = self.extract_time(log_path)
-        time_per_testcase = round(time/totalnum,3)
-        time_info = f'在本次测试中，LLM的响应时间为：平均每条测试用例{time_per_testcase}秒'
+        time_per_testcase = round(time / totalnum, 3)
+        time_info = (
+            f"在本次测试中，LLM的响应时间为：平均每条测试用例{time_per_testcase}秒"
+        )
         conclude_info = (
             f"本次测试包括{totalnum}条测试用例.\n\n这些测试用例主要包括"
             + field_info
             + f"\n\n在所有测试用例中:\n"
             + testcasenum_info
             + score_info
-            +"\n"
+            + "\n"
             + time_info
         )
 
@@ -213,9 +199,7 @@ class Analyse:
         axs[1].set_aspect("equal")
         axs[1].set_position([0.0, 1.0, 0.6, 0.6])
 
-        legend_labels = [
-            "{}".format(fields) for fields in field
-        ]
+        legend_labels = ["{}".format(fields) for fields in field]
         legend = axs[1].legend(
             patches, legend_labels, loc="lower right", bbox_to_anchor=(1.25, 0.10)
         )
@@ -357,18 +341,18 @@ class Analyse:
         print("Report Generated !")
 
     def introduction_of_llm(self, log_path, llm_intro) -> str:
-        field_dict = {
-            "knowledge_understanding": "语言理解",
-            "coding": "代码",
-            "common_knowledge": "知识与常识",
-            "reasoning": "逻辑推理",
-            "multi_language": "多语言",
-            "specialized_knowledge": "专业知识",
-            "traceability": "可追溯性",
-            "outputformatting": "输出格式化",
-            "internal_security": "内生安全性",
-            "external_security": "外生安全性",
-        }
+        # field_dict = {
+        #     "knowledge_understanding": "语言理解",
+        #     "coding": "代码",
+        #     "common_knowledge": "知识与常识",
+        #     "reasoning": "逻辑推理",
+        #     "multi_language": "多语言",
+        #     "specialized_knowledge": "专业知识",
+        #     "traceability": "可追溯性",
+        #     "outputformatting": "输出格式化",
+        #     "internal_security": "内生安全性",
+        #     "external_security": "外生安全性",
+        # }
         ex_list = extract_example_info(log_path)
 
         for i in range(len(ex_list)):
@@ -423,22 +407,21 @@ class Analyse:
         with open(log_path, 'r', encoding="utf-8") as file:
             lines = file.readlines()
 
-        time_pattern = re.compile(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})')
+        time_pattern = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})")
 
         first_line_match = time_pattern.match(lines[0])
         last_line_match = time_pattern.match(lines[-1])
 
         if first_line_match and last_line_match:
-            first_time = datetime.strptime(first_line_match.group(1), '%Y-%m-%d %H:%M:%S')
-            last_time = datetime.strptime(last_line_match.group(1), '%Y-%m-%d %H:%M:%S')
+            first_time = datetime.strptime(
+                first_line_match.group(1), "%Y-%m-%d %H:%M:%S"
+            )
+            last_time = datetime.strptime(last_line_match.group(1), "%Y-%m-%d %H:%M:%S")
 
             time_difference = last_time - first_time
             return time_difference.total_seconds()
         else:
             return None
-    def escape_latex_special_characters(self, text):
-        text = re.sub(r'([#$%&~_^\\{}])', r'\\\1', text)
-        return text
 
 
 

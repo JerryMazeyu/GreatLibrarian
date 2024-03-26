@@ -1,6 +1,7 @@
 import re
 from typing import Dict, List
 
+
 def clean_log_dialog(log_file) -> None:
     """Organize disordered logs in the order of line numbers to create properly ordered logs."""
     thread_messages = info_extract(log_file)
@@ -9,7 +10,10 @@ def clean_log_dialog(log_file) -> None:
         messages = thread_messages[str(i)]
         for message in messages:
             # Check if the message contains the specified patterns
-            if "Mistaken case:prompt:" not in message and "Example case:prompt:" not in message:
+            if (
+                "Mistaken case:prompt:" not in message
+                and "Example case:prompt:" not in message
+            ):
                 print(message)
         print()
 
