@@ -102,6 +102,7 @@ class Analyse:
 
 
         plt.rcParams["font.size"] = 18
+        plt.rcParams['text.usetex'] = False
 
         pdf_name = self.generate_new_name(report_path, "report")
         pdf_file_path = os.path.join(report_path, pdf_name)
@@ -127,6 +128,7 @@ class Analyse:
         fig = plt.figure(figsize=(30, 30))
         plt.rcParams["font.sans-serif"] = ["SimSun"]
         plt.rcParams["mathtext.fontset"] = "stix"
+        plt.rcParams['text.usetex'] = False
 
         title = "1.背景介绍"
         plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
@@ -243,6 +245,7 @@ class Analyse:
         title = "3.回答错误的测试用例"
         plt.rcParams["font.sans-serif"] = ["SimSun"]
         plt.rcParams["mathtext.fontset"] = "stix"
+        plt.rcParams['text.usetex'] = False
         plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
 
         mistaken_list = extract_mistaken_info(log_path)
@@ -255,12 +258,16 @@ class Analyse:
         if len(mistaken_list) <= 4:
             for mistakens in mistaken_list:
                 if len(mistakens) == 5:
+                    mistakens[0] = self.escape_latex_special_characters(mistakens[0])
+                    mistakens[1] = self.escape_latex_special_characters(mistakens[1])
                     if mistakens[2]:
                         mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
                     else:
                         mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
+                    mistakens[0] = self.escape_latex_special_characters(mistakens[0])
+                    mistakens[1] = self.escape_latex_special_characters(mistakens[1])
                     if mistakens[2]:
                         mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
                     else:
@@ -269,12 +276,16 @@ class Analyse:
         else:
             for i in range(4):
                 if len(mistaken_list[i]) == 5:
+                    mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
+                    mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
                     if mistaken_list[i][2]:
                         mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
                     else:
                         mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
+                    mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
+                    mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
                     if mistaken_list[i][2]:
                         mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
                     else:
@@ -371,11 +382,15 @@ class Analyse:
 
         if len(ex_list) <= 3 and len(ex_list) > 0:
             for ex in ex_list:
-                example = f'\n\n对于以下这条属于"{ex[2]}"领域的问题，该大语言模型的回答完全正确。\n\n问题：“{ex[0]}”\n\n回答：“{ex[1]}”\n\n'
+                ex[0] = self.escape_latex_special_characters(ex[0])
+                ex[1] = self.escape_latex_special_characters(ex[1])
+                example = '\n\n' + f'对于以下这条属于"{ex[2]}"领域的问题，该大语言模型的回答完全正确。' + '\n\n'+ f'问题：“{ex[0]}”' + '\n\n' + f'回答：“{ex[1]}”' + '\n\n'
                 example_txt += example
         if len(ex_list) > 3:
             for i in range(3):
-                example = f'\n\n对于以下这条属于"{ex_list[i][2]}"领域的问题，该大语言模型的回答完全正确。\n\n问题：“{ex_list[i][0]}”\n\n回答：“{ex_list[i][1]}”\n\n'
+                ex_list[i][0] = self.escape_latex_special_characters(ex_list[i][0])
+                ex_list[i][1] = self.escape_latex_special_characters(ex_list[i][1])
+                example = '\n\n' + f'对于以下这条属于"{ex_list[i][2]}"领域的问题，该大语言模型的回答完全正确。' + '\n\n' + f'问题：“{ex_list[i][0]}”' + '\n\n' + f'回答：“{ex_list[i][1]}”' + '\n\n'
                 example_txt += example
 
         intro = "这是一个对于场景化大语言模型的自动化测评报告。\n\n由于工具中暂无关于当前大语言模型的背景信息，所以当前页仅展示本次测评中大语言模型答对的数条测试样例。"
@@ -405,7 +420,7 @@ class Analyse:
     
 
     def extract_time(self,log_path):
-        with open(log_path, 'r') as file:
+        with open(log_path, 'r', encoding="utf-8") as file:
             lines = file.readlines()
 
         time_pattern = re.compile(r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})')
@@ -421,6 +436,9 @@ class Analyse:
             return time_difference.total_seconds()
         else:
             return None
+    def escape_latex_special_characters(self, text):
+        text = re.sub(r'([#$%&~_^\\{}])', r'\\\1', text)
+        return text
 
 
 

@@ -28,7 +28,7 @@ class GetInfo:
         with open(
             file_path,
             "r",
-            encoding="utf-8" if platform.system() != "Windows" else "gbk",
+            encoding="utf-8",
         ) as file:
             lines = file.readlines()
 

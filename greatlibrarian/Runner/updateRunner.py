@@ -14,10 +14,10 @@ from ..Analyser import Analyse, GetInfo
 class UpdateRunner:
     """A class responsible for orchestrating the overall program operation"""
 
-    def __init__(self, cfg, Test_ID) -> None:
+    def __init__(self, cfg, Test_ID, log_dir) -> None:
         self.cfg = cfg
         self.Test_ID = Test_ID
-        self.log_dir = ""
+        self.log_dir = log_dir
         load_from_cfg(self, cfg)
         self._check()
         self.test_llm_name = self.test_llm.get_name()
@@ -38,7 +38,8 @@ class UpdateRunner:
             Test_ID_dir = generate_logger_subfile()
         else:
             Test_ID_dir = Test_ID
-        self.log_dir = os.path.join("Logs", Test_ID_dir)
+        self.log_dir = os.path.join(self.log_dir, Test_ID_dir)
+        # self.log_dir = os.path.join("Logs", Test_ID_dir)
         source_log_path = os.path.join(self.log_dir, "human_evaluation.log")
         destination_log_path = os.path.join(self.log_dir, "dialog_init.log")
         append_log(source_log_path, destination_log_path)
@@ -61,7 +62,7 @@ class UpdateRunner:
         analyse.analyse = apply_decorator_to_func(dec(), analyse.analyse)
         mean_score_info, sum_info, plotinfo = analyse.analyse()
         analyse.report(
-            plotinfo, self.llm_intro, logger_path, os.path.join("Logs", self.Test_ID)
+            plotinfo, self.llm_intro, logger_path, self.log_dir
         )
 
     def mk_clean_log(self, logger_path) -> None:
