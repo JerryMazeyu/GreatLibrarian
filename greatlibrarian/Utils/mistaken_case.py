@@ -9,7 +9,7 @@ def extract_mistaken_info(log_file) -> List[List[str]]:
 
     mistaken_list = []
 
-    with open(log_file, "r") as file:
+    with open(log_file, "r", encoding="utf-8") as file:
         log_messages = file.readlines()
 
     for message in log_messages:

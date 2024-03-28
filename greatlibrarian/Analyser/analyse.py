@@ -100,17 +100,35 @@ class Analyse:
         total_score = plotinfo[2]
         totalnum = sum(total_score)
 
+
         plt.rcParams["font.size"] = 18
+        plt.rcParams['text.usetex'] = False
 
         pdf_name = self.generate_new_name(report_path, "report")
         pdf_file_path = os.path.join(report_path, pdf_name)
 
         pdf_pages = PdfPages(pdf_file_path)
 
+        # filtered_fields = [
+        #     fields
+        #     for fields, total_scores in zip(field, total_score)
+        #     if total_scores > 0
+        # ]
+
+        # filtered_totalscore = [
+        #     totalscores for totalscores in total_score if totalscores > 0
+        # ]
+        # filtered_score_get = [
+        #     score
+        #     for score, total_scores in zip(score_get, total_score)
+        #     if total_scores > 0
+        # ]
+
         # 1.背景介绍
         fig = plt.figure(figsize=(30, 30))
         plt.rcParams["font.sans-serif"] = ["SimSun"]
         plt.rcParams["mathtext.fontset"] = "stix"
+        plt.rcParams['text.usetex'] = False
 
         title = "1.背景介绍"
         plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
@@ -138,7 +156,7 @@ class Analyse:
         if len(field) <= 3:
             for fields in field:
                 field_info += f'"{(fields)}"'
-            field_info += "领域"
+            field_info += '领域'
         else:
             for i in range(3):
                 field_info += f'"{str(field[i])}"'
@@ -146,23 +164,21 @@ class Analyse:
 
         testcasenum_info = ""
         for i in range(len(field)):
-            testcasenum_info += f"\n “{field[i]}”领域中有{total_score[i]}条测试用例。\n"
+            testcasenum_info += f'\n “{field[i]}”领域中有{total_score[i]}条测试用例。\n'
         score_info = ""
         for i in range(len(score_get)):
-            score_info += f"\n在“{field[i]}”领域中 ,该大语言模型的得分为: {score_get[i]}/{total_score[i]}。\n"
+            score_info += f'\n在“{field[i]}”领域中 ,该大语言模型的得分为: {score_get[i]}/{total_score[i]}。\n'
 
         time = self.extract_time(log_path)
-        time_per_testcase = round(time / totalnum, 3)
-        time_info = (
-            f"在本次测试中，LLM的响应时间为：平均每条测试用例{time_per_testcase}秒"
-        )
+        time_per_testcase = round(time/totalnum,3)
+        time_info = f'在本次测试中，LLM的响应时间为：平均每条测试用例{time_per_testcase}秒'
         conclude_info = (
             f"本次测试包括{totalnum}条测试用例.\n\n这些测试用例主要包括"
             + field_info
             + f"\n\n在所有测试用例中:\n"
             + testcasenum_info
             + score_info
-            + "\n"
+            +"\n"
             + time_info
         )
 
@@ -197,7 +213,9 @@ class Analyse:
         axs[1].set_aspect("equal")
         axs[1].set_position([0.0, 1.0, 0.6, 0.6])
 
-        legend_labels = ["{}".format(fields) for fields in field]
+        legend_labels = [
+            "{}".format(fields) for fields in field
+        ]
         legend = axs[1].legend(
             patches, legend_labels, loc="lower right", bbox_to_anchor=(1.25, 0.10)
         )
@@ -227,6 +245,7 @@ class Analyse:
         title = "3.回答错误的测试用例"
         plt.rcParams["font.sans-serif"] = ["SimSun"]
         plt.rcParams["mathtext.fontset"] = "stix"
+        plt.rcParams['text.usetex'] = False
         plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
 
         mistaken_list = extract_mistaken_info(log_path)
@@ -239,12 +258,16 @@ class Analyse:
         if len(mistaken_list) <= 4:
             for mistakens in mistaken_list:
                 if len(mistakens) == 5:
+                    mistakens[0] = self.escape_latex_special_characters(mistakens[0])
+                    mistakens[1] = self.escape_latex_special_characters(mistakens[1])
                     if mistakens[2]:
                         mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
                     else:
                         mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
+                    mistakens[0] = self.escape_latex_special_characters(mistakens[0])
+                    mistakens[1] = self.escape_latex_special_characters(mistakens[1])
                     if mistakens[2]:
                         mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
                     else:
@@ -253,12 +276,16 @@ class Analyse:
         else:
             for i in range(4):
                 if len(mistaken_list[i]) == 5:
+                    mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
+                    mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
                     if mistaken_list[i][2]:
                         mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
                     else:
                         mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
+                    mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
+                    mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
                     if mistaken_list[i][2]:
                         mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
                     else:
@@ -355,11 +382,15 @@ class Analyse:
 
         if len(ex_list) <= 3 and len(ex_list) > 0:
             for ex in ex_list:
-                example = f'\n\n对于以下这条属于"{ex[2]}"领域的问题，该大语言模型的回答完全正确。\n\n问题：“{ex[0]}”\n\n回答：“{ex[1]}”\n\n'
+                ex[0] = self.escape_latex_special_characters(ex[0])
+                ex[1] = self.escape_latex_special_characters(ex[1])
+                example = '\n\n' + f'对于以下这条属于"{ex[2]}"领域的问题，该大语言模型的回答完全正确。' + '\n\n'+ f'问题：“{ex[0]}”' + '\n\n' + f'回答：“{ex[1]}”' + '\n\n'
                 example_txt += example
         if len(ex_list) > 3:
             for i in range(3):
-                example = f'\n\n对于以下这条属于"{ex_list[i][2]}"领域的问题，该大语言模型的回答完全正确。\n\n问题：“{ex_list[i][0]}”\n\n回答：“{ex_list[i][1]}”\n\n'
+                ex_list[i][0] = self.escape_latex_special_characters(ex_list[i][0])
+                ex_list[i][1] = self.escape_latex_special_characters(ex_list[i][1])
+                example = '\n\n' + f'对于以下这条属于"{ex_list[i][2]}"领域的问题，该大语言模型的回答完全正确。' + '\n\n' + f'问题：“{ex_list[i][0]}”' + '\n\n' + f'回答：“{ex_list[i][1]}”' + '\n\n'
                 example_txt += example
 
         intro = "这是一个对于场景化大语言模型的自动化测评报告。\n\n由于工具中暂无关于当前大语言模型的背景信息，所以当前页仅展示本次测评中大语言模型答对的数条测试样例。"
@@ -386,23 +417,37 @@ class Analyse:
         max_version = max(version_numbers) if version_numbers else 0
         new_name = f"{base_name}-v{max_version + 1}.pdf"
         return new_name
+    
 
     def extract_time(self, log_path):
-        with open(log_path, "r") as file:
+        with open(log_path, 'r', encoding="utf-8") as file:
             lines = file.readlines()
 
-        time_pattern = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})")
+        time_pattern = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}')
 
-        first_line_match = time_pattern.match(lines[0])
-        last_line_match = time_pattern.match(lines[-1])
+        all_times = []
 
-        if first_line_match and last_line_match:
-            first_time = datetime.strptime(
-                first_line_match.group(1), "%Y-%m-%d %H:%M:%S"
-            )
-            last_time = datetime.strptime(last_line_match.group(1), "%Y-%m-%d %H:%M:%S")
+        for line in lines:
+            time_match = time_pattern.search(line)
+            if time_match:
+                time_str = time_match.group(0)
+                time_obj = datetime.strptime(time_str, '%Y-%m-%d %H:%M:%S')
+                all_times.append(time_obj)
 
-            time_difference = last_time - first_time
+        if all_times:
+            min_time = min(all_times)
+            max_time = max(all_times)
+
+            time_difference = max_time - min_time
             return time_difference.total_seconds()
         else:
             return None
+        
+
+    def escape_latex_special_characters(self, text):
+        text = re.sub(r'([#$%&~_^\\{}])', r'\\\1', text)
+        return text
+
+
+
+
