@@ -389,7 +389,7 @@ def setup_logger(logger_name, logger_file, level=logging.INFO) -> None:
         streamHandler = logging.StreamHandler()
         streamHandler.setFormatter(formatter)
         l.setLevel(level)
-        streamHandler.setStream(io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8'))
+        # streamHandler.setStream(io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8'))
         l.addHandler(fileHandler)
         l.addHandler(streamHandler)
 

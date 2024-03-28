@@ -8,7 +8,7 @@ import os
 @click.command()
 @click.option(
     "--testcase_path",
-    default = r"E:\GL实验\GL\Close\CMMLU-common",
+    default = r"E:\GL实验\GL\Datasets\Open-LLMEval\CMMLU-reasoning",
     help="testcase的json文件所存放的文件夹路径",
 )
 @click.option(
@@ -16,6 +16,7 @@ import os
     default = r"E:\GL实验\GL\register_usr.py",
     help="配置文件的绝对路径",
 )
+
 @click.option("--project_name", default="", help="项目名称，默认为空字符串")
 @click.option("--test_name", default="", help="实验名称，默认为空字符串")
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
@@ -38,7 +39,7 @@ def main(testcase_path, config_path, project_name, test_id, test_name, logs_path
 @click.command()
 @click.option(
     "--config_path",
-    default="",
+    default = r"E:\GL实验\GL\register_usr.py",
     help="配置文件的绝对路径",
 )
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
