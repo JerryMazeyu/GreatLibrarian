@@ -345,10 +345,10 @@ def generate_name_new(type) -> str:
 def generate_logger_subfile(Logs_path) -> str:
     subfilenum = "1"
     subfilename = "Test" + subfilenum
-    if Logs_path != '':
+    if Logs_path != "":
         logger_file = os.path.join(Logs_path, subfilename)
     else:
-        logger_file = os.path.join('Logs', subfilename)
+        logger_file = os.path.join("Logs", subfilename)
 
     # analyse_exist = os.path.exists(os.path.join(logger_file, "analyse.log"))
     # dialog_exist = os.path.exists(os.path.join(logger_file, "dialog.log"))
@@ -384,7 +384,7 @@ def setup_logger(logger_name, logger_file, level=logging.INFO) -> None:
         formatter = logging.Formatter("%(levelname)s:%(asctime)s:%(name)s: %(message)s")
 
         fileHandler = logging.FileHandler(
-            os.path.join(logger_file, f"{logger_name}.log"), mode="a", encoding='utf-8'
+            os.path.join(logger_file, f"{logger_name}.log"), mode="a", encoding="utf-8"
         )
         streamHandler = logging.StreamHandler()
         streamHandler.setFormatter(formatter)
@@ -442,10 +442,10 @@ class LoggerWriter:
             level_name, _, msg = message.partition(" ")
             if level_name.upper() in logging._nameToLevel:  # 判断是否为日志等级名称
                 formatted_message = f"{now} - {level_name.upper()} - {msg}"
-                formatted_message = formatted_message.encode('utf-8').decode('utf-8')
+                formatted_message = formatted_message.encode("utf-8").decode("utf-8")
             else:
                 formatted_message = f"{now} - INFO - {message}"
-                formatted_message = formatted_message.encode('utf-8').decode('utf-8')
+                formatted_message = formatted_message.encode("utf-8").decode("utf-8")
             self.logger.info(formatted_message)
 
     def flush(self) -> None:

@@ -54,11 +54,19 @@ class AutoInteractor:
         ans_list = []
         for ind, pr in enumerate(prompt):
             # recoder.dialoge[ind] = ''
-            print(f"To LLM:\t {pr} from thread {self.threadnum}".encode('utf-8').decode('utf-8'))
+            print(
+                f"To LLM:\t {pr} from thread {self.threadnum}".encode("utf-8").decode(
+                    "utf-8"
+                )
+            )
             # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
             ans = self.test_llm(pr)
             # ans = "Yes"
-            print(f"To User:\t {ans} from thread {self.threadnum}".encode('utf-8').decode('utf-8'))
+            print(
+                f"To User:\t {ans} from thread {self.threadnum}".encode("utf-8").decode(
+                    "utf-8"
+                )
+            )
 
             try:
                 ans_list.append(ans.lower())
