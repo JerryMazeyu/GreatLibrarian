@@ -20,7 +20,7 @@ def clean_log_dialog(log_file) -> None:
 
 def info_extract(log) -> Dict[str, List[str]]:
     pattern = r"from thread (\d+)"
-    with open(log, "r") as file:
+    with open(log, "r", encoding="utf-8") as file:
         log_messages = file.readlines()
 
     thread_messages = {}

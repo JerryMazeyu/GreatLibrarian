@@ -7,7 +7,7 @@ def extract_example_info(log_file) -> List[List[str]]:
 
     example_list = []
 
-    with open(log_file, "r") as file:
+    with open(log_file, "r", encoding="utf-8") as file:
         log_messages = file.readlines()
 
     for message in log_messages:
