@@ -78,12 +78,16 @@ class AutoRunner:
         if self.Logs_path != "":
             self.Logs_path = os.path.join(self.Logs_path, "Logs")
             if self.test_id == "":
-                self.log_path = os.path.join(self.Logs_path, generate_logger_subfile(self.Logs_path))
+                self.log_path = os.path.join(
+                    self.Logs_path, generate_logger_subfile(self.Logs_path)
+                )
             else:
                 self.log_path = os.path.join(self.Logs_path, self.test_id)
         else:
             if self.test_id == "":
-                self.log_path = os.path.join("Logs", generate_logger_subfile(self.Logs_path))
+                self.log_path = os.path.join(
+                    "Logs", generate_logger_subfile(self.Logs_path)
+                )
             else:
                 self.log_path = os.path.join("Logs", self.test_id)
 
@@ -217,8 +221,8 @@ class AutoRunner:
 
         #     methodnum.append(trans_result)
         # return methodnum
-        methodnum = [1,1,1,1]
-        return(methodnum)
+        methodnum = [1, 1, 1, 1]
+        return methodnum
 
     def mk_clean_log(self, logger_path) -> None:
         clean_log_dialog(logger_path)
