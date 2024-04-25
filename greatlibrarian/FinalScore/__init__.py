@@ -1,1 +1,1 @@
-from .finalScore1 import FinalScore1
+from .finalscore1 import FinalScore1
