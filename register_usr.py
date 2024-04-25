@@ -9,7 +9,7 @@ LLM_base = Registry("LLMs")
 
 
 @LLM_base.register_module("qwen_turbo")
-class New_LLM1(LLMs):
+class NewLLM1(LLMs):
     def __init__(self, apikey, name, llm_intro) -> None:
         self.apikey = apikey
         self.name = name
@@ -35,7 +35,7 @@ class New_LLM1(LLMs):
 
 
 @LLM_base.register_module("wenxin")
-class New_LLM2(LLMs):
+class NewLLM2(LLMs):
     def __init__(self, ak, sk, name, llm_intro) -> None:
         self.ak = ak
         self.sk = sk
@@ -63,7 +63,7 @@ class New_LLM2(LLMs):
 
 
 @LLM_base.register_module("chatglm")
-class New_LLM3(LLMs):
+class NewLLM3(LLMs):
     def __init__(self, apikey, name, llm_intro) -> None:
         self.apikey = apikey
         self.name = name
@@ -92,7 +92,7 @@ class New_LLM3(LLMs):
 import requests
 
 @LLM_base.register_module("chatglm6b")
-class New_LLM4(LLMs):
+class NewLLM4(LLMs):
     def __init__(self, apikey, name, llm_intro) -> None:
         self.apikey = apikey
         self.name = name

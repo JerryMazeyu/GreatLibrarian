@@ -14,11 +14,11 @@ from ..Analyser import Analyse, GetInfo
 class UpdateRunner:
     """A class responsible for orchestrating the overall program operation"""
 
-    def __init__(self, cfg, Test_ID, log_dir) -> None:
-        self.cfg = cfg
-        self.Test_ID = Test_ID
-        self.log_dir = log_dir
-        load_from_cfg(self, cfg)
+    def __init__(self, **kwargs) -> None:
+        self.cfg = kwargs.get('cfg')
+        self.Test_ID = kwargs.get('Test_ID')
+        self.log_dir = kwargs.get('log_dir')
+        load_from_cfg(self, self.cfg)
         self._check()
         self.test_llm_name = self.test_llm.get_name()
         self.LLM_eval_llm_name = self.LLM_eval_llm.get_name()
@@ -34,11 +34,12 @@ class UpdateRunner:
 
     def run(self) -> None:
         Test_ID = self.Test_ID
-        if Test_ID == "":
-            Test_ID_dir = generate_logger_subfile()
-        else:
-            Test_ID_dir = Test_ID
-        self.log_dir = os.path.join(self.log_dir, Test_ID_dir)
+        # if Test_ID == "":
+        #     Test_ID_dir = generate_logger_subfile()
+        # else:
+        Test_ID_dir = Test_ID
+        self.log_dir = os.path.join(self.log_dir, 'Logs')
+        self.log_dir = os.path.join(self.log_dir, Test_ID)
         # self.log_dir = os.path.join("Logs", Test_ID_dir)
         source_log_path = os.path.join(self.log_dir, "human_evaluation.log")
         destination_log_path = os.path.join(self.log_dir, "dialog_init.log")

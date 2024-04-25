@@ -9,15 +9,6 @@ class FinalScore(ABC):
         self.field = field
         self.threadnum = threadnum
 
-    @abstractmethod
-    def get_final_score(self) -> float:
-        """
-        The rule to determine the final score of a testcase based by the score of every evalmethod.
-        Return:
-            the final score of the testcase
-        """
-        pass
-
     def final_score_info(self) -> str:
         """
         Return:

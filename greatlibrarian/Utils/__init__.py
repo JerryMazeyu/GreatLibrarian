@@ -11,3 +11,4 @@ from .process import record_process
 from .registry import Registry
 from .update_dialog import append_log
 from .clear_log import clear_logs
+from .record_testcase import record_testcase_process

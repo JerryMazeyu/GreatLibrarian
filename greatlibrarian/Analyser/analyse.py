@@ -9,7 +9,7 @@ import warnings
 from typing import Tuple, List, Union
 import re
 from datetime import datetime
-
+matplotlib.use('TkAgg')
 
 # log_name = generate_name_new('analyse')
 # log_name = "analyse"
@@ -169,10 +169,12 @@ class Analyse:
             score_info += f"\n在“{field[i]}”领域中 ,该大语言模型的得分为: {score_get[i]}/{total_score[i]}。\n"
 
         time = self.extract_time(log_path)
-        time_per_testcase = round(time / totalnum, 3)
-        time_info = (
-            f"在本次测试中，LLM的响应时间为：平均每条测试用例{time_per_testcase}秒"
-        )
+        if totalnum != 0:
+            time_per_testcase = round(time/totalnum,3)
+            time_info = f'在本次测试中，LLM的响应时间为：平均每条测试用例{time_per_testcase}秒'
+        else:
+            time_info = f'等待人工审核后计算平均响应时间'
+        
         conclude_info = (
             f"本次测试包括{totalnum}条测试用例.\n\n这些测试用例主要包括"
             + field_info
@@ -244,8 +246,8 @@ class Analyse:
         title = "3.回答错误的测试用例"
         plt.rcParams["font.sans-serif"] = ["SimSun"]
         plt.rcParams["mathtext.fontset"] = "stix"
-        plt.rcParams["text.usetex"] = False
         plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
+        # plt.rcParams['text.usetex'] = True
 
         mistaken_list = extract_mistaken_info(log_path)
         mistaken_txt = ""
@@ -259,44 +261,49 @@ class Analyse:
                 if len(mistakens) == 5:
                     mistakens[0] = self.escape_latex_special_characters(mistakens[0])
                     mistakens[1] = self.escape_latex_special_characters(mistakens[1])
-                    if mistakens[2]:
-                        mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
-                    else:
-                        mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
+                    # if mistakens[2]:
+                        # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
+                    # mistakens[1] = r"{}".format(mistakens[1])
+                    mistakens[1] = self.process_escape_characters(mistakens[1])
+                    mistakens[1] = self.replace_double_dollars_with_align(mistakens[1])
+                    mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n' + f'回答：{mistakens[1]}' + f'\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
+                    # else:
+                        # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
                     mistakens[0] = self.escape_latex_special_characters(mistakens[0])
                     mistakens[1] = self.escape_latex_special_characters(mistakens[1])
-                    if mistakens[2]:
-                        mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
-                    else:
-                        mistaken = f'\n\n对于以下这条属于"{mistakens[2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistakens[0]}”\n\n回答：“{mistakens[1]}”\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
+                    # if mistakens[2]:
+                    # mistakens[1] = r"{}".format(mistakens[1])
+                    mistakens[1] = self.process_escape_characters(mistakens[1])
+                    mistakens[1] = self.replace_double_dollars_with_align(mistakens[1])
+                    mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n' + f'回答：{mistakens[1]}' + f'\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
+                    # else:
+                        # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
                     mistaken_txt += mistaken
         else:
             for i in range(4):
                 if len(mistaken_list[i]) == 5:
-                    mistaken_list[i][0] = self.escape_latex_special_characters(
-                        mistaken_list[i][0]
-                    )
-                    mistaken_list[i][1] = self.escape_latex_special_characters(
-                        mistaken_list[i][1]
-                    )
-                    if mistaken_list[i][2]:
-                        mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
-                    else:
-                        mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
+                    mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
+                    mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
+                    # if mistaken_list[i][2]:
+                    # mistaken_list[i][1] = r"{}".format(mistaken_list[i][1])
+                    mistaken_list[i][1] = self.process_escape_characters(mistaken_list[i][1])
+                    mistaken_list[i][1] = self.replace_double_dollars_with_align(mistaken_list[i][1])
+                    mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n' + f'回答：{mistaken_list[i][1]}' + f'\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
+                    # else:
+                        # mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n回答：{mistaken_list[i][1]}\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
                     mistaken_txt += mistaken
                 else:
-                    mistaken_list[i][0] = self.escape_latex_special_characters(
-                        mistaken_list[i][0]
-                    )
-                    mistaken_list[i][1] = self.escape_latex_special_characters(
-                        mistaken_list[i][1]
-                    )
-                    if mistaken_list[i][2]:
-                        mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
-                    else:
-                        mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：“{mistaken_list[i][0]}”\n\n回答：“{mistaken_list[i][1]}”\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
+                    mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
+                    mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
+                    # if mistaken_list[i][2]:
+                    # mistaken_list[i][1] = r"{}".format(mistaken_list[i][1])
+                    mistaken_list[i][1] = self.process_escape_characters(mistaken_list[i][1])
+                    mistaken_list[i][1] = self.replace_double_dollars_with_align(mistaken_list[i][1])
+                    mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n' + rf'回答：{mistaken_list[i][1]}' + f'\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
+                    # else:
+                        # mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n回答：{mistaken_list[i][1]}\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
                     mistaken_txt += mistaken
         if mistaken_txt == "":
             mistaken_txt += (
@@ -310,7 +317,7 @@ class Analyse:
             fontsize=25,
             fontfamily="SimSun",
             ha="left",
-            va="center",
+            va="center"
         )
 
         plt.axis("off")
@@ -465,6 +472,60 @@ class Analyse:
         else:
             return None
 
+    # def escape_latex_special_characters(self, text):
+    #     pattern = r'([#$%&~_^{}])'
+    #     escaped_text = re.sub(pattern, r'\1', text)
+    #     # escaped_text = re.sub(r'\\\\n', '', escaped_text)
+    #     return escaped_text
+
+    # def escape_latex_special_characters(self, text):
+    #     pattern = r'([#$%&~_^{}])'
+    #     escaped_text = re.sub(pattern, r'\1', text)
+    #     # escaped_text = re.sub(r'\\\\n', '', escaped_text)
+    #     return escaped_text
+
     def escape_latex_special_characters(self, text):
+        text = re.sub(r'\\n', '', text)
+        text = re.sub(r'\\', '', text)
+        return text 
+    
+    def process_escape_characters(self, input_string):
+        if not input_string:
+            return input_string
+
+        processed_chars = []
+        i = 0
+        length = len(input_string)
+        while i < length:
+            if input_string[i] == '\\':
+                count = 1
+                i += 1
+                while i < length and input_string[i] == '\\':
+                    count += 1
+                    i += 1
+                new_count = count // 2
+                processed_chars.append('\\' * new_count)
+            else:
+                processed_chars.append(input_string[i])
+                i += 1
+        return ''.join(processed_chars)
+    
+    def replace_double_dollars_with_align(self, input_str):
+        pattern = r'\$\$(.*?)\$\$'
+        matches = re.findall(pattern, input_str, re.DOTALL)
+        
+        for match in matches:
+
+            multiline_latex = match.replace('\n', '\\\\')
+
+            input_str = input_str.replace('$$' + match + '$$', r'\begin{equation}' + multiline_latex + r'\end{equation}')
+
+        input_str = re.sub(pattern, '', input_str)
+        
+        return input_str
+
+
+
+    
         text = re.sub(r"([#$%&~_^\\{}])", r"\\\1", text)
         return text
