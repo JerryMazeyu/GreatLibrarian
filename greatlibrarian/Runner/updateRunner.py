@@ -62,9 +62,7 @@ class UpdateRunner:
         analyse = Analyse(score_dict)
         analyse.analyse = apply_decorator_to_func(dec(), analyse.analyse)
         mean_score_info, sum_info, plotinfo = analyse.analyse()
-        analyse.report(
-            plotinfo, self.llm_intro, logger_path, self.log_dir
-        )
+        analyse.report(plotinfo, self.llm_intro, logger_path, self.log_dir)
 
     def mk_clean_log(self, logger_path) -> None:
         clean_log_dialog(logger_path)

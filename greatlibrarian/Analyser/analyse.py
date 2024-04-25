@@ -100,9 +100,8 @@ class Analyse:
         total_score = plotinfo[2]
         totalnum = sum(total_score)
 
-
         plt.rcParams["font.size"] = 18
-        plt.rcParams['text.usetex'] = False
+        plt.rcParams["text.usetex"] = False
 
         pdf_name = self.generate_new_name(report_path, "report")
         pdf_file_path = os.path.join(report_path, pdf_name)
@@ -128,6 +127,7 @@ class Analyse:
         fig = plt.figure(figsize=(30, 30))
         plt.rcParams["font.sans-serif"] = ["SimSun"]
         plt.rcParams["mathtext.fontset"] = "stix"
+        plt.rcParams["text.usetex"] = False
 
         title = "1.背景介绍"
         plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
@@ -155,7 +155,7 @@ class Analyse:
         if len(field) <= 3:
             for fields in field:
                 field_info += f'"{(fields)}"'
-            field_info += '领域'
+            field_info += "领域"
         else:
             for i in range(3):
                 field_info += f'"{str(field[i])}"'
@@ -163,10 +163,10 @@ class Analyse:
 
         testcasenum_info = ""
         for i in range(len(field)):
-            testcasenum_info += f'\n “{field[i]}”领域中有{total_score[i]}条测试用例。\n'
+            testcasenum_info += f"\n “{field[i]}”领域中有{total_score[i]}条测试用例。\n"
         score_info = ""
         for i in range(len(score_get)):
-            score_info += f'\n在“{field[i]}”领域中 ,该大语言模型的得分为: {score_get[i]}/{total_score[i]}。\n'
+            score_info += f"\n在“{field[i]}”领域中 ,该大语言模型的得分为: {score_get[i]}/{total_score[i]}。\n"
 
         time = self.extract_time(log_path)
         if totalnum != 0:
@@ -181,7 +181,7 @@ class Analyse:
             + f"\n\n在所有测试用例中:\n"
             + testcasenum_info
             + score_info
-            +"\n"
+            + "\n"
             + time_info
         )
 
@@ -216,9 +216,7 @@ class Analyse:
         axs[1].set_aspect("equal")
         axs[1].set_position([0.0, 1.0, 0.6, 0.6])
 
-        legend_labels = [
-            "{}".format(fields) for fields in field
-        ]
+        legend_labels = ["{}".format(fields) for fields in field]
         legend = axs[1].legend(
             patches, legend_labels, loc="lower right", bbox_to_anchor=(1.25, 0.10)
         )
@@ -400,13 +398,29 @@ class Analyse:
             for ex in ex_list:
                 ex[0] = self.escape_latex_special_characters(ex[0])
                 ex[1] = self.escape_latex_special_characters(ex[1])
-                example = '\n\n' + f'对于以下这条属于"{ex[2]}"领域的问题，该大语言模型的回答完全正确。' + '\n\n'+ f'问题：“{ex[0]}”' + '\n\n' + f'回答：“{ex[1]}”' + '\n\n'
+                example = (
+                    "\n\n"
+                    + f'对于以下这条属于"{ex[2]}"领域的问题，该大语言模型的回答完全正确。'
+                    + "\n\n"
+                    + f"问题：“{ex[0]}”"
+                    + "\n\n"
+                    + f"回答：“{ex[1]}”"
+                    + "\n\n"
+                )
                 example_txt += example
         if len(ex_list) > 3:
             for i in range(3):
                 ex_list[i][0] = self.escape_latex_special_characters(ex_list[i][0])
                 ex_list[i][1] = self.escape_latex_special_characters(ex_list[i][1])
-                example = '\n\n' + f'对于以下这条属于"{ex_list[i][2]}"领域的问题，该大语言模型的回答完全正确。' + '\n\n' + f'问题：“{ex_list[i][0]}”' + '\n\n' + f'回答：“{ex_list[i][1]}”' + '\n\n'
+                example = (
+                    "\n\n"
+                    + f'对于以下这条属于"{ex_list[i][2]}"领域的问题，该大语言模型的回答完全正确。'
+                    + "\n\n"
+                    + f"问题：“{ex_list[i][0]}”"
+                    + "\n\n"
+                    + f"回答：“{ex_list[i][1]}”"
+                    + "\n\n"
+                )
                 example_txt += example
 
         intro = "这是一个对于场景化大语言模型的自动化测评报告。\n\n由于工具中暂无关于当前大语言模型的背景信息，所以当前页仅展示本次测评中大语言模型答对的数条测试样例。"
@@ -433,13 +447,12 @@ class Analyse:
         max_version = max(version_numbers) if version_numbers else 0
         new_name = f"{base_name}-v{max_version + 1}.pdf"
         return new_name
-    
 
     def extract_time(self, log_path):
-        with open(log_path, 'r', encoding="utf-8") as file:
+        with open(log_path, "r", encoding="utf-8") as file:
             lines = file.readlines()
 
-        time_pattern = re.compile(r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}')
+        time_pattern = re.compile(r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}")
 
         all_times = []
 
@@ -447,7 +460,7 @@ class Analyse:
             time_match = time_pattern.search(line)
             if time_match:
                 time_str = time_match.group(0)
-                time_obj = datetime.strptime(time_str, '%Y-%m-%d %H:%M:%S')
+                time_obj = datetime.strptime(time_str, "%Y-%m-%d %H:%M:%S")
                 all_times.append(time_obj)
 
         if all_times:
@@ -458,7 +471,12 @@ class Analyse:
             return time_difference.total_seconds()
         else:
             return None
-        
+
+    # def escape_latex_special_characters(self, text):
+    #     pattern = r'([#$%&~_^{}])'
+    #     escaped_text = re.sub(pattern, r'\1', text)
+    #     # escaped_text = re.sub(r'\\\\n', '', escaped_text)
+    #     return escaped_text
 
     # def escape_latex_special_characters(self, text):
     #     pattern = r'([#$%&~_^{}])'
@@ -509,3 +527,5 @@ class Analyse:
 
 
     
+        text = re.sub(r"([#$%&~_^\\{}])", r"\\\1", text)
+        return text

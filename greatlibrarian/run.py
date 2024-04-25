@@ -36,7 +36,7 @@ def sub_main(testcase_path, config_path, project_name, test_id, test_name, logs_
 )
 @click.option(
     "--config_path",
-    default = r"E:\GL实验\GL\register_usr.py",
+    default=r"E:\GL实验\GL\register_usr.py",
     help="配置文件的绝对路径",
 )
 @click.option("--project_name", default="", help="项目名称，默认为空字符串")
