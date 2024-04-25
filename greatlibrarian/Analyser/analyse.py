@@ -523,9 +523,3 @@ class Analyse:
         input_str = re.sub(pattern, '', input_str)
         
         return input_str
-
-
-
-    
-        text = re.sub(r"([#$%&~_^\\{}])", r"\\\1", text)
-        return text
