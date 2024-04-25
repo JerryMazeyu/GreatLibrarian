@@ -1,5 +1,5 @@
-from ..Utils import load_from_cfg
-from ..Interactor import AutoInteractor
+from ..Utils import load_from_cfg, record_testcase
+from ..Interactor import AutoInteractor,HallucinationInteractor
 from ..TestCase import TestProject
 import os
 import json
@@ -12,6 +12,7 @@ from ..Utils import (
     to_int,
     record_project_info,
     record_process,
+    record_testcase_process,
     setup,
     apply_decorator_to_func,
     generate_logger_subfile,
@@ -23,17 +24,19 @@ from ..FinalScore import FinalScore1
 class AutoRunner:
     """A class responsible for orchestrating the overall program operation"""
 
-    def __init__(self, cfg, path, project_name, test_id, test_name, Logs_path) -> None:
-        self.path = path
-        self.cfg = cfg
+    def __init__(self, **kwargs) -> None:
+        self.cfg = kwargs.get('cfg')
+        self.path = kwargs.get('path')
+        self.project_name = kwargs.get('project_name','')
+        self.test_id = kwargs.get('test_id', '0')
+        self.test_name = kwargs.get('test_name','')
+        self.logs_path = kwargs.get('logs_path','')
+        self.test_type = kwargs.get('test_type','common')
+        self.testcase_num = 0
         self.logger_path = ""
         self.log_path = ""
         self.testproject_num = 0
-        self.project_name = project_name
-        self.Test_name = test_name
-        self.test_id = test_id
-        self.Logs_path = Logs_path
-        load_from_cfg(self, cfg)
+        load_from_cfg(self, self.cfg)
         self._check()
         self.load_json()
         self.test_llm_name = self.test_llm.get_name()
@@ -47,15 +50,23 @@ class AutoRunner:
         #     raise ValueError("There is no json_paths in the configure file.")
         if not hasattr(self, "LLM_eval_llm"):
             raise ValueError("There is no LLM_eval_llm in the configure file.")
-        if not hasattr(self, "interactor"):
-            print("Find no interactor, default as auto interactor.")
-            self.interactor_cls = AutoInteractor
+        # if not hasattr(self, "interactor"):
+        #     print("Find no interactor, default as auto interactor.")
+        #     self.interactor_cls = AutoInteractor
         if not hasattr(self, "register_agents"):
             print("Find no registered agents, default is empty list.")
             self.register_agents = []
-        if not hasattr(self, "finalscore"):
-            print("Find no finalscore, default is FinalScore1.")
-            self.finalscore = FinalScore1
+        # if not hasattr(self, "finalscore"):
+        #     print("Find no finalscore, default is FinalScore1.")
+        #     self.finalscore = FinalScore1
+        self.choose_interactor()
+        self.testcase_num = self.get_total_testcase()
+
+    def choose_interactor(self) -> None:
+        if self.test_type == 'general':
+            self.interactor_cls = AutoInteractor
+        if self.test_type == 'hallucination':
+            self.interactor_cls = HallucinationInteractor
 
     def load_json(self) -> None:
         self.testprojects = []
@@ -73,17 +84,35 @@ class AutoRunner:
             with open(jsp, encoding="utf-8") as f:
                 jsonobj = json.load(f)
                 self.testprojects.append(TestProject(jsonobj))
+    
+    def get_total_testcase(self) -> None:
+        directory = self.path
+        total_length = 0
+
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                file_path = os.path.join(root, file)
+                if file.endswith(".json"):
+                    with open(file_path, encoding="utf-8") as f:
+                        jsonobj = json.load(f)
+                        if "prompts" in jsonobj:
+                            prompts = jsonobj["prompts"]
+                            if isinstance(prompts, list):
+                                total_length += len(prompts)
+
+        return total_length
+
 
     def set_log_file(self):
-        if self.Logs_path != "":
-            self.Logs_path = os.path.join(self.Logs_path, "Logs")
+        if self.logs_path != "":
+            self.logs_path = os.path.join(self.logs_path, "Logs")
             if self.test_id == "":
-                self.log_path = os.path.join(self.Logs_path, generate_logger_subfile(self.Logs_path))
+                self.log_path = os.path.join(self.logs_path, generate_logger_subfile(self.logs_path))
             else:
-                self.log_path = os.path.join(self.Logs_path, self.test_id)
+                self.log_path = os.path.join(self.logs_path, self.test_id)
         else:
             if self.test_id == "":
-                self.log_path = os.path.join("Logs", generate_logger_subfile(self.Logs_path))
+                self.log_path = os.path.join("Logs", generate_logger_subfile(self.logs_path))
             else:
                 self.log_path = os.path.join("Logs", self.test_id)
 
@@ -93,8 +122,13 @@ class AutoRunner:
         """
         self.set_log_file()
         lock = threading.Lock()
+        num_done_lock = threading.Lock()
+        global num_done
+        num_done = 0 
+        record_testcase_process(f"目前的进度为：{num_done}/{self.testcase_num}", self.log_path)
 
         def run_interactor(testproj, interactor_cls, cfg, methodnum, threadnum):
+            global num_done
             for testcase in testproj.get_cases(cfg):
                 with lock:
                     interactor = interactor_cls(
@@ -108,6 +142,10 @@ class AutoRunner:
                     )
                     if interactor is not None:
                         interactor.run()
+                        with num_done_lock:
+                            num_done += 1
+                            record_testcase_process(f"目前的进度为：{num_done}/{self.testcase_num}", self.log_path)
+
             self.logger_path = interactor.get_logger_path()
 
         method_num = self.selectmethod()
@@ -119,7 +157,7 @@ class AutoRunner:
                 future = executor.submit(
                     run_interactor,
                     testproj,
-                    self.interactor,
+                    self.interactor_cls,
                     self.cfg,
                     method_num,
                     threadnum,
@@ -152,7 +190,7 @@ class AutoRunner:
             self.LLM_eval_llm_name,
             self.path,
             self.testproject_num,
-            self.Test_name,
+            self.test_name,
             self.log_path,
         )
 
@@ -217,8 +255,13 @@ class AutoRunner:
 
         #     methodnum.append(trans_result)
         # return methodnum
-        methodnum = [1,1,1,1]
-        return(methodnum)
+        if self.test_type == 'general':
+            methodnum = [1,1,1,1,1]
+            return(methodnum)
+        
+        if self.test_type == 'hallucination':
+            methodnum = [1,1,1,2,2]
+            return(methodnum)
 
     def mk_clean_log(self, logger_path) -> None:
         clean_log_dialog(logger_path)

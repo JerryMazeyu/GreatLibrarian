@@ -17,7 +17,6 @@ class TestProject:
         self.prompts_ = to_list(json_obj["prompts"])
         self.values = json_obj.get("values", {})
         self.raw_eval_info = json_obj.get("evaluation", None)
-        self.valid_fields = ["common knowledge", "tool usage"]
         self.prompts = defaultdict(list)
 
         self.get_prompts()
@@ -131,7 +130,6 @@ class TestProject:
                     cfg["test_llm"] = getattr(baseconf, "test_llm", None)
                     cfg["LLM_eval_llm"] = getattr(baseconf, "LLM_eval_llm", None)
                     cfg["register_agents"] = getattr(baseconf, "register_agents", None)
-                    cfg["finalscore"] = getattr(baseconf, "finalscore", None)
                     if not cfg["register_agents"]:
                         warn(
                             "There is no registered agents in the config.",

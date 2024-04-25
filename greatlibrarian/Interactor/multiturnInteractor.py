@@ -6,9 +6,9 @@ from ..Utils import (
 )
 from ..EvalMethods import ToolUse, Keyword, LLMEval, Blacklist
 import warnings
-from ..FinalScore import FinalScore1
 
-class AutoInteractor:
+
+class MultiTurnInteractor:
     """A class to keep the interaction between the LLM and GreatLibrarian"""
 
     def __init__(self, testcase, methodnum, threadnum, logger_path="") -> None:
@@ -68,7 +68,8 @@ class AutoInteractor:
                 ans_list.append("default_value")
 
         return ans_list
-
+    
+    
     def tool_interact(self, prompt, tools: list) -> list:
         """
         A function to create the interaction between the LLM, the user and the tool.
@@ -99,6 +100,7 @@ class AutoInteractor:
         # self.recoders.append(recoder)
         return ans_list
 
+
     def run(self) -> None:
         """
         A function to start the interaction.
@@ -119,37 +121,38 @@ class AutoInteractor:
             print(tool_eval_info + f"from thread {self.threadnum}")
             score_dict["toolusage"] = toolusage_score
         else:
-            keywords_ans = self.base_interact(self.prompt)
-            if self.eval_info.get("blacklist", None):
-                eval_obj = eval_stack["blacklist"]
-                eval_obj.set_ans(keywords_ans)
-                eval_obj.set_field(self.field)
-                eval_obj.set_threadnum(self.threadnum)
-                blacklist_score, blacklist_eval_info = eval_obj.score(self.methodnum[2])
-                print(blacklist_eval_info + f"from thread {self.threadnum}")
-                score_dict["blacklist"] = blacklist_score
+            for i in range (5):
+                keywords_ans = self.base_interact(self.prompt)
+                if self.eval_info.get("blacklist", None):
+                    eval_obj = eval_stack["blacklist"]
+                    eval_obj.set_ans(keywords_ans)
+                    eval_obj.set_field(self.field)
+                    eval_obj.set_threadnum(self.threadnum)
+                    blacklist_score, blacklist_eval_info = eval_obj.score(self.methodnum[2])
+                    print(blacklist_eval_info + f"from thread {self.threadnum}")
+                    score_dict["blacklist"] = blacklist_score
 
-            if blacklist_score != 0 and self.eval_info.get("keywords", None):
-                eval_obj = eval_stack["keywords"]
-                eval_obj.set_ans(keywords_ans)
-                eval_obj.set_field(self.field)
-                eval_obj.set_threadnum(self.threadnum)
-                keywords_score, keywords_eval_info = eval_obj.score(self.methodnum[1])
-                print(keywords_eval_info + f"from thread {self.threadnum}")
-                score_dict["keywords"] = keywords_score
+                if blacklist_score != 0 and self.eval_info.get("keywords", None):
+                    eval_obj = eval_stack["keywords"]
+                    eval_obj.set_ans(keywords_ans)
+                    eval_obj.set_field(self.field)
+                    eval_obj.set_threadnum(self.threadnum)
+                    keywords_score, keywords_eval_info = eval_obj.score(self.methodnum[1])
+                    print(keywords_eval_info + f"from thread {self.threadnum}")
+                    score_dict["keywords"] = keywords_score
 
-            if blacklist_score != 0 and self.eval_info.get("LLMEval", None):
-                eval_obj = eval_stack["LLMEval"]
-                eval_obj.set_llm(self.LLM_eval_llm)
-                eval_obj.set_ans(keywords_ans)
-                eval_obj.set_field(self.field)
-                eval_obj.set_prompt(self.prompt)
-                eval_obj.set_threadnum(self.threadnum)
-                LLM_eval_score, LLM_eval_info = eval_obj.score(self.methodnum[3])
-                print(LLM_eval_info + f"from thread {self.threadnum}")
-                score_dict["LLM_eval"] = LLM_eval_score
-        final_score_obj = FinalScore1(score_dict, self.field, self.threadnum)
-        human_judge, final_score_info, final_score = final_score_obj.final_score_info(self.methodnum[4])
+                if blacklist_score != 0 and self.eval_info.get("LLMEval", None):
+                    eval_obj = eval_stack["LLMEval"]
+                    eval_obj.set_llm(self.LLM_eval_llm)
+                    eval_obj.set_ans(keywords_ans)
+                    eval_obj.set_field(self.field)
+                    eval_obj.set_prompt(self.prompt)
+                    eval_obj.set_threadnum(self.threadnum)
+                    LLM_eval_score, LLM_eval_info = eval_obj.score(self.methodnum[3])
+                    print(LLM_eval_info + f"from thread {self.threadnum}")
+                    score_dict["LLM_eval"] = LLM_eval_score
+        final_score_obj = self.finalscore(score_dict, self.field, self.threadnum)
+        human_judge, final_score_info, final_score = final_score_obj.final_score_info()
 
         if human_judge != "Human Evaluation":
             print(final_score_info)

@@ -8,10 +8,14 @@ class FinalScore1(FinalScore):
         self.score = score_dict
         self.field = field
         self.threadnum = threadnum
+        self.methodtotal = 2
+    
+    def getmethodtotal(self) -> int:
+        return int((self.methodtotal))
 
-    def get_final_score(self) -> int:
+    def get_final_score1(self) -> float:
         """
-        Used to define the final scoring calculation rules for each testcase.
+        Used to define the final scoring calculation rules for each testcase of general type.
         The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.
         """
         if self.score.get("blacklist") is not None and self.score["blacklist"] == 0.0:
@@ -30,11 +34,22 @@ class FinalScore1(FinalScore):
             return self.score["keywords"]
         if self.score.get("LLM_eval") is not None:
             return self.score["LLM_eval"]
+        
+    def get_final_score2(self) -> float:
+        """
+        Used to define the final scoring calculation rules for each testcase of hallucination type.
+        The final score is calculated based on the scores from various evalmethods through this rule to obtain the ultimate score.
+        """
+        if self.score.get("LLM_eval") is not None:
+            return self.score["LLM_eval"]
+        
 
-    def final_score_info(self) -> str:
+    def final_score_info(self, method_num) -> str:
+        eval_dict = {1: self.get_final_score1, 2:self.get_final_score2}
+        eval_method = eval_dict[method_num]
         return (
-            self.get_final_score(),
-            f"The final score of this testcase is {self.get_final_score()}, in {self.field} field."
+            eval_method(),
+            f"The final score of this testcase is {eval_method()}, in {self.field} field."
             + f"from thread {self.threadnum}",
-            self.get_final_score(),
+            eval_method(),
         )
