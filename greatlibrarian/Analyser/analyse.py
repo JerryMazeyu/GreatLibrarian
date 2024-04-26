@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import os
@@ -9,7 +11,7 @@ import warnings
 from typing import Tuple, List, Union
 import re
 from datetime import datetime
-matplotlib.use('TkAgg')
+
 
 # log_name = generate_name_new('analyse')
 # log_name = "analyse"
@@ -90,7 +92,7 @@ class Analyse:
         print(conclude_info)
         return (get_score_info, conclude_info, plotinfo)
 
-    def report(self, plotinfo, llm_intro, log_path, report_path) -> None:
+    def report(self, plotinfo, llm_intro, log_path, report_path, test_type) -> None:
         """
         log_path: The path of the dialog_init.log
         logger_path: the path to the analyse.log
@@ -249,7 +251,7 @@ class Analyse:
         plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
         # plt.rcParams['text.usetex'] = True
 
-        mistaken_list = extract_mistaken_info(log_path)
+        mistaken_list = extract_mistaken_info(log_path, test_type)
         mistaken_txt = ""
 
         for i in range(len(mistaken_list)):
@@ -270,7 +272,7 @@ class Analyse:
                     # else:
                         # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
                     mistaken_txt += mistaken
-                else:
+                if len(mistakens) == 4:
                     mistakens[0] = self.escape_latex_special_characters(mistakens[0])
                     mistakens[1] = self.escape_latex_special_characters(mistakens[1])
                     # if mistakens[2]:
@@ -278,6 +280,18 @@ class Analyse:
                     mistakens[1] = self.process_escape_characters(mistakens[1])
                     mistakens[1] = self.replace_double_dollars_with_align(mistakens[1])
                     mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n' + f'回答：{mistakens[1]}' + f'\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
+                    # else:
+                        # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
+                    mistaken_txt += mistaken
+                
+                if len(mistakens) == 3:
+                    mistakens[0] = self.escape_latex_special_characters(mistakens[0])
+                    mistakens[1] = self.escape_latex_special_characters(mistakens[1])
+                    # if mistakens[2]:
+                    # mistakens[1] = r"{}".format(mistakens[1])
+                    mistakens[1] = self.process_escape_characters(mistakens[1])
+                    mistakens[1] = self.replace_double_dollars_with_align(mistakens[1])
+                    mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n' + f'回答：{mistakens[1]}' + '\n\n\n'
                     # else:
                         # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
                     mistaken_txt += mistaken
@@ -294,7 +308,7 @@ class Analyse:
                     # else:
                         # mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n回答：{mistaken_list[i][1]}\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
                     mistaken_txt += mistaken
-                else:
+                if len(mistakens) == 4:
                     mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
                     mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
                     # if mistaken_list[i][2]:
@@ -302,6 +316,18 @@ class Analyse:
                     mistaken_list[i][1] = self.process_escape_characters(mistaken_list[i][1])
                     mistaken_list[i][1] = self.replace_double_dollars_with_align(mistaken_list[i][1])
                     mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n' + rf'回答：{mistaken_list[i][1]}' + f'\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
+                    # else:
+                        # mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n回答：{mistaken_list[i][1]}\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
+                    mistaken_txt += mistaken
+
+                if len(mistakens) == 3:
+                    mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
+                    mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
+                    # if mistaken_list[i][2]:
+                    # mistaken_list[i][1] = r"{}".format(mistaken_list[i][1])
+                    mistaken_list[i][1] = self.process_escape_characters(mistaken_list[i][1])
+                    mistaken_list[i][1] = self.replace_double_dollars_with_align(mistaken_list[i][1])
+                    mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n' + rf'回答：{mistaken_list[i][1]}' + '\n\n\n'
                     # else:
                         # mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n回答：{mistaken_list[i][1]}\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
                     mistaken_txt += mistaken
