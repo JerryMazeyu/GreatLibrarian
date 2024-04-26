@@ -1,6 +1,6 @@
-from greatlibrarian.Runner import AutoRunner, UpdateRunner
+from .Runner import AutoRunner, UpdateRunner
 import click
-from greatlibrarian.register import register
+from .register import register
 import importlib.util
 import os
 import traceback
@@ -31,7 +31,7 @@ def sub_main(testcase_path, config_path, project_name, test_id, test_name, logs_
 @click.command()
 @click.option(
     "--testcase_path",
-    default = r"E:\GL实验\GL\test",
+    default = r"E:\GL实验\GL\try",
     help="testcase的json文件所存放的文件夹路径",
 )
 @click.option(
@@ -43,7 +43,7 @@ def sub_main(testcase_path, config_path, project_name, test_id, test_name, logs_
 @click.option("--test_name", default="", help="实验名称，默认为空字符串")
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
 @click.option("--logs_path", default="", help="日志路径")
-@click.option("--test_type", default="hallucination", help="测试类型")
+@click.option("--test_type", default="general", help="测试类型")
 def main(testcase_path, config_path, project_name, test_id, test_name, logs_path, test_type) -> str:
     # sub_main(testcase_path, config_path, project_name, test_id, test_name, logs_path,test_type)
     try:
@@ -55,7 +55,7 @@ def main(testcase_path, config_path, project_name, test_id, test_name, logs_path
         record_traceback(tb_str, path)
 
 
-def sub_update(config_path, test_id, logs_path) -> None:
+def sub_update(config_path, test_id, logs_path,test_type) -> None:
     path = os.path.join(logs_path, "Logs")
     if os.path.exists(os.path.join(path, test_id)):
         spec = importlib.util.spec_from_file_location("conf", config_path)
@@ -65,13 +65,14 @@ def sub_update(config_path, test_id, logs_path) -> None:
         runner = UpdateRunner(
         cfg = config, 
         Test_ID = test_id, 
-        log_dir = logs_path
+        log_dir = logs_path,
+        test_type = test_type
         )
         runner.run()
     else:
         error_message = "Files not Found! Please use gltest before glupdate."
         raise Warning(error_message)
-    
+
 @click.command()
 @click.option(
     "--config_path",
@@ -79,11 +80,12 @@ def sub_update(config_path, test_id, logs_path) -> None:
     help="配置文件的绝对路径",
 )
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
-@click.option("--logs_path", default="E:\GL实验\GL", help="日志路径")
-def update(config_path, test_id, logs_path) -> str:
+@click.option("--logs_path", default="", help="日志路径")
+@click.option("--test_type", default="general", help="测试类型")
+def update(config_path, test_id, logs_path, test_type) -> str:
     # sub_update(config_path, test_id, logs_path)
     try:
-        sub_update(config_path, test_id, logs_path)
+        sub_update(config_path, test_id, logs_path,test_type)
     except Exception as e:
         tb_str = traceback.format_exc()
         path = os.path.join(logs_path,'Logs')

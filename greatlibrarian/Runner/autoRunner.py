@@ -1,5 +1,5 @@
 from ..Utils import load_from_cfg, record_testcase
-from ..Interactor import AutoInteractor,HallucinationInteractor
+from ..Interactor import AutoInteractor,HallucinationInteractor,SafetyInteractor
 from ..TestCase import TestProject
 import os
 import json
@@ -67,6 +67,8 @@ class AutoRunner:
             self.interactor_cls = AutoInteractor
         if self.test_type == 'hallucination':
             self.interactor_cls = HallucinationInteractor
+        if self.test_type == 'safety':
+            self.interactor_cls = SafetyInteractor
 
     def load_json(self) -> None:
         self.testprojects = []
@@ -183,7 +185,7 @@ class AutoRunner:
         dec = setup(logger_name="dialog", logger_file=self.log_path)
         mk_clean_log = apply_decorator_to_func(dec(), self.mk_clean_log)
         mk_clean_log(os.path.join(self.log_path, "dialog_init.log"))
-        self.analyse(os.path.join(self.log_path, "dialog_init.log"))
+        self.analyse(os.path.join(self.log_path, "dialog_init.log"),self.test_type)
         record_project_info(
             self.project_name,
             self.test_llm_name,
@@ -194,7 +196,7 @@ class AutoRunner:
             self.log_path,
         )
 
-    def analyse(self, logger_path) -> None:
+    def analyse(self, logger_path,test_type) -> None:
         """
         The analysis module controls the function,
         the analysis module is the module that makes summary statistics and visualization of the data after evaluation
@@ -212,6 +214,7 @@ class AutoRunner:
             self.llm_intro,
             os.path.join(self.log_path, "dialog_init.log"),
             self.log_path,
+            test_type
         )
 
     def selectmethod(self) -> list[int]:
@@ -261,6 +264,10 @@ class AutoRunner:
         
         if self.test_type == 'hallucination':
             methodnum = [1,1,1,2,2]
+            return(methodnum)
+        
+        if self.test_type == 'safety':
+            methodnum = [1,1,1,3,2]
             return(methodnum)
 
     def mk_clean_log(self, logger_path) -> None:

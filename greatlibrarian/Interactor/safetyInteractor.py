@@ -8,7 +8,7 @@ from ..EvalMethods import ToolUse, Keyword, LLMEval, Blacklist
 import warnings
 from ..FinalScore import FinalScore1
 
-class HallucinationInteractor:
+class SafetyInteractor:
     """A class to keep the interaction between the LLM and GreatLibrarian"""
 
     def __init__(self, testcase, methodnum, threadnum, logger_path="") -> None:
@@ -50,31 +50,24 @@ class HallucinationInteractor:
         """
         # recoder = Recoder()
         # recoder.ind = ind
+
         print(f"---------- New Epoch ---------- from thread {self.threadnum}")
         ans_list = []
         for ind, pr in enumerate(prompt):
-            for i in range (3):
-                # recoder.dialoge[ind] = ''
-                print(
-                    f"To LLM:\t {pr} from thread {self.threadnum}".encode("utf-8").decode(
-                        "utf-8"
-                    )
-                )
-                # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
-                ans = self.test_llm(pr)
-                # ans = "Yes"
-                print(
-                    f"To User:\t {ans} from thread {self.threadnum}".encode("utf-8").decode(
-                        "utf-8"
-                    )
-                )
+            # recoder.dialoge[ind] = ''
+            print(f"To LLM:\t {pr} from thread {self.threadnum}")
+            # recoder.dialoge[ind] += f"To LLM:\t {pr}\n"
+            ans = self.test_llm(pr)
+            # ans = "Yes"
+            print(f"To User:\t {ans} from thread {self.threadnum}")
 
-                try:
-                    ans_list.append(ans.lower())
-                except Exception as e:
-                    warning_message = f"Warning: An API exception occurred - {e}"
-                    warnings.warn(warning_message, RuntimeWarning)
-                    ans_list.append("default_value")
+            try:
+                ans_list.append(ans.lower())
+            except Exception as e:
+                warning_message = f"Warning: An API exception occurred - {e}"
+                warnings.warn(warning_message, RuntimeWarning)
+                ans_list.append("default_value")
+
         return ans_list
 
     def run(self) -> None:
@@ -89,7 +82,7 @@ class HallucinationInteractor:
         eval_stack = self.eval()
         eval_obj = eval_stack["LLMEval"]
         eval_obj.set_llm(self.LLM_eval_llm)
-        eval_obj.set_ans(ans_list)
+        eval_obj.set_ans(ans_list[0])
         eval_obj.set_field(self.field)
         eval_obj.set_prompt(self.prompt)
         eval_obj.set_threadnum(self.threadnum)

@@ -18,6 +18,7 @@ class UpdateRunner:
         self.cfg = kwargs.get('cfg')
         self.Test_ID = kwargs.get('Test_ID')
         self.log_dir = kwargs.get('log_dir')
+        self.test_type = kwargs.get('test_type')
         load_from_cfg(self, self.cfg)
         self._check()
         self.test_llm_name = self.test_llm.get_name()
@@ -62,7 +63,7 @@ class UpdateRunner:
         analyse = Analyse(score_dict)
         analyse.analyse = apply_decorator_to_func(dec(), analyse.analyse)
         mean_score_info, sum_info, plotinfo = analyse.analyse()
-        analyse.report(plotinfo, self.llm_intro, logger_path, self.log_dir)
+        analyse.report(plotinfo, self.llm_intro, logger_path, self.log_dir, self.test_type)
 
     def mk_clean_log(self, logger_path) -> None:
         clean_log_dialog(logger_path)
