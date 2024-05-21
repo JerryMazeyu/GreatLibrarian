@@ -1,10 +1,8 @@
 [tool.poetry]
-name = "greatlibrarian"
-version = "0.0.10"
+name = "gl"
+version = "0.0.12"
 description = ""
 authors = ["dmj <ggxxding@163.com>"]
-readme = "README.md"
-repository = "https://github.com/JerryMazeyu/GreatLibrarian"
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -17,10 +15,17 @@ matplotlib = "^3.8.1"
 reportlab = "^4.0.7"
 tqdm = "^4.66.1"
 click = "^8.1.7"
+markdown = "^3.6"
+pandoc = "^2.3"
+pypandoc = "^1.13"
+greatlibrarian = "^0.0.11"
+pymdown-extensions = "^10.8.1"
 
 [tool.poetry.scripts]
-gltest = "greatlibrarian.run:main"
-glupdate = "greatlibrarian.run:update"
+gltest = "gl.run:test"
+glupdate = "gl.run:update"
+gltest_async = "gl.run:test_async"
+glupdate_async = "gl.run:update_async"
 
 [build-system]
 requires = ["poetry-core"]
