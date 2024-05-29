@@ -1,0 +1,6 @@
+{
+    "data_to_sort": [4, 2, 7, 1, 9, 3],
+    "sorting_algorithm": "bubble_sort",
+    "code": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr\n\n# 使用 bubble_sort 函数对数据进行排序\ndata_to_sort = [4, 2, 7, 1, 9, 3]\nbubble_sort(data_to_sort)\ndata_to_sort"
+  }
+  
