@@ -15,3 +15,7 @@ from gl.Utils.clean_log import clean_log_dialog
 from gl.Utils.clean_log_async import clean_log_dialog_async
 from gl.Utils.human_evaluation_async import *
 from gl.Utils.human_evaluation import *
+from gl.Utils.match import *
+from gl.Utils.sentence_judge import *
+from gl.Utils.split_sentence import *
+from gl.Utils.sort_for_sim import *

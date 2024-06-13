@@ -6,13 +6,17 @@ import importlib.util
 import os
 import traceback
 import asyncio
+from FlagEmbedding import BGEM3FlagModel
 
+def get_model():
+    model = BGEM3FlagModel('BAAI/bge-m3', use_fp16=True)
+    return model
+model = get_model()
 
-    
 @click.command()
 @click.option(
     "--testcase_path",
-    default = r"D:\GL\Testcase2",
+    default = r"D:\GL\Testcase1",
     help="testcase的json文件所存放的文件夹路径",
 )
 @click.option(
@@ -51,7 +55,8 @@ def sub_test(testcase_path, config_path, project_name, test_id, test_name, logs_
         test_id=test_id,
         test_name=test_name,
         logs_path=logs_path,
-        test_type=test_type
+        test_type=test_type,
+        sim_model = model
         )
         runner.run()
     else:
@@ -144,7 +149,8 @@ async def sub_sub_test_async(testcase_path, config_path, project_name, test_id, 
             test_id=test_id,
             test_name=test_name,
             logs_path=logs_path,
-            test_type=test_type
+            test_type=test_type,
+            sim_model = model
         )
         await runner.run()
     else:
