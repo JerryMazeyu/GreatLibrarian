@@ -1,8 +1,14 @@
 import matplotlib
-matplotlib.use('TkAgg')
+import os
+if not os.environ.get('DISPLAY'):
+    print("No display found. Using 'Agg' backend.")
+    matplotlib.use('Agg')
+else:
+    print("Display found. Using 'TkAgg' backend.")
+    matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-import os
+
 from gl.Utils import extract_mistaken_info, extract_example_info
 import matplotlib
 import textwrap
@@ -431,7 +437,7 @@ class Analyse_Async:
 
         # 1.背景介绍
 
-        intro = self.introduction_of_llm(log_path, llm_intro)
+        intro = self.introduction_of_llm(log_path, llm_intro, test_type)
         with open(md_file_path, 'a', encoding='utf-8') as f:
             f.write('# 测试报告\n\n')
             f.write('## 背景介绍\n')
@@ -668,10 +674,8 @@ class Analyse_Async:
         # pdfkit.from_file(html_path, pdf_path)
         print("Report Generated !")
 
-    def introduction_of_llm(self, log_path, llm_intro) -> str:
-
-        ex_list = extract_example_info(log_path)
-
+    def introduction_of_llm(self, log_path, llm_intro,test_type) -> str:
+        ex_list = extract_example_info(log_path, test_type)
         example_txt = "以下是本次测试中的几条测试用例及其回答：\n"
 
         if len(ex_list) == 0:

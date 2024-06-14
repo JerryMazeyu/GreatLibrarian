@@ -635,13 +635,13 @@ files = [
 
 [[package]]
 name = "greatlibrarian"
-version = "0.0.11"
+version = "0.0.12"
 description = ""
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "greatlibrarian-0.0.11-py3-none-any.whl", hash = "sha256:81cfa73ce8156050af58833d21d420e88f412b92fe215858eb78e5c2e66affec"},
-    {file = "greatlibrarian-0.0.11.tar.gz", hash = "sha256:b1505b20bb3be3352e651b65bf814eac619eccdc43b0ed91949e168702e88d40"},
+    {file = "greatlibrarian-0.0.12-py3-none-any.whl", hash = "sha256:efb4dc94d08fc05e53771371c0fd7e3a9553b3f586253fb16031140138cce3ec"},
+    {file = "greatlibrarian-0.0.12.tar.gz", hash = "sha256:6cab5c3f57f0209a5cb315a35c63f46fa1adc6625dd9920f67af8019710c7744"},
 ]
 
 [package.dependencies]
@@ -2004,4 +2004,4 @@ requests = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "74d0f11048778ab1c9e75911154063c4e6df86ce747d1a8439c904c17be45c52"
+content-hash = "808bc945f4fbf976f05bbd15fbfce34900d8df84c562977326a8c78a83b95f0f"
