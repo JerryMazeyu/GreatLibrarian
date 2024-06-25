@@ -1,6 +1,6 @@
-from gl.Core import LLMs, FinalScore
-from gl.Configs import ExampleConfig
-from gl.Utils import Registry
+from greatlibrarian.Core import LLMs, FinalScore
+from greatlibrarian.Configs import ExampleConfig
+from greatlibrarian.Utils import Registry
 import dashscope
 import qianfan
 import zhipuai
