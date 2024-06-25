@@ -11,14 +11,13 @@ from gl.FinalScore import FinalScore1
 class AutoInteractor:
     """A class to keep the interaction between the LLM and GreatLibrarian"""
 
-    def __init__(self, testcase, methodnum, threadnum, model,logger_path="") -> None:
+    def __init__(self, testcase, methodnum, threadnum, logger_path="") -> None:
         load_from_cfg(self, testcase)
         # self.recoders = []
         self.methodnum = methodnum
         self.threadnum = threadnum
         self.logger_path = logger_path
         self.human_evaluation = human_evaluation
-        self.model = model
 
     def eval(self) -> dict:
         """
@@ -36,10 +35,7 @@ class AutoInteractor:
         for key in eval_dict.keys():
             if key in self.eval_info.keys():
                 eval_cls = eval_dict[key]
-                if key == 'keywords':
-                    eval_method = eval_cls(self.prompt, "", self.eval_info, "", 0, "")
-                else:
-                    eval_method = eval_cls(self.prompt, "", self.eval_info, "", 0)
+                eval_method = eval_cls(self.prompt, "", self.eval_info, "", 0)
                 eval_stack[key] = eval_method
         return eval_stack
 
@@ -138,7 +134,6 @@ class AutoInteractor:
                 eval_obj.set_ans(keywords_ans)
                 eval_obj.set_field(self.field)
                 eval_obj.set_threadnum(self.threadnum)
-                eval_obj.set_model(self.model)
                 keywords_score, keywords_eval_info = eval_obj.score(self.methodnum[1])
                 print(keywords_eval_info + f"from thread {self.threadnum}")
                 score_dict["keywords"] = keywords_score
@@ -182,6 +177,6 @@ class AutoInteractor:
                     print(output)
                     
             if float(final_score) > 0.25:
-                output = f'Example case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field},keywords:{self.eval_info["keywords"][0]}'
+                output = f"Example case:prompt:{self.prompt},ans:{keywords_ans},field:{self.field}"
                 print(output)
               
