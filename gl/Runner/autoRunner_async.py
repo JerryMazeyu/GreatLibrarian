@@ -36,7 +36,6 @@ class AutoRunner_Async:
         self.test_name = kwargs.get('test_name','')
         self.logs_path = kwargs.get('logs_path','')
         self.test_type = kwargs.get('test_type','common')
-        self.sim_model = kwargs.get('sim_model')
         self.testcase_num = 0
         self.logger_path = ""
         self.log_path = ""
@@ -139,7 +138,7 @@ class AutoRunner_Async:
             for testcase in testproj.get_cases(cfg):
                 with lock:
                     interactor = interactor_cls(
-                        testcase, methodnum, threadnum, self.sim_model, self.log_path
+                        testcase, methodnum, threadnum, self.log_path
                     )
                     dec = await setup_async(logger_name="dialog_init", logger_file=self.log_path)
                     # interactor = apply_decorator_to_all_methods(dec(), interactor)
@@ -197,7 +196,6 @@ class AutoRunner_Async:
             self.testproject_num,
             self.test_name,
             self.log_path,
-            self.test_type
         )
 
     async def analyse(self, logger_path,test_type) -> None:

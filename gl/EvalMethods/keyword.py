@@ -1,6 +1,5 @@
 from gl.Core import EvalMethods
 from gl.Utils import to_list
-from gl.Utils import get_sim, sentence_judge, split_response, sort_for_sim
 import re
 from typing import Tuple
 
@@ -8,7 +7,7 @@ from typing import Tuple
 class Keyword(EvalMethods):
     """Blacklist evaluation"""
 
-    def __init__(self, prompt, ans, evalinfo, field, threadnum, model) -> None:
+    def __init__(self, prompt, ans, evalinfo, field, threadnum) -> None:
         super().__init__(prompt, ans, evalinfo, field, threadnum)
         self.name = ["keyword", "Keyword", "Keywords", "keywords"]
         self.keywords = self.evalinfo["keywords"]
@@ -28,15 +27,11 @@ class Keyword(EvalMethods):
     def set_threadnum(self, threadnum) -> None:
         self.threadnum = threadnum
 
-    def set_model(self, model) -> None:
-        self.model = model
-
     def eval1(self) -> float:
         """
         A method for scoring models based on keywords.
         Rule:For each propmt, the model's response that contains at least one of the keywords gets a score of 1/n, and n is the number of prompts.
         Returns:Score of the model.
-        This method requires Internet to download the model.
         """
         score = 0.0
         keywords = self.evalinfo["keywords"]
@@ -44,57 +39,15 @@ class Keyword(EvalMethods):
         # print(self.prompt)
         # print(self.keywords)
         for ind, pt in enumerate(self.prompt):
-            ans_list = split_response(self.ans[ind])
-            ans_list = sort_for_sim(ans_list)
-            ans_positive = []
-            for ans in ans_list:
-                # if sentence_judge(ans):
-                ans_positive.append(ans)
-
-            loop_break = False 
-            ans_positive = sort_for_sim(ans_positive)
-            for ans_pos in ans_positive:
-                if self.if_there_is(ans_pos, self.keywords[ind]):
-                    score += 1 / len(self.prompt)
-                    loop_break = True  
-                    break
-                else:
-                    for keyword in self.keywords[ind]:
-                        sim = get_sim(ans_pos, keyword, self.model)
-                        if sim >= 0.85:
-                            print(f"keyword:{keyword}" + f" in sentence {ans_pos}" + f" from thread {self.threadnum}")
-                            score += 1 / len(self.prompt)
-                            loop_break = True 
-                            break
-                        else:
-                            print(f"Keyword:{keyword}" + f" and sentence {ans_pos}" + f" match failed. " + f"Similarity: {sim}")
-                            
-                    if loop_break:  
-                        break
+            if self.if_there_is(self.ans[ind], self.keywords[ind]):
+                score += 1 / len(self.prompt)
         return score
-    
-    # def eval1(self) -> float:
-    #     """
-    #     A method for scoring models based on keywords.
-    #     Rule:For each propmt, the model's response that contains at least one of the keywords gets a score of 1/n, and n is the number of prompts.
-    #     Returns:Score of the model.
-    #     """
-    #     score = 0.0
-    #     keywords = self.evalinfo["keywords"]
-    #     keywords = to_list(keywords)
-    #     # print(self.prompt)
-    #     # print(self.keywords)
-    #     for ind, pt in enumerate(self.prompt):
-    #         if self.if_there_is(self.ans[ind], self.keywords[ind]):
-    #             score += 1 / len(self.prompt)
-    #     return score
 
     def eval2(self) -> float:
         """
         A method for scoring models based on keywords.
         Rule:For each prompt, the model gets a score of 1/n for each keyword included in the response, and n is the number of key words.
         Returns:Score of the model.
-        This method doesn't need the Internet.
         """
         score = 0.0
         keywords = self.evalinfo["keywords"]
@@ -144,4 +97,3 @@ class Keyword(EvalMethods):
                 print(f"keyword:{kw}" + f"from thread {self.threadnum}")
                 return True
         return False
-    

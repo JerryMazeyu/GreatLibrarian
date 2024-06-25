@@ -18,9 +18,8 @@ def record_project_info(
     LLM_eval_llm_name,
     testcase_path,
     testproject_num,
-    test_name,
+    Test_name,
     file_path,
-    test_type
 ) -> None:
     json_path = os.path.join(file_path, "project_info.json")
     if not os.path.exists(json_path):
@@ -32,8 +31,7 @@ def record_project_info(
         "LLM_eval_llm_name": LLM_eval_llm_name,
         "testcase_path": testcase_path,
         "testproject_num": testproject_num,
-        "Test_name": test_name,
-        "Test_type": test_type
+        "Test_name": Test_name,
     }
 
     with open(json_path, "w") as json_file:
