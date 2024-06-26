@@ -360,9 +360,13 @@ def generate_logger_subfile(Logs_path) -> str:
         # and dialog_exist
         # and dialog_init_exist
     ):
-        subfilenum = str(int(subfilenum) + 1)
+        log_num = int(subfilenum) + 1
+        subfilenum = str(log_num)
         subfilename = "Test" + subfilenum
-        logger_file = os.path.join("Logs", subfilename)
+        if Logs_path == "":
+            logger_file = os.path.join("Logs", subfilename)
+        else:
+            logger_file = os.path.join(Logs_path, subfilename)
 
         # analyse_exist = os.path.exists(os.path.join(logger_file, "analyse.log"))
         # dialog_exist = os.path.exists(os.path.join(logger_file, "dialog.log"))

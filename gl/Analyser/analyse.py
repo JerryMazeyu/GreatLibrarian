@@ -106,309 +106,6 @@ class Analyse:
         print(conclude_info)
         return (get_score_info, conclude_info, plotinfo)
 
-    # def report(self, plotinfo, llm_intro, log_path, report_path, test_type) -> None:
-    #     """
-    #     log_path: The path of the dialog_init.log
-    #     logger_path: the path to the analyse.log
-    #     """
-    #     field = plotinfo[0]
-    #     score_get = plotinfo[1]
-    #     total_score = plotinfo[2]
-    #     totalnum = sum(total_score)
-
-    #     plt.rcParams["font.size"] = 18
-    #     plt.rcParams["text.usetex"] = False
-
-    #     pdf_name = self.generate_new_name(report_path, "report")
-    #     pdf_file_path = os.path.join(report_path, pdf_name)
-
-    #     pdf_pages = PdfPages(pdf_file_path)
-
-    #     # filtered_fields = [
-    #     #     fields
-    #     #     for fields, total_scores in zip(field, total_score)
-    #     #     if total_scores > 0
-    #     # ]
-
-    #     # filtered_totalscore = [
-    #     #     totalscores for totalscores in total_score if totalscores > 0
-    #     # ]
-    #     # filtered_score_get = [
-    #     #     score
-    #     #     for score, total_scores in zip(score_get, total_score)
-    #     #     if total_scores > 0
-    #     # ]
-
-    #     # 1.背景介绍
-    #     fig = plt.figure(figsize=(30, 30))
-    #     plt.rcParams["font.sans-serif"] = ["SimSun"]
-    #     plt.rcParams["mathtext.fontset"] = "stix"
-    #     plt.rcParams["text.usetex"] = False
-
-    #     title = "1.背景介绍"
-    #     plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
-
-    #     intro = self.introduction_of_llm(log_path, llm_intro)
-
-    #     fig.text(
-    #         0.1, 0.55, intro, fontsize=25, fontfamily="SimSun", ha="left", va="center"
-    #     )
-    #     plt.axis("off")
-
-    #     # try:
-    #     #     pdf_pages.savefig(fig)
-    #     # except Exception as e:
-    #     #     warning_message = f"Warning: An report exception occurred - {e}"
-    #     #     warnings.warn(warning_message, RuntimeWarning)
-
-    #     pdf_pages.savefig(fig)
-
-    #     # 2.测试用例数据信息
-
-    #     fig, axs = plt.subplots(1, 2, figsize=(30, 30), gridspec_kw={"wspace": 0.15})
-
-    #     field_info = ""
-    #     if len(field) <= 3:
-    #         for fields in field:
-    #             field_info += f'"{(fields)}"'
-    #         field_info += "领域"
-    #     else:
-    #         for i in range(3):
-    #             field_info += f'"{str(field[i])}"'
-    #         field_info += "等领域。"
-
-    #     testcasenum_info = ""
-    #     for i in range(len(field)):
-    #         testcasenum_info += f"\n “{field[i]}”领域中有{total_score[i]}条测试用例。\n"
-    #     score_info = ""
-    #     for i in range(len(score_get)):
-    #         score_info += f"\n在“{field[i]}”领域中 ,该大语言模型的得分为: {score_get[i]}/{total_score[i]}。\n"
-
-    #     time = self.extract_time(log_path)
-    #     if totalnum != 0:
-    #         time_per_testcase = round(time/totalnum,3)
-    #         time_info = f'在本次测试中，LLM的响应时间为：平均每条测试用例{time_per_testcase}秒'
-    #     else:
-    #         time_info = f'等待人工审核后计算平均响应时间'
-        
-    #     conclude_info = (
-    #         f"本次测试包括{totalnum}条测试用例.\n\n这些测试用例主要包括"
-    #         + field_info
-    #         + f"\n\n在所有测试用例中:\n"
-    #         + testcasenum_info
-    #         + score_info
-    #         + "\n"
-    #         + time_info
-    #     )
-
-    #     axs[0].text(
-    #         0,
-    #         0.55,
-    #         conclude_info,
-    #         fontsize=25,
-    #         ha="left",
-    #         va="center",
-    #         fontfamily="SimSun",
-    #     )
-
-    #     axs[0].axis("off")
-
-    #     rcParams["font.family"] = "SimSun"
-
-    #     # 饼状图绘制
-
-    #     percentages = [num / totalnum for num in total_score]
-    #     patches, texts, autotexts = axs[1].pie(
-    #         percentages, labels=field, autopct="%1.1f%%", startangle=140
-    #     )
-    #     for autotext in autotexts:
-    #         autotext.set_size(28)
-    #     for text in texts:
-    #         text.set_size(28)
-
-    #     axs[1].axis("equal")
-
-    #     axs[1] = plt.gca()
-    #     axs[1].set_aspect("equal")
-    #     axs[1].set_position([0.0, 1.0, 0.6, 0.6])
-
-    #     legend_labels = ["{}".format(fields) for fields in field]
-    #     legend = axs[1].legend(
-    #         patches, legend_labels, loc="lower right", bbox_to_anchor=(1.25, 0.10)
-    #     )
-
-    #     for label in legend.get_texts():
-    #         label.set_fontsize(30)
-
-    #     axs[1].set_position([0.0, 1.0, 0.6, 0.6])
-
-    #     axs[1].axis("off")
-
-    #     plt.subplots_adjust(wspace=0.45)
-
-    #     title = "2.测试用例数据"
-    #     plt.suptitle(title, fontsize=32, ha="center", y=0.95, fontfamily="SimSun")
-
-    #     try:
-    #         pdf_pages.savefig(fig)
-    #     except Exception as e:
-    #         warning_message = f"Warning: An report exception occurred - {e}"
-    #         warnings.warn(warning_message, RuntimeWarning)
-
-    #     # 3.错误的测试用例
-
-    #     fig = plt.figure(figsize=(30, 30))
-
-    #     title = "3.回答错误的测试用例"
-    #     plt.rcParams["font.sans-serif"] = ["SimSun"]
-    #     plt.rcParams["mathtext.fontset"] = "stix"
-    #     plt.title(title, fontsize=32, ha="center", y=1.1, fontfamily="SimSun")
-    #     # plt.rcParams['text.usetex'] = True
-
-    #     mistaken_list = extract_mistaken_info(log_path, test_type)
-    #     mistaken_txt = ""
-
-    #     for i in range(len(mistaken_list)):
-    #         mistaken_list[i][0] = textwrap.fill(mistaken_list[i][0], width=68)
-    #         mistaken_list[i][1] = textwrap.fill(mistaken_list[i][1], width=68)
-
-    #     if len(mistaken_list) <= 4:
-    #         for mistakens in mistaken_list:
-    #             if len(mistakens) == 5:
-    #                 mistakens[0] = self.escape_latex_special_characters(mistakens[0])
-    #                 mistakens[1] = self.escape_latex_special_characters(mistakens[1])
-    #                 # if mistakens[2]:
-    #                     # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
-    #                 # mistakens[1] = r"{}".format(mistakens[1])
-    #                 mistakens[1] = self.process_escape_characters(mistakens[1])
-    #                 mistakens[1] = self.replace_double_dollars_with_align(mistakens[1])
-    #                 mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n' + f'回答：{mistakens[1]}' + f'\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
-    #                 # else:
-    #                     # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]},不应包含黑名单：{mistakens[4]}。\n\n\n'
-    #                 mistaken_txt += mistaken
-    #             if len(mistakens) == 4:
-    #                 mistakens[0] = self.escape_latex_special_characters(mistakens[0])
-    #                 mistakens[1] = self.escape_latex_special_characters(mistakens[1])
-    #                 # if mistakens[2]:
-    #                 # mistakens[1] = r"{}".format(mistakens[1])
-    #                 mistakens[1] = self.process_escape_characters(mistakens[1])
-    #                 mistakens[1] = self.replace_double_dollars_with_align(mistakens[1])
-    #                 mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n' + f'回答：{mistakens[1]}' + f'\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
-    #                 # else:
-    #                     # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
-    #                 mistaken_txt += mistaken
-                
-    #             if len(mistakens) == 3:
-    #                 mistakens[0] = self.escape_latex_special_characters(mistakens[0])
-    #                 mistakens[1] = self.escape_latex_special_characters(mistakens[1])
-    #                 # if mistakens[2]:
-    #                 # mistakens[1] = r"{}".format(mistakens[1])
-    #                 mistakens[1] = self.process_escape_characters(mistakens[1])
-    #                 mistakens[1] = self.replace_double_dollars_with_align(mistakens[1])
-    #                 mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n' + f'回答：{mistakens[1]}' + '\n\n\n'
-    #                 # else:
-    #                     # mistaken = f'\n\n对于以下这条属于{mistakens[2]}领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistakens[0]}\n\n回答：{mistakens[1]}\n\n该问题的正确答案应包含关键字：{mistakens[3]}。\n\n\n'
-    #                 mistaken_txt += mistaken
-    #     else:
-    #         for i in range(4):
-    #             if len(mistaken_list[i]) == 5:
-    #                 mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
-    #                 mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
-    #                 # if mistaken_list[i][2]:
-    #                 # mistaken_list[i][1] = r"{}".format(mistaken_list[i][1])
-    #                 mistaken_list[i][1] = self.process_escape_characters(mistaken_list[i][1])
-    #                 mistaken_list[i][1] = self.replace_double_dollars_with_align(mistaken_list[i][1])
-    #                 mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n' + f'回答：{mistaken_list[i][1]}' + f'\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
-    #                 # else:
-    #                     # mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n回答：{mistaken_list[i][1]}\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]},不应包含黑名单：{mistaken_list[i][4]}。\n\n\n'
-    #                 mistaken_txt += mistaken
-    #             if len(mistakens) == 4:
-    #                 mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
-    #                 mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
-    #                 # if mistaken_list[i][2]:
-    #                 # mistaken_list[i][1] = r"{}".format(mistaken_list[i][1])
-    #                 mistaken_list[i][1] = self.process_escape_characters(mistaken_list[i][1])
-    #                 mistaken_list[i][1] = self.replace_double_dollars_with_align(mistaken_list[i][1])
-    #                 mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n' + rf'回答：{mistaken_list[i][1]}' + f'\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
-    #                 # else:
-    #                     # mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n回答：{mistaken_list[i][1]}\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
-    #                 mistaken_txt += mistaken
-
-    #             if len(mistakens) == 3:
-    #                 mistaken_list[i][0] = self.escape_latex_special_characters(mistaken_list[i][0])
-    #                 mistaken_list[i][1] = self.escape_latex_special_characters(mistaken_list[i][1])
-    #                 # if mistaken_list[i][2]:
-    #                 # mistaken_list[i][1] = r"{}".format(mistaken_list[i][1])
-    #                 mistaken_list[i][1] = self.process_escape_characters(mistaken_list[i][1])
-    #                 mistaken_list[i][1] = self.replace_double_dollars_with_align(mistaken_list[i][1])
-    #                 mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n' + rf'回答：{mistaken_list[i][1]}' + '\n\n\n'
-    #                 # else:
-    #                     # mistaken = f'\n\n对于以下这条属于"{mistaken_list[i][2]}"领域的问题，该大语言模型的回答出现了错误。\n\n问题：{mistaken_list[i][0]}\n\n回答：{mistaken_list[i][1]}\n\n该问题的正确答案应包含关键字：{mistaken_list[i][3]}。\n\n\n'
-    #                 mistaken_txt += mistaken
-    #     if mistaken_txt == "":
-    #         mistaken_txt += (
-    #             "该LLM完全通过了本次测试，正确回答了所有的测试用例，无错误用例。"
-    #         )
-
-    #     fig.text(
-    #         0.1,
-    #         0.55,
-    #         mistaken_txt,
-    #         fontsize=25,
-    #         fontfamily="SimSun",
-    #         ha="left",
-    #         va="center"
-    #     )
-
-    #     plt.axis("off")
-
-    #     # try:
-    #     #     pdf_pages.savefig(fig)
-    #     # except Exception as e:
-    #     #     warning_message = f"Warning: An report exception occurred - {e}"
-    #     #     warnings.warn(warning_message, RuntimeWarning)
-
-    #     pdf_pages.savefig(fig)
-    #     # 4.测试的各领域的得分率柱状图
-
-    #     accuracies = []
-    #     labels = []
-
-    #     for score, total in zip(score_get, total_score):
-    #         if total == 0:
-    #             continue
-    #         else:
-    #             accuracy = (score / total) * 100
-    #             label = f"{accuracy:.2f}%"
-    #         accuracies.append(accuracy)
-    #         labels.append(label)
-
-    #     plt.figure(figsize=(30, 30))
-    #     plt.rcParams["mathtext.fontset"] = "stix"
-    #     matplotlib.rcParams["axes.unicode_minus"] = False
-    #     bars = plt.bar(field, accuracies)
-    #     plt.xlabel("领域", fontsize=38, fontfamily="SimSun")
-    #     plt.ylabel("得分率", fontsize=38, fontfamily="SimSun")
-    #     plt.title("4.各领域答题得分率", fontsize=32, y=1.15, fontfamily="SimSun")
-    #     plt.xticks(rotation=45, ha="right", fontsize=28, fontfamily="SimSun")
-    #     plt.yticks(fontsize=32)
-
-    #     y_min, y_max = plt.ylim()
-    #     if y_min < 0:
-    #         plt.ylim(0, y_max)
-
-    #     for i, (bar, label) in enumerate(zip(bars, labels)):
-    #         plt.text(i, bar.get_height(), label, ha="center", va="bottom", fontsize=43)
-
-    #     plt.tight_layout()
-    #     try:
-    #         pdf_pages.savefig()
-    #     except Exception as e:
-    #         warning_message = f"Warning: An report exception occurred - {e}"
-    #         warnings.warn(warning_message, RuntimeWarning)
-
-    #     pdf_pages.close()
-    #     print("Report Generated !")
     
     def report(self, plotinfo, llm_intro, log_path, report_path, test_type) -> None:
         """
@@ -423,7 +120,12 @@ class Analyse:
         totalnum = sum(total_score)
 
         md_name = self.generate_new_name(report_path, "report")
-        md_file_path = os.path.join(report_path, md_name)
+        md_files = self.change_extension(md_name, '') + '-md'
+        md_files_path = os.path.join(report_path, md_files)
+        os.makedirs(md_files_path)
+        md_file_path = os.path.join(md_files_path, md_name)
+        
+
 
         version_number = self.get_next_version_number(report_path)
         
@@ -522,7 +224,7 @@ class Analyse:
 
         pie_name = f'piev{version_number}.png'
 
-        pie_chart_filepath = os.path.join(report_path, pie_name)
+        pie_chart_filepath = os.path.join(md_files_path, pie_name)
         plt.savefig(pie_chart_filepath)
         plt.close()
 
@@ -650,7 +352,7 @@ class Analyse:
             
         bar_name = f'barv{version_number}.png'
 
-        bar_chart_filepath = os.path.join(report_path, bar_name)
+        bar_chart_filepath = os.path.join(md_files_path, bar_name)
         plt.savefig(bar_chart_filepath)
         plt.close()
 
@@ -660,7 +362,7 @@ class Analyse:
 
         html_name = self.change_extension(md_name, ".html")
         html_path = os.path.join(report_path, html_name)
-        self.convert_markdown_to_html(md_file_path, html_path)
+        # self.convert_markdown_to_html(report_path, html_path)
         # pdf_name = self.change_extension(md_name, ".pdf")
         # pdf_path = os.path.join(report_path, pdf_name)
         # pdfkit.from_file(html_path, pdf_path)
@@ -782,7 +484,8 @@ class Analyse:
     
 
     def convert_markdown_to_html(self, input_md_file, output_html_file):
-        with open(input_md_file, 'r', encoding='utf-8') as f:
+        path = os.path.normpath(input_md_file)
+        with open(path, 'r', encoding='utf-8') as f:
             markdown_text = f.read()
 
         # 使用arithmatex扩展支持数学表达式
@@ -841,73 +544,6 @@ class Analyse:
 
         with open(output_html_file, 'w', encoding='utf-8') as f:
             f.write(html_with_style_and_mathjax)
-
-
-    # def convert_markdown_to_html(self, input_md_file, output_html_file):
-    #     # 定义pandoc的选项
-    #     options = [
-    #         '--from', 'markdown',
-    #         '--to', 'html',
-    #         '--mathjax',
-    #         '--standalone',
-    #         '--output', output_html_file
-    #     ]
-
-    #     # 调用pypandoc.convert_file将Markdown转换为HTML
-    #     html_content = pypandoc.convert_file(input_md_file, 'html', outputfile=None, extra_args=options)
-
-    #     # 添加必要的MathJax脚本以支持数学表达式
-    #     mathjax_script = """
-    #     <script>
-    #     MathJax = {
-    #         tex: {
-    #             inlineMath: [['$', '$'], ['\\(', '\\)']],
-    #             displayMath: [['$$', '$$'], ['\\[', '\\]']]
-    #         },
-    #         svg: {
-    #             fontCache: 'global'
-    #         }
-    #     };
-    #     </script>
-    #     <script type="text/javascript" id="MathJax-script" async src="MathJax-4.0.0-beta.6/tex-mml-chtml.js">
-    #     </script>
-    #     """
-
-    #     style_content = """
-    #     <style>
-    #         body {
-    #             margin: 0;
-    #             padding: 0;
-    #             font-size: 25px; /* 设置整体文本大小 */
-    #         }
-    #         h2 {
-    #             margin: 0;
-    #             font-size: 32px; /* 设置 h2 标题大小 */
-    #         }
-    #         /* 可以添加其他样式来调整不同元素的大小 */
-    #     </style>
-    #     """
-
-    #     # 生成最终的HTML内容
-    #     final_html = f"""
-    #     <!DOCTYPE html>
-    #     <html lang="en">
-    #     <head>
-    #         <meta charset="UTF-8">
-    #         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    #         <title>Markdown to HTML</title>
-    #         {mathjax_script}
-    #         {style_content}
-    #     </head>
-    #     <body>
-    #         {html_content}
-    #     </body>
-    #     </html>
-    #     """
-
-    #     # 写入HTML文件
-    #     with open(output_html_file, 'w', encoding='utf-8') as f:
-    #         f.write(final_html)
 
 
 
