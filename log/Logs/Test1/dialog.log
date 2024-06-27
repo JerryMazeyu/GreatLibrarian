@@ -1,0 +1,18 @@
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:10 - INFO - ---------- New Epoch ----------
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:10 - INFO - To LLM:	 我国古代“十八般武艺”中第十八是“白打”意思是什么？。
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:26 - INFO - To User:	 " 我国古代“十八般武艺”中第十八是“白打”意思是指赤手空拳的搏斗。它是一种徒手搏击的技艺，不需要使用任何武器，通过拳击、踢腿、擒拿等方式进行攻击和防御。在古代，白打被视为一种基本的武术技能，对于士兵和习武之人来说非常重要。"
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:26 - INFO - keyword:徒手
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:26 - INFO - The model gets 1.0 points in this testcase by keywords method, in common_knowledge field.
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:26 - INFO - The final score of this testcase is 1.0, in common_knowledge field.
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:30 - INFO - ---------- New Epoch ----------
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:30 - INFO - To LLM:	 小伤口出血时，我们要用什么冲洗伤口？。
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:41 - INFO - To User:	 " 小伤口出血时，我们应该使用生理盐水冲洗伤口。生理盐水能够起到消炎杀菌的作用，同时可以帮助清洁伤口，预防感染。在冲洗伤口之后，还可以使用碘伏或酒精等消毒液进行消毒，以保持伤口的清洁和预防感染。如果伤口较大或较深，建议及时就医处理。"
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:41 - INFO - keyword:生理盐水
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:41 - INFO - The model gets 1.0 points in this testcase by keywords method, in common_knowledge field.
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:41 - INFO - The final score of this testcase is 1.0, in common_knowledge field.
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:45 - INFO - ---------- New Epoch ----------
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:29:45 - INFO - To LLM:	 发生火灾时要迅速判断火势的来源，朝与火势趋向的什么方向逃生？。
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:30:07 - INFO - To User:	 " 发生火灾时，要迅速判断火势的来源，并朝与火势相反的方向逃生。这是因为火势会顺着风向扩散，所以远离火源的最有效方法是逆着风向逃生。同时，在逃生过程中，尽量选择安全的逃生通道，如疏散楼梯等，避免被火源堵住去路。如有可能，可将衣物打湿，捂住口鼻，以降低吸入烟雾的风险。遇到火势较大时，可寻找有水源的地方，如卫生间、阳台等，将毛巾、衣物等打湿，堵住门缝，防止烟雾进入，等待救援。"
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:30:07 - INFO - keyword:反
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:30:07 - INFO - The model gets 1.0 points in this testcase by keywords method, in common_knowledge field.
+2024-06-26 09:30:09 - INFO - 2024-06-26 09:30:07 - INFO - The final score of this testcase is 1.0, in common_knowledge field.

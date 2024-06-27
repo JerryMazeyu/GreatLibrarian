@@ -12,17 +12,18 @@ import asyncio
 @click.command()
 @click.option(
     "--testcase_path",
-    default = r"D:\GL\Testcase2",
+    default = r"E:\GL实验\test",
     help="testcase的json文件所存放的文件夹路径",
 )
 @click.option(
     "--config_path",
-    default=r"D:\GL\register_usr.py",
+    default=r"E:\GL实验\GL_Last\GreatLibrarian\register_usr.py",
     help="配置文件的绝对路径",
 )
 @click.option("--project_name", default="", help="项目名称，默认为空字符串")
 @click.option("--test_name", default="", help="实验名称，默认为空字符串")
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
+# @click.option("--logs_path", default=r"E:\GL实验\GL_Last\GreatLibrarian\log", help="日志路径")
 @click.option("--logs_path", default="", help="日志路径")
 @click.option("--test_type", default="general", help="测试类型")
 def test(testcase_path, config_path, project_name, test_id, test_name, logs_path, test_type) -> str:
@@ -101,17 +102,18 @@ def sub_update(config_path, test_id, logs_path,test_type) -> None:
 @click.command()
 @click.option(
     "--testcase_path",
-    default=r"D:\GL\Testcase2",
+    default=r"E:\GL实验\test",
     help="testcase的json文件所存放的文件夹路径",
 )
 @click.option(
     "--config_path",
-    default=r"D:\GL\register_usr.py",
+    default=r"E:\GL实验\GL_Last\GreatLibrarian\register_usr.py",
     help="配置文件的绝对路径",
 )
 @click.option("--project_name", default="", help="项目名称，默认为空字符串")
 @click.option("--test_name", default="", help="实验名称，默认为空字符串")
 @click.option("--test_id", default="", help="实验ID，默认为空字符串")
+# @click.option("--logs_path", default=r"E:\GL实验\GL_Last\GreatLibrarian\log", help="日志路径")
 @click.option("--logs_path", default="", help="日志路径")
 @click.option("--test_type", default="general", help="测试类型")
 def test_async(testcase_path, config_path, project_name, test_id, test_name, logs_path, test_type):
@@ -177,7 +179,7 @@ async def sub_sub_update_async(config_path, test_id, logs_path,test_type) -> Non
     default = r"D:\GL\register_usr.py",
     help="配置文件的绝对路径",
 )
-@click.option("--test_id", default="Test6", help="实验ID，默认为空字符串")
+@click.option("--test_id", default="", help="实验ID，默认为空字符串")
 @click.option("--logs_path", default="", help="日志路径")
 @click.option("--test_type", default="general", help="测试类型")
 def update_async(config_path, test_id, logs_path, test_type):

@@ -5,13 +5,13 @@
 ![piDYfgK.jpg](https://z1.ax1x.com/2023/11/29/piDYfgK.jpg)
   
   
-本项目旨在对场景化的大语言模型进行**自动化的评测**，用户只需要提供测试的大语言模型的 `API Key` 以及准备用于测试的**测试用例**，该工具就可以自动完成一个完整的测评过程，包括：**用户对配置文件按需求修改** →**用户选择各个评分方法的评分细则** → **工具箱自动的与大语言模型进行交互** → **将对话内容记录进日志** → **对每一条测试用例进行打分** → **对得分情况进行分析** → **总结本次测评的信息并生成报告**。在自动化评测的流程结束后，用户可以在最终生成的测评报告中直观的查看到本次测评的所有信息。  
+本项目旨在对场景化的大语言模型进行**自动化的评测**，用户只需要提供测试的大语言模型的 `API Key` 以及准备用于测试的**测试用例**，该工具就可以自动完成一个完整的测评过程，包括：**用户对配置文件按需求修改** → **工具箱自动的与大语言模型进行交互** → **将对话内容记录进日志** → **对每一条测试用例进行打分** → **对得分情况进行分析** → **总结本次测评的信息并生成报告**。在自动化评测的流程结束后，用户可以在最终生成的测评报告中直观的查看到本次测评的所有信息。  
 
 ![picEB34.png](https://z1.ax1x.com/2023/12/06/picEB34.png)
 
 ## 介绍  
 
-本项目主要实现语言为`python`，测试用例为`json`格式，最终生成的报告为`PDF`格式。按照工具的功能模块，分为四个部分介绍工具箱，分别为：**测前准备、自动化测评、评分规则、报告生成**。  
+本项目主要实现语言为`python`，测试用例为`json`格式，最终生成的报告为`markdown`格式。按照工具的功能模块，分为四个部分介绍工具箱，分别为：**测前准备、自动化测评、评分规则、报告生成**。  
 
 ### 测前准备  
   
@@ -89,7 +89,7 @@
 
 一组测试用例整体是一个字典，在示范的配置中，`name`和`description`两个字符串，分别是这段测试用例组的名称和描述，主要起区分作用，对测试结果无影响。 
 
- `field`字符串用于定义测试用例组所属的领域，在我们的工具箱中，测试领域一个被划分为十种，它们分别为：语言理解、代码、知识与常识、逻辑推理、多语言、专业知识、可追溯性、输出格式化、内生安全性、外生安全性。它们对应的 `field` 名称分别为：`knowledge_understanding、coding、common_knowledge、reasoning、multi_language、specialized_knowledge、traceability、outputformatting、internal_security、external_security`。用户需要根据当前测试用例组的类别设置对应的`field`。    
+ `field`字符串用于定义测试用例组所属的领域，在我们的工具箱中，测试领域一个被划分为十种，它们分别为：语言理解、代码、知识与常识、逻辑推理、多语言、专业知识、可追溯性、输出格式化、内生安全性、外生安全性。它们对应的 `field` 名称分别为：`knowledge_understanding、coding、common_knowledge、reasoning、multi_language、specialized_knowledge、traceability、outputformatting、internal_security、external_security`。用户需要根据当前测试用例组的类别设置对应的`field`。**目前`field`字段支持用户自定义**  ，用户可以根据实际情况自定义`field`的值  
 
 
 `prompt`列表用于存储当前测试用例组的所有测试用例，每一个测试用例为字符串格式。在进行自动化测试的过程中，这些测试用例会作为问题提供给当前被测试的LLM。  
@@ -105,8 +105,6 @@
  
 
 
-
-除了测试用例配置中提到的 `evaluation` 字典，工具箱的评分过程中还可以进行更具体的 **评分规则配置**。
 
 在使用 `evaluation` 字典评分的过程中，使用字典中的每个方法打分后，用户可以选用一个分数结算方法 `FinalScore` ，用于根据所有评分方法的打分给该条测试用例确定一个最终得分。  
 
@@ -154,20 +152,6 @@
                     self.get_final_score(),
                 )
 
-  
-
-工具箱还配置了每一种评价方法内部的（`keywords、blacklist、LLMEval`）的 **不同评分细则** 。  
-
-对于一条测试用例（`prompt`）以及同样的答案（`evaluation`字典）来说，可以因为`evaluation`字典中每个评分方法的不同 **评分细则** 而获得不同的得分。
-
-比如：对于一个回答“是的，**中国**是一个和谐富强的国家。”，答案中的`keywords`设置为：['中国','亚洲']，此时工具箱中对于`keywords`这个评价方法有两种评分细则，分别如下：   
-
-1. 对于`keywords`中的n个关键字，LLM的回答中 **包含n个中的任意一个就可以获得满分（1分）** 。  
-2. 对于`keywords`中的n个关键字，LLM的回答中 **每包含一个关键字，LLM就可以获得1/n分** 。  
-
-对于评分细则1，上述回答得分为1分；对于评分细则2，上述回答得分为0.5分。  
-
-在工具箱中，目前每种 **评价方法** 都至少有一种 **评分细则** 。想要使用这些评分细则，用户只需要在工具箱 **开始自动化测评前** 根据提示输入评分细则的序号，即可完成每种评价方法对应的评分细则的选用。  
   
   
 ####config定义  
@@ -229,10 +213,10 @@
   
 评分规则的配置在**前文介绍-评分规则配置**中已经阐述，这里主要介绍当前`LLMEval`方法以及工具箱内默认使用的评价方法和评分细则。  
   
-1. `keywords`：目前有eval1和eval2两种方法。主要使用`eval1`方法，其具体的评分细则为： **当LLM的回答包含`keywords`列表中至少一个关键字时，LLM在本条测试用例中获得1分，否则获得0分**。
-2. `blacklist`：目前有eval1和eval2两种方法。主要使用`eval1`方法，其具体的评分细则为：**当LLM的回答包含`blacklist`列表中的任何一个黑名单字符串时，LLM在本条测试用例中获得0分，否则获得1分**。
-3. `LLMEval`：目前有eval1方法。主要使用`eval1`方法，其具体的评分细则为：给用于LLMEval的LLM一个固定格式的包含该条问题、回答以及标准答案prompt，让其对该回答进行打分。由于需要调用另一个LLM对当前测试用例进行评分，所以同样需要调用`API Key`。
-4. `FinalScore`：目前有FinalScore1方法。主要使用`FinalScore1`，其具体的评分细则为：  
+1. `keywords`：具体的评分细则为： **当LLM的回答包含`keywords`列表中至少一个关键字时，LLM在本条测试用例中获得1分，否则获得0分**。
+2. `blacklist`：具体的评分细则为：**当LLM的回答包含`blacklist`列表中的任何一个黑名单字符串时，LLM在本条测试用例中获得0分，否则获得1分**。
+3. `LLMEval`：具体的评分细则为：给用于LLMEval的LLM一个固定格式的包含该条问题、回答以及标准答案prompt，让其对该回答进行打分。由于需要调用另一个LLM对当前测试用例进行评分，所以同样需要调用`API Key`。
+4. `FinalScore`：具体的评分细则为：  
 ①首先判断`blacklist`评分是否为0，若为0则最终得分直接为0；  
 ②然后判断`keywords`评分，若无`LLMEval`则最终得分等于`keywords`评分；  
 ③若有`LLMEval`，则计算`keywords`评分与`LLMEval`评分的差，若差的绝对值大于0.5则输出"Human Evaluation"，将该条测试用例记录进`human_evaluation.log`中，用于后续进行人工测评；若差的绝对值小于0.5，则取两者的均值作为最终得分。  
@@ -277,15 +261,15 @@ Windows (Powershell)：
     conda activate GL
     poetry install
 
-运行以下命令：`gltest --testcase_path=/path/to/your/testcases/ --config_path=/path/to/your/config_file/`  
+运行以下命令：`poetry run gltest --testcase_path=/path/to/your/testcases/ --config_path=/path/to/your/config_file/`  
 
 在这里，我们假设本次测试的测试用例存放在目录/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase下，配置文件的绝对路径为：/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py，则用如下命令启动自动测评：  
   
-`gltest --testcase_path=/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase --config_path=/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py`  
+`poetry run gltest --testcase_path=/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase --config_path=/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py`  
   
 此时工具会根据当前目录下的Logs文件夹内现存的文件夹名称确定本次测试的相关文件存储的文件夹名称，若用户需要自定义本次测试的相关文件存储的文件夹名称，需要在命令中添加可选参数`test_id`的指定：  
   
-`gltest --testcase_path=/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase --config_path=/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py test_id=Test1`  
+`poetry run gltest --testcase_path=/home/ubuntu/LLMs/czy/GreatLibrarian/Testcase --config_path=/home/ubuntu/LLMs/czy/GreatLibrarian/register_usr.py --test_id=Test1`  
   
 此时，本次测试的相关文件存储的文件夹为当前目录下的Logs/Test1   
 
@@ -301,17 +285,21 @@ Windows (Powershell)：
  
 然后同git clone方法，使用如下命令启动自动化测评：  
 
-`gltest --testcase_path=/path/to/your/testcases/ --config_path=/path/to/your/config_file/`  
-  
-然后工具箱会提示用户进行每种评价方法下的评分细则的选择，需要用户**根据提示信息输入评分细则序号**。  
-  
-选择完成后开始自动化评测，评测结束后的所有相关文件（log文件，测试报告等）记录在`GreatLibrarian/Logs`中。    
+`poetry run gltest --testcase_path=/path/to/your/testcases/ --config_path=/path/to/your/config_file/`  
+ 
+评测结束后的所有相关文件（log文件，测试报告等）记录在`GreatLibrarian/Logs`中。    
   
 此时工具会根据当前目录下的Logs文件夹内现存的文件夹名称确定本次测试的相关文件存储的文件夹名称，若用户需要自定义本次测试的相关文件存储的文件夹名称，需要在命令中添加可选参数`test_id`的指定：  
   
 `gltest --testcase_path=/path/to/your/testcases/ --config_path=/path/to/your/config_file/ test_id=Test1`
   
 此时，本次测试的相关文件存储的文件夹为当前目录下的Logs/Test1 
+
+以上的gltest命令仅支持通过API实现的同步通信，本系统目前支持异步通信API，若需要使用，请将以上命令中的`gltest`更改为`gltest_async`。
+
+若在测试时使用了LLM_Eval,可能会出现需要人工审核的测试用例，需要用户按照`human_evaluation.log`中的提示对这些测试用例进行打分。打分完成后，执行命令
+`glupdate --config_path=/path/to/your/config_file/ --test_id = you_test_id`
+对该次测试的日志以及报告进行更新，用户可以根据测试报告的版本号判断报告的更新情况。
   
 ##配置文件register_usr.py 范例及注意事项  
 
