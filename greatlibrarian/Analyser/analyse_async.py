@@ -21,6 +21,7 @@ from markdown.extensions import extra
 from markdown.extensions import codehilite
 from markdown.extensions import toc
 from markdown.extensions import md_in_html
+from Utils import to_str
 import pandoc
 import pypandoc
 import pymdownx
@@ -112,7 +113,9 @@ class Analyse_Async:
         log_path: The path of the dialog_init.log
         logger_path: the path to the analyse.log
         """
-        custom_font_path = os.path.join("fonts", "simsun.ttf")
+        custom_font_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "fonts", "simsun.ttf"
+        )
         plt.rcParams["font.family"] = fm.FontProperties(
             fname=custom_font_path
         ).get_name()
@@ -121,13 +124,14 @@ class Analyse_Async:
         total_score = plotinfo[2]
         totalnum = sum(total_score)
 
-        md_name = self.generate_new_name(report_path, "report")
-        md_files = self.change_extension(md_name, "") + "-md"
+        version_number = self.get_next_version_number(report_path)
+        # md_name = self.generate_new_name(report_path, "report")
+        # md_files = self.change_extension(md_name, "") + "-md"
+        md_files = 'report-v' + to_str(version_number) + '-md'
         md_files_path = os.path.join(report_path, md_files)
+        md_name = "report-v" + to_str(version_number) + ".md"
         os.makedirs(md_files_path)
         md_file_path = os.path.join(md_files_path, md_name)
-
-        version_number = self.get_next_version_number(report_path)
 
         # 1.背景介绍
 
@@ -471,14 +475,17 @@ class Analyse_Async:
         return new_name
 
     def get_next_version_number(self, folder_path):
-        png_files = [f for f in os.listdir(folder_path) if f.endswith(".png")]
+        subfolders = [f for f in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, f)) and f.startswith("report-")]
         version_numbers = [
-            int(re.search(r"barv(\d+).png", f).group(1))
-            for f in png_files
-            if re.match(r"barv\d+.png", f)
+            int(re.search(rf"report-v(\d+)-md", f).group(1))
+            for f in subfolders
+            if re.match(rf"report-v\d+-md", f)
         ]
-        max_version = max(version_numbers) if version_numbers else 0
-        return max_version + 1
+        if version_numbers:
+            next_version = max(version_numbers) + 1
+        else:
+            next_version = 1
+        return next_version
 
     def extract_time(self, log_path):
         with open(log_path, "r", encoding="utf-8") as file:

@@ -11,3 +11,10 @@ def to_int(x) -> Optional[int]:
         return result
     except ValueError:
         return None
+    
+def to_str(x) -> Optional[str]:
+    try:
+        result = str(x)
+        return result
+    except ValueError:
+        return None

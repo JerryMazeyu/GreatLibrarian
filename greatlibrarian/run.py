@@ -79,10 +79,10 @@ def sub_test(
 @click.command()
 @click.option(
     "--config_path",
-    default=r"D:\GL\register_usr.py",
+    default=r"E:\GL实验\GL_Last\GreatLibrarian\register_usr.py",
     help="配置文件的绝对路径",
 )
-@click.option("--test_id", default="", help="实验ID，默认为空字符串")
+@click.option("--test_id", default="Test1", help="实验ID，默认为空字符串")
 @click.option("--logs_path", default="", help="日志路径")
 @click.option("--test_type", default="general", help="测试类型")
 def update(config_path, test_id, logs_path, test_type) -> str:

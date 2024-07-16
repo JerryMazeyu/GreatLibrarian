@@ -15,3 +15,4 @@ from greatlibrarian.Utils.clean_log import clean_log_dialog
 from greatlibrarian.Utils.clean_log_async import clean_log_dialog_async
 from greatlibrarian.Utils.human_evaluation_async import *
 from greatlibrarian.Utils.human_evaluation import *
+from greatlibrarian.Utils.typetrans import *
